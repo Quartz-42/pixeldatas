@@ -2,3 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(10px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.wiggle {
+    transition: transform 0.75s;
+}
+
+.wiggle:hover {
+    animation: wiggle 0.5s ease-in-out;
+}
+
+@keyframes flip {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+.flip-animation {
+    animation: flip 2s linear;
+    transform-style: preserve-3d;
+}

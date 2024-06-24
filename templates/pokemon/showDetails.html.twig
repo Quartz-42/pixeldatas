@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+	<div class="bg-red-500 p-4 min-h-screen flex flex-col">
+		<div class="container container-fluid mx-auto text-center flex-grow">
+			<div class="bg-white p-4 mt-4 mb-8 rounded-md">
+				<h1 class="uppercase font-bold text-2xl">{{ pokemon.name.fr }}</h1>
+				<div class="flex mt-8">
+					<div class="w-1/3">
+						<span class="font-bold border bg-black border-black rounded text-amber-400 p-2">GEN.{{ pokemon.generation }}</span>
+					</div>
+					<div class="w-1/3">
+						{% if pokemon.sprites.gmax %}
+							<span class="font-bold border bg-black border-black rounded text-amber-400 p-2">GMAX</span>
+						{% endif %}
+					</div>
+					<div class="w-1/3">
+						<span class="font-bold border bg-black border-black rounded text-amber-400 p-2">
+							{% for type in pokemon.types %}
+								{{ type.name|upper }}
+								{% if not loop.last %}
+									/
+								{% endif %}
+							{% endfor %}
+						</span>
+					</div>
+				</div>
+				<div class="flex mt-4 justify-between">
+					<div class="w-1/2 flex justify-center items-center ml-8">
+						<img src="{{ pokemon.sprites.regular }}" alt="Pokemon Image">
+					</div>
+					<div class="w-1/2 flex flex-col justify-center items-center">
+						<h2 class="text-center font-bold text-xl">Statistiques :</h2>
+						<table class="mt-4 text-sm border-collapse border border-gray-500">
+							<thead>
+								<tr>
+									<th class="border border-gray-500 p-4">PV</th>
+									<th class="border border-gray-500 p-4">ATK</th>
+									<th class="border border-gray-500 p-4">DEF</th>
+									<th class="border border-gray-500 p-4">ATK_SPE</th>
+									<th class="border border-gray-500 p-4">DEF_SPE</th>
+									<th class="border border-gray-500 p-4">VIT</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="border border-gray-500 p-4">{{ pokemon.stats.hp }}</td>
+									<td class="border border-gray-500 p-4">{{ pokemon.stats.atk }}</td>
+									<td class="border border-gray-500 p-4">{{ pokemon.stats.def }}</td>
+									<td class="border border-gray-500 p-4">{{ pokemon.stats.spe_atk }}</td>
+									<td class="border border-gray-500 p-4">{{ pokemon.stats.spe_def }}</td>
+									<td class="border border-gray-500 p-4">{{ pokemon.stats.vit }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				{% if pokemon.sprites.shiny %}
+					<img src="{{ pokemon.sprites.shiny }}" alt="Shiny Pokemon Image">
+				{% endif %}
+				{% if pokemon.sprites.gmax %}
+					<img src="{{ pokemon.sprites.gmax.regular }}" alt="GMAX Pokemon Image">
+					<img src="{{ pokemon.sprites.gmax.shiny }}" alt="Shiny GMAX Pokemon Image">
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
