@@ -23,3 +23,10 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Ignore MySQL data directory
+mysql/
+
+# Ignore socket files
+*.sock
+
