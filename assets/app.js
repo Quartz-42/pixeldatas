@@ -26,29 +26,32 @@ if (toTopButton) {
 
 //RECHERCHE POKEMON
 //PAR NOM
-document.getElementById('search-input-name').addEventListener('input', function () {
-    let searchQuery = this.value.toLowerCase();
-    let pokemonCards = document.querySelectorAll('.pokemon-card');
-    let noResults = document.getElementById('no-results');
-    let hasResults = false;
+let input = document.getElementById('search-input-name');
+if (input) {
+    input.addEventListener('input', function () {
+        let searchQuery = this.value.toLowerCase();
+        let pokemonCards = document.querySelectorAll('.pokemon-card');
+        let noResults = document.getElementById('no-results');
+        let hasResults = false;
 
-    pokemonCards.forEach(function (card) {
-        let pokemonName = card.getAttribute('data-name');
+        pokemonCards.forEach(function (card) {
+            let pokemonName = card.getAttribute('data-name');
 
-        if (pokemonName.includes(searchQuery)) {
-            card.style.display = 'block';
-            hasResults = true;
+            if (pokemonName.includes(searchQuery)) {
+                card.style.display = 'block';
+                hasResults = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (hasResults) {
+            noResults.classList.add('hidden');
         } else {
-            card.style.display = 'none';
+            noResults.classList.remove('hidden');
         }
-    });
-
-    if (hasResults) {
-        noResults.classList.add('hidden');
-    } else {
-        noResults.classList.remove('hidden');
-    }
-});
+    })
+};
 
 //PAR TYPE
 document.getElementById('search-input-type').addEventListener('input', function () {
