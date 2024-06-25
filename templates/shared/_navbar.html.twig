@@ -1,33 +1,54 @@
 <nav class="bg-gray-900 text-amber-400">
 	<div class="flex flex-wrap items-center justify-between mx-auto p-4">
-		<div class="flex itemsspace-x-3-center ml-5">
-			<a href="{{path("app_home")}}" class="flex items-center space-x-3 rtl:space-x-reverse retour-lien">
+		<div class="flex items-center space-x-3 ml-5">
+			<a href="{{path('app_home')}}" class="flex items-center space-x-3 rtl:space-x-reverse retour-lien">
 				<img src="{{ asset('img/icones-d-eclair-jaune.png') }}" class="h-10 mt-2" alt="Logo">
 				<span class="text-2xl font-semibold whitespace-nowrap dark:text-white">Accueil</span>
 			</a>
 		</div>
 		<!-- Bouton de menu sur les écrans mobiles -->
-		<button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-			<span class="sr-only">Open main menu</span>
-			<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 17 14">
-				<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-			</svg>
-		</button>
-		<!-- Liens à droite -->
-		<div class="flex items-center mr-5">
-			<div class="w-full md:flex md:w-auto" id="navbar-default">
-				<ul class="flex space-x-20">
-					<li>
-						<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pokemon</a>
-					</li>
-					<li>
-						<a href="#" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Call Of Duty</a>
-					</li>
-					<li>
-						<a href="#" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Palworld</a>
-					</li>
-				</ul>
-			</div>
+		<div class="md:hidden">
+			<button id="menu-toggle" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-amber-400 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-amber-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="sr-only">Open main menu</span>
+				<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 17 14">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" class="text-amber-400"/>
+				</svg>
+			</button>
+		</div>
+		<!-- Liens à droite pour les écrans larges -->
+		<div class="hidden w-full md:flex md:items-center md:w-auto" id="navbar-default">
+			<ul class="flex space-x-20">
+				<li>
+					<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pokemon</a>
+				</li>
+				{# <li>
+									<a href="#" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Call Of Duty</a>
+								</li>
+								<li>
+									<a href="#" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Palworld</a>
+								</li> #}
+			</ul>
 		</div>
 	</div>
+	<!-- Menu hamburger pour les écrans mobiles -->
+	<div class="hidden md:hidden" id="mobile-menu">
+		<ul class="flex flex-col space-y-4 p-2 text-right">
+			<li>
+				<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 mb-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Pokemon</a>
+			</li>
+			{# <li>
+													<a href="#" class="retour-lien py-2 px-3 mt-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Call Of Duty</a>
+												</li>
+												<li>
+													<a href="#" class="retour-lien py-2 px-3 mt-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Palworld</a>
+												</li> #}
+		</ul>
+	</div>
 </nav>
+
+<script>
+	document.getElementById('menu-toggle').addEventListener('click', function () {
+var menu = document.getElementById('mobile-menu');
+menu.classList.toggle('hidden');
+});
+</script>
