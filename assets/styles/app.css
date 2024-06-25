@@ -62,3 +62,11 @@
     animation: flip 2s linear;
     transform-style: preserve-3d;
 }
+
+.custom-width-1 {
+    width: 7% !important;
+}
+
+.custom-width-2 {
+    width: 7% !important;
+}

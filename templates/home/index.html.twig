@@ -3,98 +3,44 @@
 {% block content %}
 	<div class="p-4 h-auto">
 		<div class="container container-fluid mx-auto">
-			<h1 class="font-bold text-xl uppercase text-center mt-8">Un Pokémon approche  !</h1>
-			<div class="flex mt-8 items-center justify-center">
+			<h1 class="font-bold text-xl uppercase text-center mt-8">Pokémons à saisir !</h1>
+			<div class="flex flex-wrap -mx-2">
+				{% for pokemon in randomPokemons %}
 
-				<div class="w-1/2 text-center flex items-center justify-center">
-					<img class="w-1/3 slide-in" src="{{ randomPokemon.sprites.regular }}">
-				</div>
+					{% set types = [] %}
+					{% for type in pokemon.types %}
+						{% set types = types|merge([type.name|lower]) %}
+					{% endfor %}
 
-				<div class="w-1/2 text-center flex flex-col items-center">
-					<h2 class="font-bold text-2xl relative">
-						{{ randomPokemon.name.fr|upper }}
-					</h2>
-					<div class="mt-2 flex justify-center space-x-4">
-						{% if randomPokemon.types|length == 1 %}
-							<span class="badge bg-gray-700 text-amber-400  px-4 py-1 rounded">
-								{{ randomPokemon.types[0].name|upper }}
-							</span>
-						{% else %}
-							{% for type in randomPokemon.types %}
-								<span class="badge bg-gray-700 text-amber-400  px-4 py-1 rounded">
-									{{ type.name|upper }}
-								</span>
-							{% endfor %}
-						{% endif %}
-					</div>
 
-					<div class="flex w-full justify-between mt-6">
-						<div class="w-1/2">
-							<p class="inline-block text-center bg-gray-700 text-amber-400 font-bold rounded py-2 px-8">
-								{{ randomPokemon.weight|upper }}</p>
-						</div>
-						<div class="w-1/2">
-							<p class="inline-block text-center bg-gray-700 text-amber-400 font-bold rounded py-2 px-8">
-								{{ randomPokemon.height|upper }}</p>
-						</div>
-					</div>
-
-					{% if randomPokemon.evolution %}
-						<div class="flex w-full justify-between mt-6">
-							{% set preEvolutions = randomPokemon.evolution.pre|length %}
-							{% set nextEvolutions = randomPokemon.evolution.next|length %}
-
-							{% if preEvolutions > 0 %}
-								<div class="w-{{ nextEvolutions == 0 ? 'full' : '1/2' }} text-center">
-									{% set evolutions = [] %}
-									{% for before in randomPokemon.evolution.pre %}
-										{% set evolutions = evolutions | merge([before.name]) %}
-									{% endfor %}
-									<p class="inline-block bg-gray-700 text-amber-400 rounded py-2 px-8 mt-6">
-										Evolution de :
-										{{ evolutions | join(' et ') }}
-									</p>
+					{% if pokemon.pokedex_id > 0 %}
+						<div class="w-full md:w-full lg:w-1/3 px-2 mt-8 text-center justify-center">
+							<div class="p-4 border rounded border-slate-700">
+								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr }}</h2>
+								<div class="mt-2 flex justify-center items-center">
+									{% if pokemon.types|length == 1 %}
+										<img class="custom-width-1 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
+									{% else %}
+										{% for image in pokemon.types %}
+											<img class="custom-width-2 inline {{ loop.last ? '' : 'mr-4' }}" src=" {{ image.image }} " title=" {{image.name}} ">
+										{% endfor %}
+									{% endif %}
 								</div>
-							{% endif %}
-
-							{% if nextEvolutions > 0 %}
-								<div class="w-{{ preEvolutions == 0 ? 'full' : '1/2' }} text-center">
-									{% set evolutions = [] %}
-									{% for after in randomPokemon.evolution.next %}
-										{% set evolutions = evolutions | merge([after.name]) %}
-									{% endfor %}
-									<p class="inline-block bg-gray-700 text-amber-400 rounded py-2 px-8 mt-6">
-										Evolue en :
-										{{ evolutions | join(' puis en ') }}
-									</p>
-								</div>
-							{% endif %}
+								<img src="{{ pokemon.sprites.regular }}" alt="{{ pokemon.name.fr }}" class="w-1/2 h-auto mx-auto">
+								<p class=" bg-gray-700 text-amber-400 rounded-full py-2 my-4">Pokedex n°
+									{{pokemon.pokedex_id}}
+									- Gen.
+									{{pokemon.generation}}
+								</p>
+								<p class=" bg-gray-700 text-amber-400 rounded-full py-2">
+									{{ pokemon.weight|upper }}
+									-
+									{{ pokemon.height|upper }}
+								</p>
+							</div>
 						</div>
 					{% endif %}
-
-					<table class="mt-6 mx-auto text-sm border-collapse border border-gray-500 w-full">
-						<thead>
-							<tr>
-								<th class="border border-gray-500 p-4">PV</th>
-								<th class="border border-gray-500 p-4">ATK</th>
-								<th class="border border-gray-500 p-4">DEF</th>
-								<th class="border border-gray-500 p-4">ATK_SPE</th>
-								<th class="border border-gray-500 p-4">DEF_SPE</th>
-								<th class="border border-gray-500 p-4">VIT</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="border border-gray-500 p-4 font-bold">{{randomPokemon.stats.hp}}</td>
-								<td class="border border-gray-500 p-4 font-bold">{{randomPokemon.stats.atk}}</td>
-								<td class="border border-gray-500 p-4 font-bold">{{randomPokemon.stats.def}}</td>
-								<td class="border border-gray-500 p-4 font-bold">{{randomPokemon.stats.spe_atk}}</td>
-								<td class="border border-gray-500 p-4 font-bold">{{randomPokemon.stats.spe_def}}</td>
-								<td class="border border-gray-500 p-4 font-bold">{{randomPokemon.stats.vit}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
