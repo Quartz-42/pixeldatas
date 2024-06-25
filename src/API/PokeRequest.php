@@ -11,7 +11,7 @@ class PokeRequest
     ) {
     }
 
-    public function getRandomPokemon(): array
+    public function getRandomPokemon(int $count): array
     {
         $response = $this->client->request(
             'GET',
@@ -22,11 +22,9 @@ class PokeRequest
         $contentType = $response->getHeaders()['content-type'][0];
         $content = $response->toArray();
 
-        // Sélectionner une clé aléatoire du tableau des Pokémon
-        $randomKey = array_rand($content);
-        // Récupérer le Pokémon correspondant à la clé aléatoire
-        $randomPokemon = $content[$randomKey];
-        // Retourner le Pokémon sélectionné aléatoirement
+        shuffle($content);
+        $randomPokemon = array_slice($content, 0, $count);
+
         return $randomPokemon;
     }
 

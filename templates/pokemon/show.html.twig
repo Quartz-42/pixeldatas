@@ -26,7 +26,7 @@
 				<p id="no-results2" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
 			</div>
 
-			<div id="pokemon-container" class="grid grid-cols-5 gap-4">
+			<div class="grid grid-cols-5 gap-4">
 				{% for pokemon in pokemons %}
 					{% set types = [] %}
 					{% for type in pokemon.types %}
@@ -48,15 +48,11 @@
 							<div class="flex justify-between">
 								<div class="mt-2">
 									{% if pokemon.types|length == 1 %}
-										<p class="text-normal">
-											<img class="w-2/3 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
-										</p>
+										<img class="w-2/3 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
 									{% else %}
-										<p class="text-normal">
-											{% for image in pokemon.types %}
-												<img class="w-2/6 inline" src="{{ image.image }}">
-											{% endfor %}
-										</p>
+										{% for image in pokemon.types %}
+											<img class="w-2/6 inline" src="{{ image.image }}">
+										{% endfor %}
 									{% endif %}
 								</div>
 								<div class="mt-2">
