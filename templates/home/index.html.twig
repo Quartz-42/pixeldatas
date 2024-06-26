@@ -16,7 +16,7 @@
 					{% if pokemon.pokedex_id > 0 %}
 						<div class="w-full md:w-full lg:w-1/3 px-2 mt-8 text-center justify-center">
 							<div class="p-4 border rounded border-slate-700">
-								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr }}</h2>
+								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr|upper }}</h2>
 								<div class="mt-2 flex justify-center items-center">
 									{% if pokemon.types|length == 1 %}
 										<img class="custom-width-1 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
@@ -29,12 +29,12 @@
 								<a href="{{path('app_pokemon_details', {"id" : pokemon.pokedex_id})}}">
 									<img src="{{ pokemon.sprites.regular }}" alt="{{ pokemon.name.fr }}" class="w-1/2 h-auto mx-auto">
 								</a>
-								<p class=" bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6">Pokedex n°
+								<p class=" bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6 uppercase font-semibold">Pokedex n°
 									{{pokemon.pokedex_id}}
 									- Gen.
 									{{pokemon.generation}}
 								</p>
-								<p class=" bg-gray-700 text-amber-400 rounded py-2 mt-6">
+								<p class=" bg-gray-700 text-amber-400 rounded py-2 mt-6 font-semibold">
 									{{ pokemon.weight|upper }}
 									-
 									{{ pokemon.height|upper }}
