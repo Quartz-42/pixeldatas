@@ -7,15 +7,10 @@
 				<h1 class="uppercase font-bold text-2xl">{{ pokemon.name.fr }}</h1>
 				<div class="flex mt-8">
 					<div class="w-1/3">
-						<span class="font-bold border bg-black border-black rounded text-amber-400 p-2">GEN.{{ pokemon.generation }}</span>
+						<span class="font-bold border bg-black border-black rounded text-amber-400 py-2 px-8">GEN.{{ pokemon.generation }}</span>
 					</div>
 					<div class="w-1/3">
-						{% if pokemon.sprites.gmax %}
-							<span class="font-bold border bg-black border-black rounded text-amber-400 p-2">GMAX</span>
-						{% endif %}
-					</div>
-					<div class="w-1/3">
-						<span class="font-bold border bg-black border-black rounded text-amber-400 p-2">
+						<span class="font-bold border bg-black border-black rounded text-amber-400 py-2 px-8">
 							{% for type in pokemon.types %}
 								{{ type.name|upper }}
 								{% if not loop.last %}
@@ -24,46 +19,113 @@
 							{% endfor %}
 						</span>
 					</div>
-				</div>
-				<div class="flex mt-4 justify-center">
-					<div class="w-1/4 flex justify-center items-center ml-8">
-						<img src="{{ pokemon.sprites.regular }}" alt="Pokemon Image">
-					</div>
-					<div class="w-1/2 flex flex-col justify-center items-center">
-						<h2 class="text-center font-bold text-xl">Statistiques :</h2>
-						<table class="mt-4 text-sm border-collapse border border-gray-500">
-							<thead>
-								<tr>
-									<th class="border border-gray-500 p-4">PV</th>
-									<th class="border border-gray-500 p-4">ATK</th>
-									<th class="border border-gray-500 p-4">DEF</th>
-									<th class="border border-gray-500 p-4">ATK_SPE</th>
-									<th class="border border-gray-500 p-4">DEF_SPE</th>
-									<th class="border border-gray-500 p-4">VIT</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td class="border border-gray-500 p-4">{{ pokemon.stats.hp }}</td>
-									<td class="border border-gray-500 p-4">{{ pokemon.stats.atk }}</td>
-									<td class="border border-gray-500 p-4">{{ pokemon.stats.def }}</td>
-									<td class="border border-gray-500 p-4">{{ pokemon.stats.spe_atk }}</td>
-									<td class="border border-gray-500 p-4">{{ pokemon.stats.spe_def }}</td>
-									<td class="border border-gray-500 p-4">{{ pokemon.stats.vit }}</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="w-1/3">
+						{% if pokemon.sprites.gmax %}
+							<span class="font-bold border bg-black border-black rounded text-amber-400 py-2 px-8">GMAX</span>
+						{% endif %}
 					</div>
 				</div>
 
-				{% if pokemon.sprites.shiny %}
-					<img src="{{ pokemon.sprites.shiny }}" alt="Shiny Pokemon Image">
-				{% endif %}
-				{% if pokemon.sprites.gmax %}
-					<img src="{{ pokemon.sprites.gmax.regular }}" alt="GMAX Pokemon Image">
-					<img src="{{ pokemon.sprites.gmax.shiny }}" alt="Shiny GMAX Pokemon Image">
-				{% endif %}
+
+				<div class="border-black p-4 my-8 rounded flex w-full md:w-1/2 lg:w-1/2 hidden md:flex lg:flex">
+					<div class="w-1/3 justify-center">
+						<img class="w-1/2" src="{{ asset('/img/pokeFact.png') }}">
+					</div>
+					<div class="w-2/3 ml-4">
+						<p class="italic">
+							{{pokemon.name.fr}}
+							est un Pokémon de type
+							{% for type in pokemon.types %}
+								<strong>{{ type.name }}</strong>
+								{% if not loop.last %}
+									/
+								{% endif %}
+							{% endfor %}
+							.
+						</p>
+						<p class="italic">Il possédes les talents
+							{% for talent in pokemon.talents %}
+								<strong>{{talent.name}}</strong>
+								{% if not loop.last %}
+									et
+								{% endif %}
+							{% endfor %}
+							.
+						</p>
+						{% if pokemon.evolution %}
+							<p class="italic">
+								Ce Pokémon est
+								<strong>évolutif !</strong>
+								{% if pokemon.evolution.pre %}
+									Il est l'évolution de
+									{% for preEvo in pokemon.evolution.pre %}
+										<strong>{{ preEvo.name }}</strong>
+										{% if not loop.last %}
+											et de
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+								{% if pokemon.evolution.next %}
+									Son évolution est
+									{% for nextEvo in pokemon.evolution.next %}
+										<strong>{{ nextEvo.name }}</strong>
+									{% endfor %}
+								{% endif %}
+							</p>
+						{% else %}
+							<p class="italic">
+								Ce Pokémon ne possède pas d'évolution.
+							</p>
+						{% endif %}
+
+					</div>
+				</p>
 			</div>
+
+
+			<div class="flex mt-4 justify-center">
+				<div class="w-1/4 flex justify-center items-center ml-8">
+					<img src="{{ pokemon.sprites.regular }}" alt="Pokemon Image">
+				</div>
+				<div class="w-1/2 flex flex-col justify-center items-center">
+					<h2 class="text-center font-bold text-xl">Statistiques :</h2>
+					<table class="mt-4 text-sm border-collapse border border-gray-500">
+						<thead>
+							<tr>
+								<th class="border border-gray-500 p-4">PV</th>
+								<th class="border border-gray-500 p-4">ATK</th>
+								<th class="border border-gray-500 p-4">DEF</th>
+								<th class="border border-gray-500 p-4">ATK_SPE</th>
+								<th class="border border-gray-500 p-4">DEF_SPE</th>
+								<th class="border border-gray-500 p-4">VIT</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="border border-gray-500 p-4">{{ pokemon.stats.hp }}</td>
+								<td class="border border-gray-500 p-4">{{ pokemon.stats.atk }}</td>
+								<td class="border border-gray-500 p-4">{{ pokemon.stats.def }}</td>
+								<td class="border border-gray-500 p-4">{{ pokemon.stats.spe_atk }}</td>
+								<td class="border border-gray-500 p-4">{{ pokemon.stats.spe_def }}</td>
+								<td class="border border-gray-500 p-4">{{ pokemon.stats.vit }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			{% if pokemon.sprites.shiny %}
+				<img src="{{ pokemon.sprites.shiny }}" alt="Shiny Pokemon Image">
+			{% endif %}
+			{% if pokemon.sprites.gmax %}
+				<img src="{{ pokemon.sprites.gmax.regular }}" alt="GMAX Pokemon Image">
+				<img src="{{ pokemon.sprites.gmax.shiny }}" alt="Shiny GMAX Pokemon Image">
+			{% endif %}
+
+			<a href={{path('app_all_pokemon')}} class="font-bold border bg-black border-black rounded text-amber-400 p-2 mt-6 mb-6">
+				Retour à la liste
+			</a>
+
 		</div>
 	</div>
-{% endblock %}
+</div>{% endblock %}
