@@ -26,7 +26,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/pokemon-{type}', name: 'app_pokemon_type')]
+    #[Route('/pokemon/{type}', name: 'app_pokemon_type')]
     public function showPokemonByType($type, PokeRequest $pokeRequest): Response
     {
         return $this->render('pokemon/show.html.twig', [
