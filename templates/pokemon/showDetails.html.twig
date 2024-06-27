@@ -43,7 +43,12 @@
 							{% endfor %}
 							.
 						</p>
-						<p class="italic">Il possédes les talents
+						<p class="italic">Il posséde
+							{% if pokemon.talents|length > 1 %}
+								les talents
+							{% else %}
+								le talent
+							{% endif %}
 							{% for talent in pokemon.talents %}
 								<strong>{{talent.name}}</strong>
 								{% if not loop.last %}
