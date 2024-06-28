@@ -21,7 +21,7 @@ class PokeRequest
     {
         return $this->cache->get('randomPoke', function (ItemInterface $item) use ($count): array {
 
-            $item->expiresAfter(30);
+            $item->expiresAfter(10);
 
             $response = $this->client->request('GET', 'https://tyradex.vercel.app/api/v1/pokemon');
 
@@ -42,7 +42,7 @@ class PokeRequest
     {
 
         return $this->cache->get('allPoke', function (ItemInterface $item): array {
-            $item->expiresAfter(600);
+            $item->expiresAfter(60);
 
             $response = $this->client->request(
                 'GET',
@@ -63,7 +63,7 @@ class PokeRequest
     {
         return $this->cache->get('pokeByType', function (ItemInterface $item) use ($type): array {
 
-            $item->expiresAfter(30);
+            $item->expiresAfter(10);
 
             $response = $this->client->request(
                 'GET',
@@ -99,7 +99,7 @@ class PokeRequest
 
         return $this->cache->get('pokeById', function (ItemInterface $item) use ($id): array {
 
-            $item->expiresAfter(30);
+            $item->expiresAfter(5);
 
             $response = $this->client->request(
                 'GET',
