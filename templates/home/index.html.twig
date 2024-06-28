@@ -3,7 +3,7 @@
 {% block content %}
 	<div class="p-4 h-auto">
 		<div class="container container-fluid mx-auto">
-			<h1 class="font-bold text-xl uppercase text-center mt-8">Pokémons à saisir !</h1>
+			<h1 class="font-bold text-xl uppercase text-center mt-8">Poké-randoms</h1>
 			<div class="flex flex-wrap -mx-2">
 				{% for pokemon in randomPokemons %}
 
@@ -15,7 +15,7 @@
 
 					{% if pokemon.pokedex_id > 0 %}
 						<div class="w-full md:w-full lg:w-1/3 px-2 mt-8 text-center justify-center">
-							<div class="p-4 border rounded border-slate-700">
+							<div class="p-4 border rounded border-slate-700 shadow-md">
 								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr|upper }}</h2>
 								<div class="mt-2 flex justify-center items-center">
 									{% if pokemon.types|length == 1 %}
