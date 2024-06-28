@@ -12,7 +12,6 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(PokeRequest $pokeRequest): Response
     {
-
         $randomPokemons = $pokeRequest->getRandomPokemon(3);
 
         return $this->render('home/index.html.twig', [
