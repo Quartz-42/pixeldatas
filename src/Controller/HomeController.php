@@ -18,4 +18,10 @@ class HomeController extends AbstractController
             'randomPokemons' => $randomPokemons,
         ]);
     }
+
+    #[Route('/mentions-legales', name: 'app_legal')]
+    public function showLegal(): Response
+    {
+        return $this->render('shared/_legal.html.twig');
+    }
 }
