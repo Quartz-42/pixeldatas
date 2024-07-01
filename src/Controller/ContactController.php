@@ -24,7 +24,7 @@ class ContactController extends AbstractController
 
             $email = (new Email())
                 ->from($data['email'])
-                ->to('message@bbadev.fr')
+                ->to('contact@bbadev.fr')
                 ->subject($data['subject'])
                 ->text(
                     'Nom: ' . $data['name'] . "\n" .
