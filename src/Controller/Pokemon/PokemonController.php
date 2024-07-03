@@ -26,11 +26,21 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/pokemon/{type}', name: 'app_pokemon_type')]
-    public function showPokemonByType($type, PokeRequest $pokeRequest): Response
+    //TEMPLATE NON CREE ROUTE NON UTILISEE
+    // #[Route('/pokemons/{type}', name: 'app_pokemon_type')]
+    // public function showPokemonByType($type, PokeRequest $pokeRequest): Response
+    // {
+    //     return $this->render('pokemon/showType.html.twig', [
+    //         'pokemons' => $pokeRequest->getPokemonByType($type),
+    //     ]);
+    // }
+
+    #[Route('/pokemons/generation-{generation}', name: 'app_pokemon_gen')]
+    public function showPokemonByGen($generation, PokeRequest $pokeRequest): Response
     {
-        return $this->render('pokemon/show.html.twig', [
-            'pokemons' => $pokeRequest->getPokemonByType($type),
+        return $this->render('pokemon/showGen.html.twig', [
+            'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
+            'generation' => $generation,
         ]);
     }
 }

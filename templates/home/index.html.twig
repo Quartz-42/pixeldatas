@@ -19,10 +19,10 @@
 								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr|upper }}</h2>
 								<div class="mt-2 flex justify-center items-center">
 									{% if pokemon.types|length == 1 %}
-										<img class="custom-width inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
+										<img class="grosse-taille lg:petite-taille inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
 									{% else %}
 										{% for image in pokemon.types %}
-											<img class="custom-width inline {% if not loop.last %}mr-4{% endif %}" src="{{ image.image }}" title="{{ image.name }}">
+											<img class="grosse-taille lg:petite-taille inline {% if not loop.last %}mr-4{% endif %}" src="{{ image.image }}" title="{{ image.name }}">
 										{% endfor %}
 									{% endif %}
 								</div>
@@ -31,8 +31,13 @@
 								</a>
 								<p class=" bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6 uppercase font-semibold">Pokedex n°
 									{{pokemon.pokedex_id}}
-									- Gen.
-									{{pokemon.generation}}
+									<a href="{{path('app_pokemon_gen', {'generation' : pokemon.generation})}}">
+										-
+										<span class="underline">
+											Gen.
+											{{pokemon.generation}}
+										</span>
+									</a>
 								</p>
 								<p class=" bg-gray-700 text-amber-400 rounded py-2 mt-6 font-semibold">
 									{{ pokemon.weight|upper }}

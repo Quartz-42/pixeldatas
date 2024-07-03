@@ -63,6 +63,10 @@
     transform-style: preserve-3d;
 }
 
-.custom-width {
-    width: 9% !important;
+.grosse-taille {
+    width: 10% !important;
+}
+
+.petite-taille {
+    width: 7% !important;
 }
