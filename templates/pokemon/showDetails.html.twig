@@ -7,11 +7,11 @@
 				<h1 class="uppercase font-bold text-4xl mt-8">{{ pokemon.name.fr }}</h1>
 				{#CV POKEMON #}
 				<div class="flex justify-center mt-[45px]">
-					<div class="border border-dashed border-black shadow-md px-10 py-4 rounded flex w-full md:w-1/2 lg:w-2/3 items-center">
+					<div class="border border-dashed border-black shadow-md px-10 pr-4 pl-3 rounded flex w-full md:w-1/2 lg:w-2/3 items-center">
 						<div class="w-1/3 justify-center hidden md:block lg:block">
-							<img class="w-1/3 mx-auto" src="{{ asset('/img/pokeFact.png') }}">
+							<img class="w-1/4 mx-auto" src="{{ asset('/img/pokeFact.png') }}">
 						</div>
-						<div class="w-full md:w-2/3 lg:w-2/3 ml-4 sm:w-full lg:text-lg md:text-base sm:text-sm text-center">
+						<div class="w-full md:w-2/3 lg:w-2/3 ml-2 sm:w-full lg:text-lg md:text-base sm:text-sm text-center">
 							<p class="mt-2 mb-2">
 								{{pokemon.name.fr}}
 								est un Pokémon de type
@@ -21,6 +21,13 @@
 										/
 									{% endif %}
 								{% endfor %}
+								appartenant à la
+								<a href="{{path('app_pokemon_gen', {'generation' : pokemon.generation})}}">
+									<span class="underline font-bold">
+										Génération n°
+										{{pokemon.generation}}
+									</span>
+								</a>
 							</p>
 							<p class="mt-2 mb-2">Il possède
 								{% if pokemon.talents|length > 1 %}
@@ -42,7 +49,11 @@
 									{% if pokemon.evolution.pre %}
 										Il est l'évolution de
 										{% for preEvo in pokemon.evolution.pre %}
-											<strong>{{ preEvo.name }}</strong>
+											<strong>
+
+												{{ preEvo.name }}
+
+											</strong>
 											{% if not loop.last %}
 												et de
 											{% endif %}

@@ -17,19 +17,28 @@ class PokeRequest
         $this->cache = $cache;
     }
 
+    public function getResponse()
+    {
+        $response = $this->client->request(
+            'GET',
+            'https://tyradex.vercel.app/api/v1/pokemon'
+        );
+
+        // Gestion d'erreur pour la requête HTTP
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
+        }
+
+        return $response;
+    }
+
     public function getRandomPokemon(int $count): array
     {
         return $this->cache->get('randomPoke', function (ItemInterface $item) use ($count): array {
 
             $item->expiresAfter(5);
 
-            $response = $this->client->request('GET', 'https://tyradex.vercel.app/api/v1/pokemon');
-
-            // Gestion d'erreur pour la requête HTTP
-            if ($response->getStatusCode() !== 200) {
-                throw new \Exception('Erreur lors de la récupération des données des Pokémon');
-            }
-
+            $response = $this->getResponse();
             $content = $response->toArray();
 
             shuffle($content);
@@ -44,15 +53,7 @@ class PokeRequest
         return $this->cache->get('allPoke', function (ItemInterface $item): array {
             $item->expiresAfter(60);
 
-            $response = $this->client->request(
-                'GET',
-                'https://tyradex.vercel.app/api/v1/pokemon'
-            );
-
-            // Gestion d'erreur pour la requête HTTP
-            if ($response->getStatusCode() !== 200) {
-                throw new \Exception('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
-            }
+            $response = $this->getResponse();
 
             $content = $response->toArray();
             return $content;
@@ -65,15 +66,7 @@ class PokeRequest
 
             $item->expiresAfter(2);
 
-            $response = $this->client->request(
-                'GET',
-                'https://tyradex.vercel.app/api/v1/pokemon'
-            );
-
-            // Gestion d'erreur pour la requête HTTP
-            if ($response->getStatusCode() !== 200) {
-                throw new \Exception('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
-            }
+            $response = $this->getResponse();
 
             $content = $response->toArray();
 
@@ -101,15 +94,7 @@ class PokeRequest
 
             $item->expiresAfter(2);
 
-            $response = $this->client->request(
-                'GET',
-                'https://tyradex.vercel.app/api/v1/pokemon'
-            );
-
-            // Gestion d'erreur pour la requête HTTP
-            if ($response->getStatusCode() !== 200) {
-                throw new \Exception('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
-            }
+            $response = $this->getResponse();
 
             $content = $response->toArray();
 
@@ -118,6 +103,28 @@ class PokeRequest
                     return $pokemon;
                 }
             }
+        });
+    }
+
+    public function getPokemonByGeneration($generation): array
+    {
+        return $this->cache->get('pokeByGen', function (ItemInterface $item) use ($generation): array {
+
+            $item->expiresAfter(2);
+
+            $response = $this->getResponse();
+
+            $content = $response->toArray();
+
+            $pokemonsGeneration = [];
+
+            foreach ($content as $pokemon) {
+                if (isset($pokemon['generation']) && $pokemon['generation'] == $generation) {
+                    $pokemonsGeneration[] = $pokemon;
+                }
+            }
+
+            return $pokemonsGeneration;
         });
     }
 }

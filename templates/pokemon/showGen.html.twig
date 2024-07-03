@@ -8,9 +8,11 @@
 					<img class="w-1/2" src="{{ asset('/img/pokeFact.png') }}">
 				</div>
 				<div class="w-2/3 ml-4">
-					<p class="font-bold italic">Il y a actuellement
-						{{ pokemons|length -1 }}
-						Pokémons dans la collection !</p>
+					<p class="font-bold italic">La génération
+						{{ generation}}
+						comporte
+						{{ pokemons|length }}
+						Pokémons  !</p>
 				</div>
 			</div>
 
@@ -20,14 +22,9 @@
 				<input id="search-input-name" type="search" placeholder="Nom du pokémon..." class="rounded w-1/2 sm:w-1/4 p-2 my-4 italic">
 				<p id="no-results" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
 			</div>
-			<div class="col-span-1">
-				<h3 class="font-semibold text-white">Chercher un pokémon par son type</h3>
-				<input id="search-input-type" type="search" placeholder="Type du pokémon..." class="rounded w-1/2 sm:w-1/4 p-2 my-4 italic">
-				<p id="no-results2" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
-			</div>
-
 
 			<div class="flex flex-wrap gap-2 lg:gap-4 lg:justify-start justify-center ">
+
 				{% for pokemon in pokemons %}
 					{% set types = [] %}
 					{% for type in pokemon.types %}
