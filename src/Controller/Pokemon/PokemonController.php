@@ -17,12 +17,12 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/pokemon-details/{id}', name: 'app_pokemon_details')]
-    public function showPokemonDetails(int $id, PokeRequest $pokeRequest): Response
+    #[Route('/pokemon-details/{name}', name: 'app_pokemon_details')]
+    public function showPokemonDetails(string $name, PokeRequest $pokeRequest): Response
     {
 
         return $this->render('pokemon/showDetails.html.twig', [
-            'pokemon' => $pokeRequest->getPokemonById($id),
+            'pokemon' => $pokeRequest->getPokemonByName($name),
         ]);
     }
 
@@ -35,7 +35,7 @@ class PokemonController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/pokemons/generation-{generation}', name: 'app_pokemon_gen')]
+    #[Route('/pokemons/generation/{generation}', name: 'app_pokemon_gen')]
     public function showPokemonByGen($generation, PokeRequest $pokeRequest): Response
     {
         return $this->render('pokemon/showGen.html.twig', [

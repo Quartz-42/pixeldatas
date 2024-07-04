@@ -87,10 +87,10 @@ class PokeRequest
         });
     }
 
-    public function getPokemonById($id): array
+    public function getPokemonByName($name): array
     {
 
-        return $this->cache->get('pokeById', function (ItemInterface $item) use ($id): array {
+        return $this->cache->get('pokeByName', function (ItemInterface $item) use ($name): array {
 
             $item->expiresAfter(2);
 
@@ -99,7 +99,7 @@ class PokeRequest
             $content = $response->toArray();
 
             foreach ($content as $pokemon) {
-                if ($pokemon['pokedex_id'] == $id) {
+                if ($pokemon['name']['fr'] == $name) {
                     return $pokemon;
                 }
             }

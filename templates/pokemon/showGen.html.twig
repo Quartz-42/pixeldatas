@@ -32,7 +32,7 @@
 					{% endfor %}
 
 					{% if pokemon.pokedex_id > 0 %}
-						<a href="{{ path('app_pokemon_details', {"id" : pokemon.pokedex_id}) }}" class="pokemon-card bg-white p-4 mt-8 mb-8 rounded-md flex-1 sm:basis-2/3 md:basis-1/4 lg:basis-1/6 min-w-[200px] max-w-[300px]" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}">
+						<a href="{{ path('app_pokemon_details', {"name" : pokemon.name.fr}) }}" class="pokemon-card bg-white p-4 mt-8 mb-8 rounded-md flex-1 sm:basis-2/3 md:basis-1/4 lg:basis-1/6 min-w-[200px] max-w-[300px]" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}">
 							<div class="flex justify-between">
 								<div>
 									<h2 class="text-xl font-bold">{{ pokemon.name.fr }}</h2>
