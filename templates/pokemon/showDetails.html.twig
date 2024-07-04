@@ -50,9 +50,9 @@
 										Il est l'évolution de
 										{% for preEvo in pokemon.evolution.pre %}
 											<strong>
-
-												{{ preEvo.name }}
-
+												<a class="underline" href="{{path('app_pokemon_details', {"name" : preEvo.name})}}">
+													{{ preEvo.name }}
+												</a>
 											</strong>
 											{% if not loop.last %}
 												et de
@@ -64,7 +64,11 @@
 									<p class="mt-2 mb-2">
 										Son évolution est
 										{% for nextEvo in pokemon.evolution.next %}
-											<strong>{{ nextEvo.name }}</strong>
+											<strong>
+												<a class="underline" href="{{path('app_pokemon_details', {"name" : nextEvo.name})}}">
+													{{ nextEvo.name }}
+												</a>
+											</strong>
 											{% if not loop.last %}
 												puis
 											{% endif %}

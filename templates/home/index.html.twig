@@ -26,7 +26,7 @@
 										{% endfor %}
 									{% endif %}
 								</div>
-								<a href="{{path('app_pokemon_details', {"id" : pokemon.pokedex_id})}}">
+								<a href="{{path('app_pokemon_details', {"name" : pokemon.name.fr})}}">
 									<img src="{{ pokemon.sprites.regular }}" alt="{{ pokemon.name.fr }}" class="w-1/2 h-auto mx-auto">
 								</a>
 								<p class=" bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6 uppercase font-semibold">Pokedex n°
