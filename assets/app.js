@@ -72,6 +72,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+//RECHERCHE PAR TYPE V2
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInputType = document.getElementById('search-input-type');
+    const pokemonList = document.getElementById('pokemon-list');
+    const noResults2 = document.getElementById('no-results2');
+
+    searchInputType.addEventListener('change', function () {
+        const selectedType = searchInputType.value.toLowerCase();
+        const pokemonCards = pokemonList.getElementsByClassName('pokemon-card');
+
+        let hasResults = false;
+
+        for (const card of pokemonCards) {
+            const cardTypes = card.getAttribute('data-type').split(' ');
+
+            if (selectedType === '' || cardTypes.includes(selectedType)) {
+                card.style.display = 'block';
+                hasResults = true;
+            } else {
+                card.style.display = 'none';
+            }
+        }
+
+        if (!hasResults) {
+            noResults2.classList.remove('hidden');
+        } else {
+            noResults2.classList.add('hidden');
+        }
+    });
+});
+
 // FORCER LE RELOAD DE LA PAGE
 document.addEventListener('DOMContentLoaded', function () {
     let retourLien = document.querySelectorAll('.retour-lien');
