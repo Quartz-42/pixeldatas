@@ -36,7 +36,7 @@ class PokeRequest
     {
         return $this->cache->get('randomPoke', function (ItemInterface $item) use ($count): array {
 
-            $item->expiresAfter(5);
+            $item->expiresAfter(86400);
 
             $response = $this->getResponse();
             $content = $response->toArray();
