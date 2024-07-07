@@ -1,30 +1,50 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block content %}
 	<div class="bg-red-500 p-4 h-auto">
-		<div class="container container-fluid mx-auto">
+		<div class="container mx-auto">
 			<div class="bg-white p-4 my-8 rounded flex w-full md:w-1/2 lg:w-1/4 justify-center items-center hidden md:flex lg:flex">
 				<div class="w-1/3 flex justify-center">
 					<img class="w-1/2" src="{{ asset('/img/pokeFact.png') }}">
 				</div>
 				<div class="w-2/3 ml-4">
-					<p class="font-bold italic">La génération
-						{{ generation}}
-						comporte
-						{{ pokemons|length }}
-						Pokémons  !</p>
+					<p class="font-bold italic">Cette génération comporte
+						{{ pokemons|length -1 }}
+						Pokémons !</p>
 				</div>
 			</div>
 
-			{# barre de recherche #}
-			<div class="col-span-1">
+			<div class="col-span-1 mb-4">
 				<h3 class="font-semibold text-white">Chercher un pokémon par son nom</h3>
 				<input id="search-input-name" type="search" placeholder="Nom du pokémon..." class="rounded w-1/2 sm:w-1/4 p-2 my-4 italic">
 			</div>
+			<div class="col-span-1 mb-4">
+				<h3 class="font-semibold text-white">Chercher un pokémon par son type</h3>
+				<select id="search-input-type" class="rounded w-1/2 sm:w-1/4 p-2 my-4">
+					<option value="">-- Choisir --</option>
+					<option value="Acier">Acier</option>
+					<option value="Combat">Combat</option>
+					<option value="Dragon">Dragon</option>
+					<option value="Eau">Eau</option>
+					<option value="Électrik">Électrik</option>
+					<option value="Fée">Fée</option>
+					<option value="Feu">Feu</option>
+					<option value="Glace">Glace</option>
+					<option value="Insecte">Insecte</option>
+					<option value="Normal">Normal</option>
+					<option value="Plante">Plante</option>
+					<option value="Poison">Poison</option>
+					<option value="Psy">Psy</option>
+					<option value="Roche">Roche</option>
+					<option value="Sol">Sol</option>
+					<option value="Spectre">Spectre</option>
+					<option value="Ténèbres">Ténèbres</option>
+					<option value="Vol">Vol</option>
+				</select>
+			</div>
 			<p id="no-results" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
 
-			<div class="flex flex-wrap gap-2 lg:gap-4 lg:justify-start justify-center ">
-
+			<div id="pokemon-list" class="flex flex-wrap gap-2 lg:gap-4 lg:justify-start justify-center">
 				{% for pokemon in pokemons %}
 					{% set types = [] %}
 					{% for type in pokemon.types %}
@@ -32,13 +52,17 @@
 					{% endfor %}
 
 					{% if pokemon.pokedex_id > 0 %}
-						<a href="{{ path('app_pokemon_details', {"name" : pokemon.name.fr}) }}" class="pokemon-card bg-white p-4 mt-8 mb-8 rounded-md flex-1 sm:basis-2/3 md:basis-1/4 lg:basis-1/6 min-w-[200px] max-w-[300px]" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}">
+						<div class="pokemon-card bg-white p-4 mt-8 mb-8 rounded-md flex-1 sm:basis-2/3 md:basis-1/4 lg:basis-1/6 min-w-[200px] max-w-[300px]" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}">
 							<div class="flex justify-between">
 								<div>
-									<h2 class="text-xl font-bold">{{ pokemon.name.fr }}</h2>
+									<h2 class="text-xl font-bold">{{ pokemon.name.fr }}
+										{% if pokemon.sprites.gmax %}
+											<span class="text-xs font-semibold border bg-black border-black rounded text-amber-400 py-1 px-2">GMAX</span>
+										{% endif %}
+									</h2>
 								</div>
 								<div>
-									<p class="font-bold italic hidden md:block lg:block">
+									<p class="font-bold italic">
 										Pokédex n°{{ pokemon.pokedex_id }}
 									</p>
 								</div>
@@ -48,24 +72,28 @@
 									{% if pokemon.types|length == 1 %}
 										<img class="w-2/3 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
 									{% else %}
-										{% for image in pokemon.types %}
-											<img class="w-2/6 inline" src="{{ image.image }}">
+										{% for type in pokemon.types %}
+											<img class="w-2/6 inline" src="{{ type.image }}" title="{{ type.name }}">
 										{% endfor %}
 									{% endif %}
 								</div>
 								<div class="mt-2">
-									{% if pokemon.sprites.gmax %}
-										<span class="font-bold border bg-black border-black rounded text-amber-400 py-1 px-4">GMAX</span>
-									{% endif %}
+									<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
+										<span class="font-bold italic underline">Gen.
+											{{ pokemon.generation }}
+										</span>
+									</a>
 								</div>
 							</div>
 							<div class="flex justify-center">
-								<img src="{{ pokemon.sprites.regular }}" alt="Image de {{ pokemon.name.fr }}" class="w-4/5 mt-[-10px] wiggle">
+								<a href="{{ path('app_pokemon_details', {"name": pokemon.name.fr}) }}">
+									<img src="{{ pokemon.sprites.regular }}" alt="Image de {{ pokemon.name.fr }}" class="w-4/5 mt-[-10px] wiggle">
+								</a>
 							</div>
-						</a>
+						</div>
 					{% endif %}
 				{% endfor %}
 			</div>
 		</div>
 	</div>
-{% endblock %}
+{% endblock %} #}
