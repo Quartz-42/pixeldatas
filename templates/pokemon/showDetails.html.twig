@@ -21,13 +21,8 @@
 										/
 									{% endif %}
 								{% endfor %}
-								appartenant à la
-								<a href="{{path('app_pokemon_gen', {'generation' : pokemon.generation})}}">
-									<span class="underline font-bold">
-										Génération n°
-										{{pokemon.generation}}
-									</span>
-								</a>
+								appartenant à la Génération n°
+								{{pokemon.generation}}
 							</p>
 							<p class="mt-2 mb-2">Il possède
 								{% if pokemon.talents|length > 1 %}
