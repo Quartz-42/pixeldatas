@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="p-4 h-auto">
+		<div class="container container-fluid mx-auto flex flex-col items-center justify-center">
+			<h1 class="font-bold text-xl uppercase text-center my-8">Oups ! Une erreur s'est produite</h1>
+			<img class="w-1/2 md:w-1/4" src="{{asset('img/error404-img.png')}}">
+			<p class="font-bold text-center mt-8">
+				Suivez nos amis, ils vont vous ramener en lieu sûr !
+				<br>
+				<a class="inline-block mt-8 font-bold border bg-black border-black rounded text-amber-400 px-8 py-4" href="{{ path('app_home') }}">Retour à l'accueil</a>
+			</p>
+		</div>
+	</div>
+{% endblock %}
