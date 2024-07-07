@@ -25,19 +25,23 @@ function normalizeString(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
 
-// Fonction pour rechercher les Pokémon
-function searchPokemons(attribute, query, noResultsId) {
+// Fonction pour rechercher les Pokémon avec plusieurs critères
+function searchPokemonsMulti(criteria, noResultsId) {
     let pokemonCards = document.querySelectorAll('.pokemon-card');
     let noResults = document.getElementById(noResultsId);
     let hasResults = false;
 
-    query = normalizeString(query);
-
     pokemonCards.forEach(function (card) {
-        let value = card.getAttribute(attribute);
-        value = normalizeString(value);
-
-        if (value.includes(query)) {
+        let matches = true;
+        for (let key in criteria) {
+            let value = card.getAttribute(key);
+            value = normalizeString(value);
+            if (!value.includes(criteria[key])) {
+                matches = false;
+                break;
+            }
+        }
+        if (matches) {
             card.style.display = 'block';
             hasResults = true;
         } else {
@@ -52,64 +56,57 @@ function searchPokemons(attribute, query, noResultsId) {
     }
 }
 
-// RECHERCHE POKEMON PAR NOM
+// Mise à jour de la recherche
+function updateSearch() {
+    const nameValue = normalizeString(document.getElementById('search-input-name').value);
+    const typeValue = normalizeString(document.getElementById('search-input-type').value);
+    const genValue = normalizeString(document.getElementById('search-input-gen').value);
+
+    let criteria = {};
+    if (nameValue) {
+        criteria['data-name'] = nameValue;
+    }
+    if (typeValue) {
+        criteria['data-type'] = typeValue;
+    }
+    if (genValue) {
+        criteria['data-gen'] = genValue;
+    }
+
+    searchPokemonsMulti(criteria, 'no-results');
+}
+
+// Réinitialiser les filtres
+function resetFilters() {
+    document.getElementById('search-input-name').value = '';
+    document.getElementById('search-input-type').value = '';
+    document.getElementById('search-input-gen').value = '';
+
+    let pokemonCards = document.querySelectorAll('.pokemon-card');
+    pokemonCards.forEach(function (card) {
+        card.style.display = 'block';
+    });
+
+    document.getElementById('no-results').classList.add('hidden');
+}
+
+// Ajouter des écouteurs d'événements pour les champs de recherche
 document.addEventListener('DOMContentLoaded', function () {
-    let inputName = document.getElementById('search-input-name');
+    const inputName = document.getElementById('search-input-name');
+    const inputType = document.getElementById('search-input-type');
+    const inputGen = document.getElementById('search-input-gen');
+    const resetButton = document.getElementById('reset-filters');
+
     if (inputName) {
-        inputName.addEventListener('input', function () {
-            searchPokemons('data-name', this.value.toLowerCase(), 'no-results');
-        });
+        inputName.addEventListener('input', updateSearch);
     }
-});
-
-// RECHERCHE POKEMON PAR TYPE
-document.addEventListener('DOMContentLoaded', function () {
-    let inputType = document.getElementById('search-input-type');
     if (inputType) {
-        inputType.addEventListener('input', function () {
-            searchPokemons('data-type', this.value.toLowerCase(), 'no-results2');
-        });
+        inputType.addEventListener('change', updateSearch);
     }
-});
-
-//RECHERCHE PAR TYPE V2
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInputType = document.getElementById('search-input-type');
-    const pokemonList = document.getElementById('pokemon-list');
-    const noResults2 = document.getElementById('no-results2');
-
-    searchInputType.addEventListener('change', function () {
-        const selectedType = searchInputType.value.toLowerCase();
-        const pokemonCards = pokemonList.getElementsByClassName('pokemon-card');
-
-        let hasResults = false;
-
-        for (const card of pokemonCards) {
-            const cardTypes = card.getAttribute('data-type').split(' ');
-
-            if (selectedType === '' || cardTypes.includes(selectedType)) {
-                card.style.display = 'block';
-                hasResults = true;
-            } else {
-                card.style.display = 'none';
-            }
-        }
-
-        if (!hasResults) {
-            noResults2.classList.remove('hidden');
-        } else {
-            noResults2.classList.add('hidden');
-        }
-    });
-});
-
-// FORCER LE RELOAD DE LA PAGE
-document.addEventListener('DOMContentLoaded', function () {
-    let retourLien = document.querySelectorAll('.retour-lien');
-    retourLien.forEach(function (lien) {
-        lien.addEventListener('click', function (event) {
-            event.preventDefault();
-            window.location.href = this.href;
-        });
-    });
+    if (inputGen) {
+        inputGen.addEventListener('change', updateSearch);
+    }
+    if (resetButton) {
+        resetButton.addEventListener('click', resetFilters);
+    }
 });

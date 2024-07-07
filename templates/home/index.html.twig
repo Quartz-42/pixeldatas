@@ -29,15 +29,10 @@
 								<a href="{{path('app_pokemon_details', {"name" : pokemon.name.fr})}}">
 									<img src="{{ pokemon.sprites.regular }}" alt="{{ pokemon.name.fr }}" class="w-1/2 h-auto mx-auto">
 								</a>
-								<p class=" bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6 uppercase font-semibold">Pokedex n°
+								<p class="bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6 uppercase font-semibold">Pokedex n°
 									{{pokemon.pokedex_id}}
-									<a href="{{path('app_pokemon_gen', {'generation' : pokemon.generation})}}">
-										-
-										<span class="underline">
-											Gen.
-											{{pokemon.generation}}
-										</span>
-									</a>
+									- Gen.
+									{{pokemon.generation}}
 								</p>
 								<p class=" bg-gray-700 text-amber-400 rounded py-2 mt-6 font-semibold">
 									{{ pokemon.weight|upper }}
