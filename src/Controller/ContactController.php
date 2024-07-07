@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Form\ContactType;
@@ -30,10 +29,14 @@ class ContactController extends AbstractController
                     'Nom: ' . $data['name'] . "\n" .
                         'Email: ' . $data['email'] . "\n\n" .
                         $data['message']
+                )
+                ->html(
+                    '<p>Nom: ' . $data['name'] . '</p>' .
+                        '<p>Email: ' . $data['email'] . '</p>' .
+                        '<p>Message: ' . nl2br($data['message']) . '</p>'
                 );
 
             $mailer->send($email);
-
             $this->addFlash('success', 'Votre message a été envoyé avec succès.');
 
             return $this->redirectToRoute('app_contact');
