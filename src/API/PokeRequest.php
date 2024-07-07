@@ -51,7 +51,7 @@ class PokeRequest
     {
 
         return $this->cache->get('allPoke', function (ItemInterface $item): array {
-            $item->expiresAfter(60);
+            $item->expiresAfter(2);
 
             $response = $this->getResponse();
 
