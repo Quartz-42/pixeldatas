@@ -21,129 +21,133 @@
 										/
 									{% endif %}
 								{% endfor %}
-								appartenant à la Génération n°
-								{{pokemon.generation}}
+								appartenant à la
+								<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
+									<span class="font-bold underline">Gen.
+										{{ pokemon.generation }}
+									</span>
+								</a>
 							</p>
-							<p class="mt-2 mb-2">Il possède
-								{% if pokemon.talents|length > 1 %}
-									les talents
-								{% else %}
-									le talent
-								{% endif %}
-								{% for talent in pokemon.talents %}
-									<strong>{{talent.name}}</strong>
-									{% if not loop.last %}
-										,
-									{% endif %}
-								{% endfor %}
-							</p>
-							{% if pokemon.evolution %}
-								<p class="mt-2 mb-2">
-									Ce Pokémon est
-									<strong>évolutif !</strong>
-									{% if pokemon.evolution.pre %}
-										Il est l'évolution de
-										{% for preEvo in pokemon.evolution.pre %}
-											<strong>
-												<a class="underline" href="{{path('app_pokemon_details', {"name" : preEvo.name})}}">
-													{{ preEvo.name }}
-												</a>
-											</strong>
-											{% if not loop.last %}
-												et de
-											{% endif %}
-										{% endfor %}
-									{% endif %}
-								</p>
-								{% if pokemon.evolution.next %}
-									<p class="mt-2 mb-2">
-										Son évolution est
-										{% for nextEvo in pokemon.evolution.next %}
-											<strong>
-												<a class="underline" href="{{path('app_pokemon_details', {"name" : nextEvo.name})}}">
-													{{ nextEvo.name }}
-												</a>
-											</strong>
-											{% if not loop.last %}
-												puis
-											{% endif %}
-										{% endfor %}
-									{% endif %}
-								</p>
-								{% if pokemon.evolution.mega %}
-									<p class="mt-2 mb-2">
-										La légende raconte même qu'il peut
-										<strong>méga-évoluer !</strong>
-									</p>
-								{% endif %}
+						</p>
+						<p class="mt-2 mb-2">Il possède
+							{% if pokemon.talents|length > 1 %}
+								les talents
 							{% else %}
+								le talent
+							{% endif %}
+							{% for talent in pokemon.talents %}
+								<strong>{{talent.name}}</strong>
+								{% if not loop.last %}
+									,
+								{% endif %}
+							{% endfor %}
+						</p>
+						{% if pokemon.evolution %}
+							<p class="mt-2 mb-2">
+								Ce Pokémon est
+								<strong>évolutif !</strong>
+								{% if pokemon.evolution.pre %}
+									Il est l'évolution de
+									{% for preEvo in pokemon.evolution.pre %}
+										<strong>
+											<a class="underline" href="{{path('app_pokemon_details', {"name" : preEvo.name})}}">
+												{{ preEvo.name }}
+											</a>
+										</strong>
+										{% if not loop.last %}
+											et de
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							</p>
+							{% if pokemon.evolution.next %}
 								<p class="mt-2 mb-2">
-									Ce Pokémon ne possède pas d'évolution.
+									Son évolution est
+									{% for nextEvo in pokemon.evolution.next %}
+										<strong>
+											<a class="underline" href="{{path('app_pokemon_details', {"name" : nextEvo.name})}}">
+												{{ nextEvo.name }}
+											</a>
+										</strong>
+										{% if not loop.last %}
+											puis
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							</p>
+							{% if pokemon.evolution.mega %}
+								<p class="mt-2 mb-2">
+									La légende raconte même qu'il peut
+									<strong>méga-évoluer !</strong>
 								</p>
 							{% endif %}
-						</div>
+						{% else %}
+							<p class="mt-2 mb-2">
+								Ce Pokémon ne possède pas d'évolution.
+							</p>
+						{% endif %}
 					</div>
 				</div>
-
-				<div class="flex flex-wrap mt-4 justify-center">
-					<div class="w-full md:w-1/4 flex justify-center items-center mb-4 md:mb-0 md:ml-8">
-						<img src="{{ pokemon.sprites.regular }}" alt="Pokemon Image" class="w-2/3 md:w-full">
-					</div>
-					<div class="w-full md:w-1/2 flex flex-col justify-center items-center">
-						<h2 class="text-center font-bold text-xl">Statistiques :</h2>
-						<table class="mt-6 mx-auto text-sm font-bold border-collapse border border-gray-500 w-full md:w-2/3">
-							<thead>
-								<tr>
-									<th class="border border-gray-500 p-2 md:p-4">PV</th>
-									<th class="border border-gray-500 p-2 md:p-4">ATK</th>
-									<th class="border border-gray-500 p-2 md:p-4">DEF</th>
-									<th class="border border-gray-500 p-2 md:p-4">ATK_SPE</th>
-									<th class="border border-gray-500 p-2 md:p-4">DEF_SPE</th>
-									<th class="border border-gray-500 p-2 md:p-4">VIT</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.hp }}</td>
-									<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.atk }}</td>
-									<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.def }}</td>
-									<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.spe_atk }}</td>
-									<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.spe_def }}</td>
-									<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.vit }}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<div class="flex flex-wrap justify-center md:space-x-10 lg:space-x-10 my-11">
-					{% if pokemon.sprites.shiny %}
-						<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
-							<h2 class="font-bold text-xl mt-4">Forme Shiny</h2>
-							<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.shiny }}" alt="Shiny Pokemon Image">
-						</div>
-					{% endif %}
-
-					{% if pokemon.sprites.gmax %}
-						<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
-							<h2 class="font-bold text-xl mt-4">Forme GMAX</h2>
-							<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.gmax.regular }}" alt="GMAX Pokemon Image">
-						</div>
-						<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
-							<h2 class="font-bold text-xl mt-4">Forme GMAX Shiny</h2>
-							<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.gmax.shiny }}" alt="Shiny GMAX Pokemon Image">
-						</div>
-					{% endif %}
-				</div>
-
-
-				<div class="my-[50px]">
-					<a href={{path('app_all_pokemon')}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
-						Retour à la liste des Pokémons
-					</a>
-				</div>
-
 			</div>
+
+			<div class="flex flex-wrap mt-4 justify-center">
+				<div class="w-full md:w-1/4 flex justify-center items-center mb-4 md:mb-0 md:ml-8">
+					<img src="{{ pokemon.sprites.regular }}" alt="Pokemon Image" class="w-2/3 md:w-full">
+				</div>
+				<div class="w-full md:w-1/2 flex flex-col justify-center items-center">
+					<h2 class="text-center font-bold text-xl">Statistiques :</h2>
+					<table class="mt-6 mx-auto text-sm font-bold border-collapse border border-gray-500 w-full md:w-2/3">
+						<thead>
+							<tr>
+								<th class="border border-gray-500 p-2 md:p-4">PV</th>
+								<th class="border border-gray-500 p-2 md:p-4">ATK</th>
+								<th class="border border-gray-500 p-2 md:p-4">DEF</th>
+								<th class="border border-gray-500 p-2 md:p-4">ATK_SPE</th>
+								<th class="border border-gray-500 p-2 md:p-4">DEF_SPE</th>
+								<th class="border border-gray-500 p-2 md:p-4">VIT</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.hp }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.atk }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.def }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.spe_atk }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.spe_def }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.vit }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="flex flex-wrap justify-center md:space-x-10 lg:space-x-10 my-11">
+				{% if pokemon.sprites.shiny %}
+					<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
+						<h2 class="font-bold text-xl mt-4">Forme Shiny</h2>
+						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.shiny }}" alt="Shiny Pokemon Image">
+					</div>
+				{% endif %}
+
+				{% if pokemon.sprites.gmax %}
+					<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
+						<h2 class="font-bold text-xl mt-4">Forme GMAX</h2>
+						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.gmax.regular }}" alt="GMAX Pokemon Image">
+					</div>
+					<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
+						<h2 class="font-bold text-xl mt-4">Forme GMAX Shiny</h2>
+						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.gmax.shiny }}" alt="Shiny GMAX Pokemon Image">
+					</div>
+				{% endif %}
+			</div>
+
+
+			<div class="my-[50px]">
+				<a href={{path('app_all_pokemon')}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
+					Retour à la liste des Pokémons
+				</a>
+			</div>
+
 		</div>
 	</div>
-{% endblock %}
+</div>{% endblock %}

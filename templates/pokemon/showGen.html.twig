@@ -1,4 +1,4 @@
-{# {% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block content %}
 	<div class="bg-red-500 p-4 h-auto">
@@ -8,41 +8,13 @@
 					<img class="w-1/2" src="{{ asset('/img/pokeFact.png') }}">
 				</div>
 				<div class="w-2/3 ml-4">
-					<p class="font-bold italic">Cette génération comporte
+					<p class="font-bold italic">La génération
+						{{(generation)}}
+						comporte
 						{{ pokemons|length -1 }}
 						Pokémons !</p>
 				</div>
 			</div>
-
-			<div class="col-span-1 mb-4">
-				<h3 class="font-semibold text-white">Chercher un pokémon par son nom</h3>
-				<input id="search-input-name" type="search" placeholder="Nom du pokémon..." class="rounded w-1/2 sm:w-1/4 p-2 my-4 italic">
-			</div>
-			<div class="col-span-1 mb-4">
-				<h3 class="font-semibold text-white">Chercher un pokémon par son type</h3>
-				<select id="search-input-type" class="rounded w-1/2 sm:w-1/4 p-2 my-4">
-					<option value="">-- Choisir --</option>
-					<option value="Acier">Acier</option>
-					<option value="Combat">Combat</option>
-					<option value="Dragon">Dragon</option>
-					<option value="Eau">Eau</option>
-					<option value="Électrik">Électrik</option>
-					<option value="Fée">Fée</option>
-					<option value="Feu">Feu</option>
-					<option value="Glace">Glace</option>
-					<option value="Insecte">Insecte</option>
-					<option value="Normal">Normal</option>
-					<option value="Plante">Plante</option>
-					<option value="Poison">Poison</option>
-					<option value="Psy">Psy</option>
-					<option value="Roche">Roche</option>
-					<option value="Sol">Sol</option>
-					<option value="Spectre">Spectre</option>
-					<option value="Ténèbres">Ténèbres</option>
-					<option value="Vol">Vol</option>
-				</select>
-			</div>
-			<p id="no-results" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
 
 			<div id="pokemon-list" class="flex flex-wrap gap-2 lg:gap-4 lg:justify-start justify-center">
 				{% for pokemon in pokemons %}
@@ -79,7 +51,7 @@
 								</div>
 								<div class="mt-2">
 									<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
-										<span class="font-bold italic underline">Gen.
+										<span class="font-bold underline">Gen.
 											{{ pokemon.generation }}
 										</span>
 									</a>
@@ -96,4 +68,4 @@
 			</div>
 		</div>
 	</div>
-{% endblock %} #}
+{% endblock %}
