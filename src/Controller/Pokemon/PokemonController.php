@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PokemonController extends AbstractController
 {
-    #[Route('/all-pokemon', name: 'app_all_pokemon')]
+    #[Route('/pokemons/liste', name: 'app_all_pokemon')]
     public function showAllpokemon(PokeRequest $pokeRequest): Response
     {
         return $this->render('pokemon/show.html.twig', [
@@ -17,7 +17,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/pokemon-details/{name}', name: 'app_pokemon_details')]
+    #[Route('/pokemon/details/{name}', name: 'app_pokemon_details')]
     public function showPokemonDetails(string $name, PokeRequest $pokeRequest): Response
     {
 
