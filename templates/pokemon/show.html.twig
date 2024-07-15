@@ -15,13 +15,13 @@
 			</div>
 
 			{# barre de recherche #}
-			<div class="lg:flex lg:justify-between">
-				<div class="col-span-1 mb-4">
+			<div class="md:flex md:justify-between">
+				<div class="basis-1/3 mb-4">
 					<h3 class="font-semibold text-white">Chercher un pokémon par son nom</h3>
 					<form id="search-form">
-						<input id="search-input-name" type="search" placeholder="Nom du Pokémon..." class="rounded w-1/2 sm:w-1/4 p-2 my-4 italic">
+						<input id="search-input-name" type="search" placeholder="Nom du Pokémon..." class="rounded w-full p-2 my-4 italic">
 						<h3 class="font-semibold text-white">Chercher un pokémon par type</h3>
-						<select id="search-input-type" class="rounded w-1/2 sm:w-1/4 p-2 my-4">
+						<select id="search-input-type" class="rounded w-full p-2 my-4">
 							<option value="">-- Type --</option>
 							<option value="Acier">Acier</option>
 							<option value="Combat">Combat</option>
@@ -43,7 +43,7 @@
 							<option value="Vol">Vol</option>
 						</select>
 						<h3 class="font-semibold text-white">Chercher un pokémon par génération</h3>
-						<select id="search-input-gen" class="rounded w-1/2 sm:w-1/4 p-2 my-4">
+						<select id="search-input-gen" class="rounded w-full p-2 my-4">
 							<option value="">-- Génération --</option>
 							<option value="1">Génération 1</option>
 							<option value="2">Génération 2</option>
@@ -56,58 +56,60 @@
 							<option value="9">Génération 9</option>
 						</select>
 						<br>
-						<button type="button" id="reset-filters" class="bg-gray-700 text-amber-400 rounded py-2 px-6 mt-4 font-semibold">Réinitialiser les filtres</button>
+						<button type="button" id="reset-filters" class="bg-gray-700 text-amber-400 rounded py-2 px-6 mt-4 font-semibold w-full">Réinitialiser les filtres</button>
 					</form>
 					<p id="no-results" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
-
-					<div id="pokemon-list" class="flex flex-wrap gap-2 lg:gap-4 lg:justify-start justify-center">
-						{% for pokemon in pokemons %}
-							{% set types = [] %}
-							{% for type in pokemon.types %}
-								{% set types = types|merge([type.name|lower]) %}
-							{% endfor %}
-
-							{% if pokemon.pokedex_id > 0 %}
-								<div class="pokemon-card bg-white p-4 mt-8 mb-8 rounded-md flex-1 sm:basis-2/3 md:basis-1/4 lg:basis-1/6 min-w-[200px] max-w-[300px]" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}" data-gen="{{pokemon.generation}}">
-									<div class="flex justify-between">
-										<div>
-											<h2 class="text-xl font-bold">{{ pokemon.name.fr }}
-												{% if pokemon.sprites.gmax %}
-													<span class="text-xs font-semibold border bg-black border-black rounded text-amber-400 py-1 px-2">GMAX</span>
-												{% endif %}
-											</h2>
-										</div>
-										<div>
-											<p class="font-bold italic">
-												Pokédex n°{{ pokemon.pokedex_id }}
-											</p>
-										</div>
-									</div>
-									<div class="flex justify-between">
-										<div class="mt-2">
-											{% if pokemon.types|length == 1 %}
-												<img class="w-2/3 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
-											{% else %}
-												{% for type in pokemon.types %}
-													<img class="w-2/6 inline" src="{{ type.image }}" title="{{ type.name }}">
-												{% endfor %}
-											{% endif %}
-										</div>
-										<div class="mt-2">
-											<span class="font-bold italic">Gen.
-												{{ pokemon.generation }}
-											</span>
-										</div>
-									</div>
-									<div class="flex justify-center">
-										<a href="{{ path('app_pokemon_details', {"name": pokemon.name.fr}) }}">
-											<img src="{{ pokemon.sprites.regular }}" alt="Image de {{ pokemon.name.fr }}" class="w-4/5 mt-[-10px] wiggle">
-										</a>
-									</div>
-								</div>
-							{% endif %}
-						{% endfor %}
-					</div>
 				</div>
 			</div>
-		{% endblock %}
+
+			<div id="pokemon-list" class="flex flex-wrap gap-2 lg:gap-4 lg:justify-start justify-center">
+				{% for pokemon in pokemons %}
+					{% set types = [] %}
+					{% for type in pokemon.types %}
+						{% set types = types|merge([type.name|lower]) %}
+					{% endfor %}
+
+					{% if pokemon.pokedex_id > 0 %}
+						<div class="pokemon-card bg-white p-4 mt-8 mb-8 rounded-md flex-1 sm:basis-2/3 md:basis-1/4 lg:basis-1/6 min-w-[200px] max-w-[300px]" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}" data-gen="{{pokemon.generation}}">
+							<div class="flex justify-between">
+								<div>
+									<h2 class="text-xl font-bold">{{ pokemon.name.fr }}
+										{% if pokemon.sprites.gmax %}
+											<span class="text-xs font-semibold border bg-black border-black rounded text-amber-400 py-1 px-2">GMAX</span>
+										{% endif %}
+									</h2>
+								</div>
+								<div>
+									<p class="font-bold italic">
+										Pokédex n°{{ pokemon.pokedex_id }}
+									</p>
+								</div>
+							</div>
+							<div class="flex justify-between">
+								<div class="mt-2">
+									{% if pokemon.types|length == 1 %}
+										<img class="w-2/3 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
+									{% else %}
+										{% for type in pokemon.types %}
+											<img class="w-2/6 inline" src="{{ type.image }}" title="{{ type.name }}">
+										{% endfor %}
+									{% endif %}
+								</div>
+								<div class="mt-2">
+									<span class="font-bold italic">Gen.
+										{{ pokemon.generation }}
+									</span>
+								</div>
+							</div>
+							<div class="flex justify-center">
+								<a href="{{ path('app_pokemon_details', {"name": pokemon.name.fr}) }}">
+									<img src="{{ pokemon.sprites.regular }}" alt="Image de {{ pokemon.name.fr }}" class="w-4/5 mt-[-10px] wiggle">
+								</a>
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
