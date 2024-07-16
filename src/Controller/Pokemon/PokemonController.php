@@ -7,9 +7,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/pokemons')]
 class PokemonController extends AbstractController
 {
-    #[Route('/pokemons/liste', name: 'app_all_pokemon')]
+    #[Route('/list', name: 'app_all_pokemon')]
     public function showAllpokemon(PokeRequest $pokeRequest): Response
     {
         return $this->render('pokemon/show.html.twig', [
@@ -17,7 +18,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/pokemon/details/{name}', name: 'app_pokemon_details')]
+    #[Route('/details/{name}', name: 'app_pokemon_details')]
     public function showPokemonDetails(string $name, PokeRequest $pokeRequest): Response
     {
 
@@ -35,7 +36,7 @@ class PokemonController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/pokemons/generation/{generation}', name: 'app_pokemon_gen')]
+    #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
     public function showPokemonByGen($generation, PokeRequest $pokeRequest): Response
     {
         return $this->render('pokemon/showGen.html.twig', [
@@ -43,4 +44,22 @@ class PokemonController extends AbstractController
             'generation' => $generation,
         ]);
     }
+
+    // #[Route('/ranking', name: 'app_pokemon_ranking')]
+    // public function showPokemonRanking(PokeRequest $pokeRequest): Response
+    // {
+    //     $pokemonStats = $pokeRequest->getPokemonStats(5);
+
+    //     return $this->render('pokemon/showRanking.html.twig', [
+    //         'pokemonStats' => $pokemonStats,
+    //     ]);
+    // }
+
+    // #[Route('/ranking/generation/{generation}', name: 'app_pokemon_ranking_by_gen')]
+    // public function showPokemonRankingByGen(PokeRequest $pokeRequest, int $generation): Response
+    // {
+    //     return $this->render('pokemon/showRanking.html.twig', [
+    //         'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
+    //     ]);
+    // }
 }

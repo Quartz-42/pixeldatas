@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+	<h1>Classement des Pokémon par statistiques moyennes</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Rang</th>
+				<th>Nom</th>
+				<th>Statistiques Moyennes</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for pokemon in pokemonStats %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ pokemon.name }}</td>
+					<td>{{ pokemon.average_stats }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
