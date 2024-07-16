@@ -127,4 +127,37 @@ class PokeRequest
             return $pokemonsGeneration;
         });
     }
+
+    // public function getPokemonStats(int $count): array
+    // {
+    //     return $this->cache->get('pokeStats', function (ItemInterface $item) use ($count): array {
+    //         $item->expiresAfter(3600);
+
+    //         // Premier appel API pour obtenir la liste des Pokémon
+    //         $response = $this->client->request('GET', 'https://tyradex.vercel.app/api/v1/pokemon');
+    //         $content = $response->toArray();
+    //         $pokemonStats = [];
+
+    //         foreach ($content as $pokemon) {
+    //             // Calculer la moyenne des statistiques
+    //             if (isset($pokemon['stats']) && is_array($pokemon['stats'])) {
+    //                 $stats = $pokemon['stats'];
+    //                 $totalStats = array_sum($stats);
+    //                 $averageStats = ceil($totalStats / count($stats));
+
+    //                 $pokemonStats[] = [
+    //                     'name' => $pokemon['name']['fr'],
+    //                     'average_stats' => $averageStats,
+    //                 ];
+    //             }
+    //         }
+
+    //         // Trier les Pokémon par moyenne des statistiques
+    //         usort($pokemonStats, function ($a, $b) {
+    //             return $b['average_stats'] <=> $a['average_stats'];
+    //         });
+
+    //         return array_slice($pokemonStats, 0, $count);
+    //     });
+    // }
 }

@@ -14,14 +14,24 @@
 				</div>
 			</div>
 
+
+			{#ranking pokemon#}
+			{# <h3 class="font-semibold text-white">Quel sera le Pokémon le plus fort ?
+																						<br/>Consulte le classement pour le savoir !
+																					</h3>
+																					<div class="flex text-center">
+																						<a href={{path('app_pokemon_ranking')}} class="inline bg-gray-700 text-amber-400 rounded py-2 px-6 my-4 font-semibold w-1/3">
+																							Accéder au classement
+																						</a>
+																					</div> #}
+
 			{# barre de recherche #}
-			<div class="md:flex md:justify-between">
-				<div class="basis-1/3 mb-4">
+				<div class="md:flex md:justify-between"> <div class="basis-1/3 mb-4">
 					<h3 class="font-semibold text-white">Chercher un pokémon par son nom</h3>
 					<form id="search-form">
-						<input id="search-input-name" type="search" placeholder="Nom du Pokémon..." class="rounded w-full p-2 my-4 italic">
+						<input id="search-input-name" type="search" placeholder="Nom du Pokémon..." class="rounded w-4/5 p-2 my-4 italic">
 						<h3 class="font-semibold text-white">Chercher un pokémon par type</h3>
-						<select id="search-input-type" class="rounded w-full p-2 my-4">
+						<select id="search-input-type" class="rounded w-4/5 p-2 my-4">
 							<option value="">-- Type --</option>
 							<option value="Acier">Acier</option>
 							<option value="Combat">Combat</option>
@@ -43,7 +53,7 @@
 							<option value="Vol">Vol</option>
 						</select>
 						<h3 class="font-semibold text-white">Chercher un pokémon par génération</h3>
-						<select id="search-input-gen" class="rounded w-full p-2 my-4">
+						<select id="search-input-gen" class="rounded w-4/5 p-2 my-4">
 							<option value="">-- Génération --</option>
 							<option value="1">Génération 1</option>
 							<option value="2">Génération 2</option>
@@ -56,7 +66,7 @@
 							<option value="9">Génération 9</option>
 						</select>
 						<br>
-						<button type="button" id="reset-filters" class="bg-gray-700 text-amber-400 rounded py-2 px-6 mt-4 font-semibold w-full">Réinitialiser les filtres</button>
+						<button type="button" id="reset-filters" class="bg-gray-700 text-amber-400 rounded py-2 px-6 mt-4 font-semibold w-4/5">Réinitialiser les filtres</button>
 					</form>
 					<p id="no-results" class="hidden italic font-bold text-white text-xl">Aucun Pokémon ne correspond à la recherche</p>
 				</div>
