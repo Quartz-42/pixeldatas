@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Puissance 4</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      #game,
+      #setup {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #board {
+        display: grid;
+        grid-template-columns: repeat(7, 50px);
+        grid-gap: 5px;
+        background-color: blue;
+        padding: 10px;
+        border-radius: 10px;
+      }
+      #endGameOptions {
+        display: none;
+      }
+      .cell {
+        width: 50px;
+        height: 50px;
+        background-color: white;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .red {
+        background-color: red;
+      }
+      .yellow {
+        background-color: yellow;
+      }
+      #message,
+      #scores {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 20px 0;
+      }
+      #winner {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 20px 0;
+        display: none;
+      }
+      button,
+      input {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      input {
+        background-color: white;
+        color: black;
+        border: 1px solid #ccc;
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f2d74e;
+        position: absolute;
+        top: 0;
+        opacity: 0;
+        animation: confetti 5s ease-in-out infinite;
+      }
+      @keyframes confetti {
+        0% {
+          transform: translateY(0) rotateZ(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotateZ(720deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="setup">
+      <h1>Puissance 4</h1>
+      <div class="flex space-x-4 mb-5">
+        <button id="vsCPU">Jouer contre l'ordinateur</button>
+        <button id="vs2Players" class="ml-5">Jouer à 2 joueurs</button>
+      </div>
+      <button id="back" class="mt-5">Retour à l'accueil</button>
+      <div id="playerNames" style="display: none">
+        <input type="text" id="player1Name" placeholder="Nom du Joueur 1" />
+        <input type="text" id="player2Name" placeholder="Nom du Joueur 2" />
+        <button id="startGame">Commencer la partie</button>
+      </div>
+    </div>
+    <div id="game" style="display: none">
+      <h1>Puissance 4</h1>
+      <div id="board"></div>
+      <p id="message"></p>
+      <p id="scores"></p>
+      <div id="winner"></div>
+      <div id="endGameOptions">
+        <button id="replay">Rejouer</button>
+        <button id="backToMenu">Retour au menu</button>
+      </div>
+    </div>
+
+    <script>
+      const setup = document.getElementById("setup");
+      const back = document.getElementById("back");
+      const game = document.getElementById("game");
+      const board = document.getElementById("board");
+      const message = document.getElementById("message");
+      const scoresDisplay = document.getElementById("scores");
+      const winnerDisplay = document.getElementById("winner");
+      const replayButton = document.getElementById("replay");
+      const vsCPUButton = document.getElementById("vsCPU");
+      const vs2PlayersButton = document.getElementById("vs2Players");
+      const playerNamesDiv = document.getElementById("playerNames");
+      const startGameButton = document.getElementById("startGame");
+      const player1NameInput = document.getElementById("player1Name");
+      const player2NameInput = document.getElementById("player2Name");
+
+      let currentPlayer = "red";
+      let gameBoard = Array(6)
+        .fill()
+        .map(() => Array(7).fill(null));
+      let player1Name = "JOUEUR 1";
+      let player2Name = "JOUEUR 2";
+      let scores = { [player1Name]: 0, [player2Name]: 0 };
+      let isCPUGame = false;
+      let gameActive = false;
+
+      vsCPUButton.addEventListener("click", () => {
+        isCPUGame = true;
+        player1NameInput.placeholder = "Nom du Joueur"; // Modifier le placeholder pour refléter un duel contre l'ordinateur
+        player2NameInput.style.display = "none"; // Masquer le champ du joueur 2
+        playerNamesDiv.style.display = "block"; // Afficher le champ pour le nom du joueur
+        startGameButton.addEventListener(
+          "click",
+          () => {
+            player1Name = (player1NameInput.value || "JOUEUR").toUpperCase();
+            player2Name = "ORDINATEUR";
+            scores = { [player1Name]: 0, [player2Name]: 0 };
+            startGame();
+          },
+          { once: true }
+        ); // Assurer que cet event listener ne soit ajouté qu'une fois
+      });
+
+      vs2PlayersButton.addEventListener("click", () => {
+        isCPUGame = false;
+        player2NameInput.style.display = "block"; // Afficher le champ du joueur 2
+        playerNamesDiv.style.display = "block";
+        vsCPUButton.style.display = "none";
+        vs2PlayersButton.style.display = "none";
+      });
+
+      startGameButton.addEventListener("click", () => {
+        player1Name = (player1NameInput.value || "JOUEUR 1").toUpperCase();
+        player2Name = (player2NameInput.value || "JOUEUR 2").toUpperCase();
+        scores = { [player1Name]: 0, [player2Name]: 0 };
+        startGame();
+      });
+
+      function startGame() {
+        setup.style.display = "none";
+        game.style.display = "flex";
+        resetGame();
+      }
+
+      function createBoard() {
+        board.innerHTML = "";
+        for (let row = 5; row >= 0; row--) {
+          for (let col = 0; col < 7; col++) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.row = row;
+            cell.dataset.col = col;
+            board.appendChild(cell);
+          }
+        }
+        board.addEventListener("click", handleClick);
+      }
+
+      function handleClick(event) {
+        if (!gameActive) return;
+        const cell = event.target;
+        if (!cell.classList.contains("cell")) return;
+
+        const col = parseInt(cell.dataset.col);
+        placePiece(col);
+      }
+
+      function placePiece(col) {
+        for (let row = 0; row < 6; row++) {
+          if (gameBoard[row][col] === null) {
+            gameBoard[row][col] = currentPlayer;
+            const cell = document.querySelector(
+              `.cell[data-row="${row}"][data-col="${col}"]`
+            );
+            cell.classList.add(currentPlayer);
+            message.style.display = "block";
+
+            if (checkWin(row, col)) {
+              celebrateWin();
+            } else if (checkDraw()) {
+              message.textContent = "Match nul !";
+              endGame();
+            } else {
+              currentPlayer = currentPlayer === "red" ? "yellow" : "red";
+              updateMessage();
+              if (isCPUGame && currentPlayer === "yellow" && gameActive) {
+                setTimeout(cpuMove, 1000);
+              }
+            }
+            return;
+          }
+        }
+      }
+
+      function cpuMove() {
+        if (!gameActive) return;
+        let col = findBestMove();
+        placePiece(col);
+      }
+
+      function findBestMove() {
+        let bestScore = -Infinity;
+        let bestMove;
+        for (let col = 0; col < 7; col++) {
+          if (gameBoard[5][col] === null) {
+            let row = getLowestEmptyRow(col);
+            gameBoard[row][col] = "yellow";
+            let score = minimax(gameBoard, 0, false);
+            gameBoard[row][col] = null;
+            if (score > bestScore) {
+              bestScore = score;
+              bestMove = col;
+            }
+          }
+        }
+        return bestMove;
+      }
+
+      function minimax(board, depth, isMaximizing) {
+        if (checkWinForPlayer(board, "yellow")) return 1;
+        if (checkWinForPlayer(board, "red")) return -1;
+        if (checkDrawBoard(board)) return 0;
+        if (depth > 3) return 0; // Limite la profondeur pour éviter le plantage
+
+        if (isMaximizing) {
+          let bestScore = -Infinity;
+          for (let col = 0; col < 7; col++) {
+            if (board[5][col] === null) {
+              let row = getLowestEmptyRow(col);
+              board[row][col] = "yellow";
+              let score = minimax(board, depth + 1, false);
+              board[row][col] = null;
+              bestScore = Math.max(score, bestScore);
+            }
+          }
+          return bestScore;
+        } else {
+          let bestScore = Infinity;
+          for (let col = 0; col < 7; col++) {
+            if (board[5][col] === null) {
+              let row = getLowestEmptyRow(col);
+              board[row][col] = "red";
+              let score = minimax(board, depth + 1, true);
+              board[row][col] = null;
+              bestScore = Math.min(score, bestScore);
+            }
+          }
+          return bestScore;
+        }
+      }
+
+      function getLowestEmptyRow(col) {
+        for (let row = 0; row < 6; row++) {
+          if (gameBoard[row][col] === null) return row;
+        }
+        return -1;
+      }
+
+      function checkWin(row, col) {
+        const directions = [
+          [0, 1],
+          [1, 0],
+          [1, 1],
+          [1, -1],
+        ];
+        for (let [dx, dy] of directions) {
+          let count = 1;
+          for (let i = 1; i <= 3; i++) {
+            if (checkCell(row + dx * i, col + dy * i)) count++;
+            else break;
+          }
+          for (let i = 1; i <= 3; i++) {
+            if (checkCell(row - dx * i, col - dy * i)) count++;
+            else break;
+          }
+          if (count >= 4) return true;
+        }
+        return false;
+      }
+
+      function checkCell(row, col) {
+        return (
+          row >= 0 &&
+          row < 6 &&
+          col >= 0 &&
+          col < 7 &&
+          gameBoard[row][col] === currentPlayer
+        );
+      }
+
+      function checkDraw() {
+        return gameBoard.every((row) => row.every((cell) => cell !== null));
+      }
+
+      function checkWinForPlayer(board, player) {
+        for (let row = 0; row < 6; row++) {
+          for (let col = 0; col < 7; col++) {
+            if (board[row][col] === player) {
+              if (
+                checkWinDirection(board, row, col, 0, 1, player) ||
+                checkWinDirection(board, row, col, 1, 0, player) ||
+                checkWinDirection(board, row, col, 1, 1, player) ||
+                checkWinDirection(board, row, col, 1, -1, player)
+              ) {
+                return true;
+              }
+            }
+          }
+        }
+        return false;
+      }
+
+      function checkWinDirection(board, row, col, dx, dy, player) {
+        for (let i = 0; i < 4; i++) {
+          if (
+            row < 0 ||
+            row >= 6 ||
+            col < 0 ||
+            col >= 7 ||
+            board[row][col] !== player
+          ) {
+            return false;
+          }
+          row += dx;
+          col += dy;
+        }
+        return true;
+      }
+
+      function checkDrawBoard(board) {
+        return board.every((row) => row.every((cell) => cell !== null));
+      }
+
+      function celebrateWin() {
+        const winner = currentPlayer === "red" ? player1Name : player2Name;
+        message.style.display = "none";
+        winnerDisplay.textContent = `${winner} GAGNE !`;
+        winnerDisplay.style.display = "block";
+        scores[winner]++;
+        updateScores();
+        createConfetti();
+        endGame();
+      }
+
+      function updateScores() {
+        scoresDisplay.textContent = `${player1Name}: ${scores[player1Name]} - ${player2Name}: ${scores[player2Name]}`;
+      }
+
+      function endGame() {
+        gameActive = false;
+        document.getElementById("endGameOptions").style.display = "block";
+      }
+
+      function resetGame() {
+        gameBoard = Array(6)
+          .fill()
+          .map(() => Array(7).fill(null));
+        currentPlayer = "red";
+        winnerDisplay.style.display = "none";
+        document.getElementById("endGameOptions").style.display = "none";
+        createBoard();
+        updateMessage();
+        updateScores();
+        gameActive = true;
+        removeConfetti();
+      }
+
+      function createConfetti() {
+        for (let i = 0; i < 100; i++) {
+          const confetti = document.createElement("div");
+          confetti.classList.add("confetti");
+          confetti.style.left = `${Math.random() * 100}vw`;
+          confetti.style.animationDelay = `${Math.random() * 3}s`;
+          confetti.style.backgroundColor = `hsl(${
+            Math.random() * 360
+          }, 100%, 50%)`;
+          document.body.appendChild(confetti);
+
+          confetti.addEventListener("animationend", () => {
+            confetti.remove();
+          });
+        }
+      }
+
+      function removeConfetti() {
+        const confetti = document.querySelectorAll(".confetti");
+        confetti.forEach((c) => c.remove());
+      }
+
+      function updateMessage() {
+        const currentPlayerName =
+          currentPlayer === "red" ? player1Name : player2Name;
+        message.textContent = `C'est au tour de ${currentPlayerName}`;
+      }
+
+      replayButton.addEventListener("click", resetGame);
+
+      function backToMenu() {
+        game.style.display = "none";
+        setup.style.display = "flex";
+        document.getElementById("endGameOptions").style.display = "none";
+        vsCPUButton.style.display = "block";
+        vs2PlayersButton.style.display = "block";
+        playerNamesDiv.style.display = "none";
+        removeConfetti();
+      }
+
+      document.getElementById("replay").addEventListener("click", resetGame);
+      document
+        .getElementById("backToMenu")
+        .addEventListener("click", backToMenu);
+      document.getElementById("back").addEventListener("click", function () {
+        window.location.href = "{{ path('app_home') }}";
+      });
+    </script>
+  </body>
+</html>
