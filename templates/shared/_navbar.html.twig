@@ -1,5 +1,5 @@
 <nav class="bg-gray-900 text-amber-400">
-	<div class="flex flex-wrap items-center justify-between mx-auto p-4">
+	<div class="flex flex-wrap items-center justify-between mx-auto p-2">
 		<div class="flex items-center space-x-3 ml-5">
 			<a href="{{path('app_home')}}" class="flex items-center space-x-3 rtl:space-x-reverse retour-lien">
 				<img src="{{ asset('img/icones-d-eclair-jaune.png') }}" class="h-10 mt-2" alt="Logo">
@@ -19,14 +19,9 @@
 		<div class="hidden w-full md:flex md:items-center md:w-auto" id="navbar-default">
 			<ul class="flex space-x-20">
 				<li>
-					<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pokemon</a>
+					<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pokémons</a>
 				</li>
-				<li>
-					<a href="{{path('app_game_snake')}}" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Snake</a>
-				</li>
-				<li>
-					<a href="{{path('app_game_p4')}}" class="retour-lien py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Puissance 4</a>
-				</li>
+
 			</ul>
 		</div>
 	</div>
@@ -34,22 +29,15 @@
 	<div class="hidden md:hidden" id="mobile-menu">
 		<ul class="flex flex-col space-y-4 p-2 text-right">
 			<li>
-				<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 mb-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Pokemon</a>
-			</li>
-			<li>
-				<a href="{{path('app_game_snake')}}" class="retour-lien py-2 px-3 mt-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Snake</a>
-			</li>
-			<li>
-				<a href="{{path('app_game_p4')}}" class="retour-lien py-2 px-3 mt-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Puissance 4</a>
+				<a href="{{path('app_all_pokemon')}}" class="retour-lien py-2 px-3 mb-4 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Pokémons</a>
 			</li>
 		</ul>
 	</div>
 </nav>
 
 <script>
-	document.getElementById('menu-toggle').addEventListener('click', function () 
-	{
-			var menu = document.getElementById('mobile-menu');
-			menu.classList.toggle('hidden');
-	});
+	document.getElementById('menu-toggle').addEventListener('click', function () {
+let menu = document.getElementById('mobile-menu');
+menu.classList.toggle('hidden');
+});
 </script>

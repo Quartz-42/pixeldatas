@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-	<div class="p-4 h-auto">
-		<div class="container container-fluid mx-auto">
-			<h1 class="font-bold text-xl uppercase text-center mt-8">Les Pokémons aléatoires du jour sont...</h1>
-			<div class="flex flex-wrap -mx-2">
+	<div class="p-4">
+		<div class="container mx-auto">
+			<h1 class="font-bold text-xl uppercase text-center mt-8">Chaque jour, 3 Pokémons aléatoires apparaissent !</h1>
+			<div class="flex flex-wrap mx-2 justify-center">
 				{% for pokemon in randomPokemons %}
 
 					{% set types = [] %}
@@ -13,8 +13,8 @@
 					{% endfor %}
 
 					{% if pokemon.pokedex_id > 0 %}
-						<div class="w-full md:w-full lg:w-1/3 px-2 mt-8 text-center justify-center">
-							<div class="p-4 border rounded border-slate-700 shadow-md">
+						<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
+							<div class="p-2 border rounded border-slate-700 shadow-md">
 								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr|upper }}</h2>
 								<div class="mt-2 flex justify-center items-center">
 									{% if pokemon.types|length == 1 %}
@@ -28,17 +28,18 @@
 								<a href="{{path('app_pokemon_details', {"name" : pokemon.name.fr})}}">
 									<img src="{{ pokemon.sprites.regular }}" alt="{{ pokemon.name.fr }}" class="w-1/2 h-auto mx-auto">
 								</a>
-								<p class="bg-gray-700 text-amber-400 rounded py-2 mb-4 mt-6 uppercase font-semibold">Pokedex n°
+								<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
+									N°
 									{{pokemon.pokedex_id}}
 									<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
 										-
-										<span class="font-bold underline">
+										<span class="underline">
 											Gen.
 											{{ pokemon.generation }}
 										</span>
 									</a>
 								</p>
-								<p class=" bg-gray-700 text-amber-400 rounded py-2 mt-6 font-semibold">
+								<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
 									{{ pokemon.weight|upper }}
 									-
 									{{ pokemon.height|upper }}
@@ -47,6 +48,11 @@
 						</div>
 					{% endif %}
 				{% endfor %}
+				<div class="w-full flex justify-center my-11">
+					<a href="{{ path('app_all_pokemon') }}" class="bg-red-500 text-white rounded p-4 font-semibold uppercase inline-block text-center">
+						Voir tous les Pokémons
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
