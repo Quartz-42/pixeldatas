@@ -45,21 +45,21 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    // #[Route('/ranking', name: 'app_pokemon_ranking')]
-    // public function showPokemonRanking(PokeRequest $pokeRequest): Response
-    // {
-    //     $pokemonStats = $pokeRequest->getPokemonStats(5);
+    #[Route('/ranking', name: 'app_pokemon_ranking')]
+    public function showPokemonRanking(PokeRequest $pokeRequest): Response
+    {
+        $pokemonStats = $pokeRequest->getPokemonStats(5);
 
-    //     return $this->render('pokemon/showRanking.html.twig', [
-    //         'pokemonStats' => $pokemonStats,
-    //     ]);
-    // }
+        return $this->render('pokemon/showRanking.html.twig', [
+            'pokemonStats' => $pokemonStats,
+        ]);
+    }
 
-    // #[Route('/ranking/generation/{generation}', name: 'app_pokemon_ranking_by_gen')]
-    // public function showPokemonRankingByGen(PokeRequest $pokeRequest, int $generation): Response
-    // {
-    //     return $this->render('pokemon/showRanking.html.twig', [
-    //         'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
-    //     ]);
-    // }
+    #[Route('/ranking/generation/{generation}', name: 'app_pokemon_ranking_by_gen')]
+    public function showPokemonRankingByGen(PokeRequest $pokeRequest, int $generation): Response
+    {
+        return $this->render('pokemon/showRanking.html.twig', [
+            'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
+        ]);
+    }
 }
