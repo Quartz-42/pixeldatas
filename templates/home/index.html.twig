@@ -3,8 +3,8 @@
 {% block content %}
 	<div class="p-4">
 		<div class="container mx-auto">
-			<h1 class="font-bold text-xl uppercase text-center mt-8">Chaque jour, 3 Pokémons aléatoires apparaissent !</h1>
-			<div class="flex flex-wrap mx-2 justify-center">
+			<h1 class="font-bold text-xl uppercase text-center mt-8">3 Pokémons aléatoires apparaissent chaque jour !</h1>
+			<div class="flex flex-wrap mx-2 justify-between">
 				{% for pokemon in randomPokemons %}
 
 					{% set types = [] %}
@@ -14,7 +14,7 @@
 
 					{% if pokemon.pokedex_id > 0 %}
 						<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
-							<div class="p-2 border rounded border-slate-700 shadow-md">
+							<div class="p-2 border-dashed border-2 border-red-500 rounded">
 								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr|upper }}</h2>
 								<div class="mt-2 flex justify-center items-center">
 									{% if pokemon.types|length == 1 %}
@@ -48,7 +48,7 @@
 						</div>
 					{% endif %}
 				{% endfor %}
-				<div class="w-full flex justify-center my-11">
+				<div class="w-full flex justify-center my-10 lg:mt-[55px]">
 					<a href="{{ path('app_all_pokemon') }}" class="bg-red-500 text-white rounded p-4 font-semibold uppercase inline-block text-center">
 						Voir tous les Pokémons
 					</a>
