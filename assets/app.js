@@ -44,14 +44,17 @@ function searchPokemonsMulti(criteria, noResultsId) {
 
     pokemonCards.forEach(function (card) {
         let matches = true;
+
         for (let key in criteria) {
             let value = card.getAttribute(key);
             value = normalizeString(value);
+            
             if (!value.includes(criteria[key])) {
                 matches = false;
                 break;
             }
         }
+
         if (matches) {
             card.style.display = 'block';
             hasResults = true;
