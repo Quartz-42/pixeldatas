@@ -1,23 +1,76 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-	<h1>Classement des Pokémon par statistiques moyennes</h1>
-	<table>
-		<thead>
-			<tr>
-				<th>Rang</th>
-				<th>Nom</th>
-				<th>Statistiques Moyennes</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for pokemon in pokemonStats %}
-				<tr>
-					<td>{{ loop.index }}</td>
-					<td>{{ pokemon.name }}</td>
-					<td>{{ pokemon.average_stats }}</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+	<div class="bg-red-500 p-4 min-h-screen flex flex-col">
+		<div class="container mx-auto text-center flex-grow">
+			<div class="bg-white p-6 mt-4 mb-8 rounded-md shadow-lg">
+				<h1 class="uppercase font-bold text-4xl mt-8">QUI EST LE PLUS FORT ?</h1>
+
+				<!-- Introduction avec espacements et mots en gras -->
+				<div class="mt-8 p-2 border-dashed border-2 border-red-500 rounded">
+					<p class="my-4 text-gray-700 text-lg">Dans l'univers des
+						<strong>Pokémon</strong>, chaque créature se distingue par des caractéristiques uniques qui influencent ses compétences en combat
+					</p>
+					<p class="my-4 text-gray-700 text-lg">
+						La
+						<strong>puissance</strong>
+						des Pokémon, mesurée à travers leurs
+						<strong>statistiques moyennes</strong>, est souvent au cœur de la quête des dresseurs désireux de trouver les plus forts
+					</p>
+					<p class="my-4 text-gray-700 text-lg">
+						Ce classement met en lumière les
+						<strong>Pokémon les plus puissants</strong>, ceux qui, grâce à leur
+						<strong>force exceptionnelle</strong>, dominent les autres
+					</p>
+				</div>
+
+				<!-- Podium des 3 premiers Pokémon -->
+				<div class="text-center mt-8">
+					<h2 class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-10 uppercase lg:w-1/3 text-xl mx-auto text-center">L'élite Pokémon</h2>
+					<div class="flex flex-wrap justify-center gap-6 mt-4">
+						{% for pokemon in pokemonStats[:3] %}
+							<div class="flex flex-col items-center w-full sm:w-1/3">
+								<div class="text-yellow-500">
+									<h2 class="text-3xl font-bold mb-2">#1</h2>
+								</div>
+								<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
+									<img src="{{ pokemon.image }}" alt="Image de {{ pokemon.name }}" class="w-40 h-40 md:w-48 md:h-48 lg:w-60 lg:h-60 mb-2">
+								</a>
+								<h3 class="text-2xl font-semibold text-gray-700">{{ pokemon.name }}</h3>
+								<p class="text-gray-500">Statistiques Moyennes:
+									<strong>{{ pokemon.average_stats }}</strong>
+								</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<!-- Classement des Pokémon à partir de la 4e place -->
+				<h2 class="mt-[60px] bg-gray-700 text-amber-400 rounded py-2 px-4 my-10 uppercase lg:w-1/3 text-xl mx-auto text-center" ">Top 10 des Pokémon</h2>
+				<div class="flex flex-wrap justify-center gap-6 my-8">
+					{% set rank = 2 %}
+					{% for pokemon in pokemonStats[3:12] %}
+						<div class="flex flex-col items-center w-full sm:w-1/3">
+							<div class="{% if rank == 2 %}text-gray-400{% elseif rank == 3 %}text-amber-700{% else %}text-black{% endif %}">
+								<h2 class="text-3xl font-bold mb-2">#{{ rank }}</h2>
+							</div>
+							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
+								<img src="{{ pokemon.image }}" alt="Image de {{ pokemon.name }}" class="w-36 h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 mb-2">
+							</a>
+							<h3 class="text-xl font-semibold text-gray-700">{{ pokemon.name }}</h3>
+							<p class="text-gray-500">Statistiques Moyennes:
+								<strong>{{ pokemon.average_stats }}</strong>
+							</p>
+						</div>
+						{% set rank = rank + 1 %}
+					{% endfor %}
+				</div>
+				<div class="my-[50px]">
+					<a href={{path('app_all_pokemon')}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
+						Retour à la liste des Pokémons
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

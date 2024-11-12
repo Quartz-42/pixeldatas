@@ -145,9 +145,12 @@ class PokeRequest
                     $totalStats = array_sum($stats);
                     $averageStats = ceil($totalStats / count($stats));
 
+                    $imageUrl = $pokemon['sprites']['regular'] ?? null;
+
                     $pokemonStats[] = [
                         'name' => $pokemon['name']['fr'],
                         'average_stats' => $averageStats,
+                        'image' => $imageUrl,
                     ];
                 }
             }
