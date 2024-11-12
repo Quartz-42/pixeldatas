@@ -48,7 +48,7 @@ class PokemonController extends AbstractController
     #[Route('/ranking', name: 'app_pokemon_ranking')]
     public function showPokemonRanking(PokeRequest $pokeRequest): Response
     {
-        $pokemonStats = $pokeRequest->getPokemonStats(5);
+        $pokemonStats = $pokeRequest->getPokemonStats(12);
 
         return $this->render('pokemon/showRanking.html.twig', [
             'pokemonStats' => $pokemonStats,
