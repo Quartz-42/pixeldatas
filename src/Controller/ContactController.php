@@ -47,21 +47,4 @@ class ContactController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/test-email', name: 'test_email')]
-    public function testEmail(MailerInterface $mailer): Response
-    {
-        $email = (new Email())
-            ->from('contact@bbadev.fr')
-            ->to('contact@bbadev.fr')
-            ->subject('Test Email')
-            ->text('This is a test email.');
-
-        try {
-            $mailer->send($email);
-            return new Response('Email sent successfully.');
-        } catch (\Exception $e) {
-            return new Response('Failed to send email: ' . $e->getMessage());
-        }
-    }
 }
