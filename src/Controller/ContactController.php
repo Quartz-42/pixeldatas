@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,5 +46,22 @@ class ContactController extends AbstractController
         return $this->render('/shared/_contact.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[Route('/test-email', name: 'test_email')]
+    public function testEmail(MailerInterface $mailer): Response
+    {
+        $email = (new Email())
+            ->from('contact@bbadev.fr')
+            ->to('contact@bbadev.fr')
+            ->subject('Test Email')
+            ->text('This is a test email.');
+
+        try {
+            $mailer->send($email);
+            return new Response('Email sent successfully.');
+        } catch (\Exception $e) {
+            return new Response('Failed to send email: ' . $e->getMessage());
+        }
     }
 }
