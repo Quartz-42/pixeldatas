@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class NoHtml extends Constraint
 {
-    public $message = 'No HTML allowed';
+    public string $message = 'No HTML allowed';
 }

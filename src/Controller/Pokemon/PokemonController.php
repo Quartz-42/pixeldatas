@@ -4,6 +4,7 @@ namespace App\Controller\Pokemon;
 
 use App\API\PokeRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -21,25 +22,28 @@ class PokemonController extends AbstractController
     #[Route('/details/{name}', name: 'app_pokemon_details')]
     public function showPokemonDetails(string $name, PokeRequest $pokeRequest): Response
     {
-
-        return $this->render('pokemon/showDetails.html.twig', [
+        return $this->render('pokemon/show_details.html.twig', [
             'pokemon' => $pokeRequest->getPokemonByName($name),
         ]);
     }
 
-    //TEMPLATE NON CREE ROUTE NON UTILISEE
-    // #[Route('/pokemons/{type}', name: 'app_pokemon_type')]
+    // TEMPLATE NON CREE ROUTE NON UTILISEE
+    #[Route('/pokemons', name: 'app_pokemon_type')]
     // public function showPokemonByType($type, PokeRequest $pokeRequest): Response
-    // {
-    //     return $this->render('pokemon/showType.html.twig', [
-    //         'pokemons' => $pokeRequest->getPokemonByType($type),
-    //     ]);
-    // }
+    public function showPokemonByType(Request $request): Response
+    {
+        $type = $request->query->get('type');
+
+        return $this->render('pokemon/show_type.html.twig', [
+            // 'pokemons' => $pokeRequest->getPokemonByType($type),
+            'type' => $type,
+        ]);
+    }
 
     #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
     public function showPokemonByGen($generation, PokeRequest $pokeRequest): Response
     {
-        return $this->render('pokemon/showGen.html.twig', [
+        return $this->render('pokemon/show_gen.html.twig', [
             'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
             'generation' => $generation,
         ]);
@@ -50,7 +54,7 @@ class PokemonController extends AbstractController
     {
         $pokemonStats = $pokeRequest->getPokemonStats(12);
 
-        return $this->render('pokemon/showRanking.html.twig', [
+        return $this->render('pokemon/show_ranking.html.twig', [
             'pokemonStats' => $pokemonStats,
         ]);
     }
@@ -58,7 +62,7 @@ class PokemonController extends AbstractController
     #[Route('/ranking/generation/{generation}', name: 'app_pokemon_ranking_by_gen')]
     public function showPokemonRankingByGen(PokeRequest $pokeRequest, int $generation): Response
     {
-        return $this->render('pokemon/showRanking.html.twig', [
+        return $this->render('pokemon/show_ranking.html.twig', [
             'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
         ]);
     }

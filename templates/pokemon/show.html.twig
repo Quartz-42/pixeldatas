@@ -23,44 +23,39 @@
 						<input id="search-input-name" type="search" placeholder="Nom du Pokémon..." class="rounded border border-gray-300 w-full p-2 my-4 text-gray-600">
 						<h4 class="font-medium text-gray-600 mt-4">Par Type</h4>
 						<select id="search-input-type" class="rounded border border-gray-300 w-full p-2 my-4">
-							<option value="">-- Type --</option>
-							<option value="Acier">Acier</option>
-							<option value="Combat">Combat</option>
-							<option value="Dragon">Dragon</option>
-							<option value="Eau">Eau</option>
-							<option value="Électrik">Électrik</option>
-							<option value="Fée">Fée</option>
-							<option value="Feu">Feu</option>
-							<option value="Glace">Glace</option>
-							<option value="Insecte">Insecte</option>
-							<option value="Normal">Normal</option>
-							<option value="Plante">Plante</option>
-							<option value="Poison">Poison</option>
-							<option value="Psy">Psy</option>
-							<option value="Roche">Roche</option>
-							<option value="Sol">Sol</option>
-							<option value="Spectre">Spectre</option>
-							<option value="Ténèbres">Ténèbres</option>
-							<option value="Vol">Vol</option>
+							{% set typeDisplayed = [] %}
+							<option value="" selected>-- Type --</option>
+							{% for pokemon in pokemons %}
+								{% for type in pokemon.types %}
+									{% if type.name not in typeDisplayed %}
+										<option value={{type.name}}>{{type.name}}</option>
+										{% set typeDisplayed = typeDisplayed|merge([type.name]) %}
+									{% endif %}
+								{% endfor %}
+							{% endfor %}
 						</select>
 
 						<h4 class="font-medium text-gray-600 mt-4">Par Génération</h4>
 						<select id="search-input-gen" class="rounded border border-gray-300 w-full p-2 my-4">
-							<option value="">-- Génération --</option>
-							<option value="1">Génération 1</option>
-							<option value="2">Génération 2</option>
-							<option value="3">Génération 3</option>
-							<option value="4">Génération 4</option>
-							<option value="5">Génération 5</option>
-							<option value="6">Génération 6</option>
-							<option value="7">Génération 7</option>
-							<option value="8">Génération 8</option>
-							<option value="9">Génération 9</option>
+							{% set generationDisplayed = [] %}
+							<option value="" selected>-- Génération --</option>
+							{% for pokemon in pokemons %}
+								{% if pokemon.generation not in generationDisplayed %}
+									<option value={{pokemon.generation}}>
+										{% set generationDisplayed = generationDisplayed|merge([pokemon.generation]) %}
+										Gén.
+										{{pokemon.generation}}
+									</option>
+								{% endif %}
+							{% endfor %}
 						</select>
+
 						<button type="button" id="reset-filters" class="mt-[46px] inline-block bg-gray-700 text-amber-400 rounded py-2 px-4 font-semibold hover:bg-gray-800 w-full">
 							Réinitialiser les filtres
 						</button>
+
 					</form>
+
 					<p id="no-results" class="hidden italic font-bold text-red-600 text-lg mt-4">Aucun Pokémon ne correspond à la recherche</p>
 				</div>
 
@@ -71,6 +66,24 @@
 					</div>
 					<a href="{{ path('app_pokemon_ranking') }}" class="mt-4 w-full inline-block bg-gray-700 text-amber-400 rounded py-2 px-4 font-semibold hover:bg-gray-800">Accéder au classement</a>
 				</div>
+			</div>
+
+			<div class="mt-6">
+				<form action="{{ path('app_pokemon_type') }}" method="get" target="_blank">
+					<select name="type">
+						{% set displayed = [] %}
+						<option value="" selected>-- Choisissez un type --</option>
+						{% for pokemon in pokemons %}
+							{% for type in pokemon.types %}
+								{% if type.name not in displayed %}
+									<option value={{type.name}}>{{type.name}}</option>
+									{% set displayed = displayed|merge([type.name]) %}
+								{% endif %}
+							{% endfor %}
+						{% endfor %}
+					</select>
+					<input type="submit" class="inline-block bg-gray-700 text-amber-400 rounded py-2 px-4 font-semibold cursor-pointer " value="ON TEST !"/>
+				</form>
 			</div>
 
 			<div id="pokemon-list" class="grid gap-6 mt-[60px] sm:grid-cols-2 lg:grid-cols-5">
