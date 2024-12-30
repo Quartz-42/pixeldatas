@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Validator\Constraints\NoHtml;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -10,7 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NoSuspiciousCharacters;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use App\Validator\Constraints\NoHtml;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class ContactType extends AbstractType
@@ -23,21 +23,21 @@ class ContactType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3]),
-                    new NoSuspiciousCharacters,
+                    new NoSuspiciousCharacters(),
                     new NoHtml(),
                     new Regex(
                         pattern: '/\d/',
                         match: false,
                         message: 'Your name cannot contain a number',
-                    )
+                    ),
                 ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'constraints' => [
                     new NotBlank(),
-                    new NoSuspiciousCharacters,
-                    new NoHtml()
+                    new NoSuspiciousCharacters(),
+                    new NoHtml(),
                 ],
             ])
             ->add('subject', TextType::class, [
@@ -45,7 +45,7 @@ class ContactType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3]),
-                    new NoSuspiciousCharacters,
+                    new NoSuspiciousCharacters(),
                     new NoHtml(),
                 ],
             ])
@@ -54,8 +54,8 @@ class ContactType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3]),
-                    new NoSuspiciousCharacters,
-                    new NoHtml()
+                    new NoSuspiciousCharacters(),
+                    new NoHtml(),
                 ],
             ]);
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function contact(Request $request, MailerInterface $mailer)
+    public function contact(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ContactType::class);
 
@@ -27,14 +27,14 @@ class ContactController extends AbstractController
                 ->to('contact@bbadev.fr')
                 ->subject($data['subject'])
                 ->text(
-                    'Nom: ' . $data['name'] . "\n" .
-                        'Email: ' . $data['email'] . "\n\n" .
+                    'Nom: '.$data['name']."\n".
+                        'Email: '.$data['email']."\n\n".
                         $data['message']
                 )
                 ->html(
-                    '<p>Nom: ' . $data['name'] . '</p>' .
-                        '<p>Email: ' . $data['email'] . '</p>' .
-                        '<p>Message: ' . nl2br($data['message']) . '</p>'
+                    '<p>Nom: '.$data['name'].'</p>'.
+                        '<p>Email: '.$data['email'].'</p>'.
+                        '<p>Message: '.nl2br($data['message']).'</p>'
                 );
 
             $mailer->send($email);

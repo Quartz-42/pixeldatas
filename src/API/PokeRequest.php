@@ -2,9 +2,9 @@
 
 namespace App\API;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PokeRequest
 {
@@ -25,7 +25,7 @@ class PokeRequest
         );
 
         // Gestion d'erreur pour la requête HTTP
-        if ($response->getStatusCode() !== 200) {
+        if (200 !== $response->getStatusCode()) {
             throw new \Exception('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
         }
 
@@ -35,7 +35,6 @@ class PokeRequest
     public function getRandomPokemon(int $count): array
     {
         return $this->cache->get('randomPoke', function (ItemInterface $item) use ($count): array {
-
             $item->expiresAfter(86400);
 
             $response = $this->getResponse();
@@ -49,13 +48,13 @@ class PokeRequest
 
     public function getAllPokemons(): array
     {
-
         return $this->cache->get('allPoke', function (ItemInterface $item): array {
             $item->expiresAfter(2);
 
             $response = $this->getResponse();
 
             $content = $response->toArray();
+
             return $content;
         });
     }
@@ -63,7 +62,6 @@ class PokeRequest
     public function getPokemonByType($type): array
     {
         return $this->cache->get('pokeByType', function (ItemInterface $item) use ($type): array {
-
             $item->expiresAfter(2);
 
             $response = $this->getResponse();
@@ -89,9 +87,7 @@ class PokeRequest
 
     public function getPokemonByName($name): array
     {
-
         return $this->cache->get('pokeByName', function (ItemInterface $item) use ($name): array {
-
             $item->expiresAfter(2);
 
             $response = $this->getResponse();
@@ -109,7 +105,6 @@ class PokeRequest
     public function getPokemonByGeneration($generation): array
     {
         return $this->cache->get('pokeByGen', function (ItemInterface $item) use ($generation): array {
-
             $item->expiresAfter(2);
 
             $response = $this->getResponse();
