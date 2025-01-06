@@ -68,24 +68,6 @@
 				</div>
 			</div>
 
-			<div class="mt-6">
-				<form action="{{ path('app_pokemon_type') }}" method="get" target="_blank">
-					<select name="type">
-						{% set displayed = [] %}
-						<option value="" selected>-- Choisissez un type --</option>
-						{% for pokemon in pokemons %}
-							{% for type in pokemon.types %}
-								{% if type.name not in displayed %}
-									<option value={{type.name}}>{{type.name}}</option>
-									{% set displayed = displayed|merge([type.name]) %}
-								{% endif %}
-							{% endfor %}
-						{% endfor %}
-					</select>
-					<input type="submit" class="inline-block bg-gray-700 text-amber-400 rounded py-2 px-4 font-semibold cursor-pointer " value="ON TEST !"/>
-				</form>
-			</div>
-
 			<div id="pokemon-list" class="grid gap-6 mt-[60px] sm:grid-cols-2 lg:grid-cols-5">
 				{% for pokemon in pokemons %}
 					{% set types = [] %}
@@ -119,6 +101,19 @@
 								</a>
 							</div>
 						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+			<div class="flex items-center justify-center text-center mx-auto mt-10 space-x-4">
+				{% for page in visiblePages %}
+					{% if page == 1 or page == pokemons.nbPages or (page >= pokemons.currentPage - 3 and page <= pokemons.currentPage + 3) %}
+						{% if page == pokemons.currentPage %}
+							<span class="block py-2 px-4 bg-black text-amber-500 rounded">{{ page }}</span>
+						{% else %}
+							<a href="{{ pagerfanta_page_url(pokemons, page) }}" class="block py-2 px-4 bg-white text-black rounded">{{ page }}</a>
+						{% endif %}
+					{% elseif loop.first or loop.last or page == visiblePages[loop.index0 - 1] + 1 %}
+						<span class="text-gray-500 px-2">...</span>
 					{% endif %}
 				{% endfor %}
 			</div>

@@ -10,7 +10,13 @@
 				<div class="w-3/4 ml-4 text-lg md:text-base">
 					<p class="font-bold text-xl italic text-gray-700">
 						La génération
-						{{(generation)}}
+						{% set generation = false %}
+						{% for pokemon in pokemons %}
+							{% if generation != true %}
+								{{pokemon.generation}}
+								{% set generation = true %}
+							{% endif %}
+						{% endfor %}
 						comporte
 						<span class="text-red-500">{{ pokemons|length -1 }}</span>
 						Pokémons !
@@ -64,6 +70,11 @@
 						</div>
 					{% endif %}
 				{% endfor %}
+			</div>
+			<div class="my-[50px] text-center">
+				<a href={{path('app_all_pokemon')}} class="font-bold border bg-white border-white rounded text-black px-8 py-4">
+					Retour à la liste des Pokémons
+				</a>
 			</div>
 		</div>
 	</div>
