@@ -49,7 +49,7 @@ class PokeRequest
     public function getAllPokemons(): array
     {
         return $this->cache->get('allPoke', function (ItemInterface $item): array {
-            $item->expiresAfter(2);
+            $item->expiresAfter(300);
 
             $response = $this->getResponse();
 
@@ -62,7 +62,7 @@ class PokeRequest
     public function getPokemonByType($type): array
     {
         return $this->cache->get('pokeByType', function (ItemInterface $item) use ($type): array {
-            $item->expiresAfter(2);
+            $item->expiresAfter(300);
 
             $response = $this->getResponse();
 
@@ -88,7 +88,7 @@ class PokeRequest
     public function getPokemonByName($name): array
     {
         return $this->cache->get('pokeByName', function (ItemInterface $item) use ($name): array {
-            $item->expiresAfter(2);
+            $item->expiresAfter(300);
 
             $response = $this->getResponse();
 
@@ -105,7 +105,7 @@ class PokeRequest
     public function getPokemonByGeneration($generation): array
     {
         return $this->cache->get('pokeByGen', function (ItemInterface $item) use ($generation): array {
-            $item->expiresAfter(2);
+            $item->expiresAfter(300);
 
             $response = $this->getResponse();
 
