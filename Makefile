@@ -6,3 +6,6 @@ php-stan:
 php-cs:
 	php-cs-fixer fix
  
+.PHONY : tailwind-build
+tailwind-build:
+	symfony console tailwind:build --watch

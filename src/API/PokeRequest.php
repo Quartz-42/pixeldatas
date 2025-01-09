@@ -59,6 +59,20 @@ class PokeRequest
         });
     }
 
+    public function getObjPokemons(): array
+    {
+        return $this->cache->get('allPoke', function (ItemInterface $item): array {
+            $item->expiresAfter(300);
+
+            $response = $this->getResponse();
+
+            $content = $response->toArray();
+
+            // Ne retourner que les 10 premiers Pokémon
+            return array_slice($content, 0, 10);
+        });
+    }
+
     public function getPokemonByType($type): array
     {
         return $this->cache->get('pokeByType', function (ItemInterface $item) use ($type): array {
