@@ -19,7 +19,7 @@ class PokemonController extends AbstractController
         PokeRequest $pokeRequest,
         #[MapQueryParameter] int $page = 1,
     ): Response {
-        $pokemons = $pokeRequest->getAllPokemons();
+        $pokemons = $pokeRequest->getObjPokemons();
         $adapter = new ArrayAdapter($pokemons);
 
         $pager = new Pagerfanta($adapter);
