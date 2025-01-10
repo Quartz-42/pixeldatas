@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TalentRepository::class)]
+#[ORM\UniqueConstraint(name: 'unique_type_name', columns: ['name'])]
 class Talent
 {
     #[ORM\Id]
@@ -15,7 +16,7 @@ class Talent
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
     /**
@@ -23,6 +24,9 @@ class Talent
      */
     #[ORM\ManyToMany(targetEntity: Pokemon::class, inversedBy: 'talent')]
     private Collection $pokemons;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
 
     public function __construct()
     {
@@ -66,6 +70,18 @@ class Talent
     public function removePokemon(Pokemon $pokemon): static
     {
         $this->pokemons->removeElement($pokemon);
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

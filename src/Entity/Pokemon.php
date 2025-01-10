@@ -78,14 +78,21 @@ class Pokemon
     /**
      * @var Collection<int, Talent>
      */
-    #[ORM\ManyToMany(targetEntity: Talent::class, mappedBy: 'pokemons')]
+    #[ORM\ManyToMany(targetEntity: Talent::class, mappedBy: 'pokemons', cascade: ['persist'])]
     private Collection $talent;
+
+    /**
+     * @var Collection<int, Type>
+     */
+    #[ORM\ManyToMany(targetEntity: Type::class, mappedBy: 'pokemonId', cascade: ['persist'])]
+    private Collection $types;
 
     public function __construct()
     {
         $this->nextEvolution = new ArrayCollection();
         $this->preEvolution = new ArrayCollection();
         $this->talent = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -367,6 +374,33 @@ class Pokemon
     {
         if ($this->talent->removeElement($talent)) {
             $talent->removePokemon($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Type>
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(Type $type): static
+    {
+        if (!$this->types->contains($type)) {
+            $this->types->add($type);
+            $type->addPokemonId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Type $type): static
+    {
+        if ($this->types->removeElement($type)) {
+            $type->removePokemonId($this);
         }
 
         return $this;

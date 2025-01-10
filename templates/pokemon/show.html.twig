@@ -74,15 +74,15 @@
 					{% for type in pokemon.types %}
 						{% set types = types|merge([type.name|lower]) %}
 					{% endfor %}
-					{% if pokemon.pokedex_id > 0 %}
-						<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}" data-gen="{{pokemon.generation}}">
+					{% if pokemon.pokedexId > 0 %}
+						<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105" data-name="{{ pokemon.name | lower }}" data-type="{{ types|join(' ') }}" data-gen="{{pokemon.generation}}">
 							<div class="flex justify-between items-center mb-4">
-								<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name.fr }}
-									{% if pokemon.sprites.gmax %}
+								<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name }}
+									{% if pokemon.spriteGmax %}
 										<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded ml-2">GMAX</span>
 									{% endif %}
 								</h2>
-								<p class="text-sm font-bold italic text-gray-500">Pokédex n°{{ pokemon.pokedex_id }}</p>
+								<p class="text-sm font-bold italic text-gray-500">Pokédex n°{{ pokemon.pokedexId }}</p>
 							</div>
 
 							<div class="flex justify-between items-center mb-4">
@@ -96,8 +96,8 @@
 							</div>
 
 							<div class="flex justify-center">
-								<a href="{{ path('app_pokemon_details', {'name': pokemon.name.fr}) }}">
-									<img src="{{ pokemon.sprites.regular }}" alt="Image de {{ pokemon.name.fr }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
+								<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
+									<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
 								</a>
 							</div>
 						</div>
