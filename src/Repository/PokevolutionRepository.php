@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Evolution;
+use App\Entity\Pokevolution;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Evolution>
+ * @extends ServiceEntityRepository<Pokevolution>
  */
-class EvolutionRepository extends ServiceEntityRepository
+class PokevolutionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Evolution::class);
+        parent::__construct($registry, Pokevolution::class);
     }
 
     //    /**
-    //     * @return Evolution[] Returns an array of Evolution objects
+    //     * @return Pokevolution[] Returns an array of Pokevolution objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
+    //            ->orderBy('p.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Evolution
+    //    public function findOneBySomeField($value): ?Pokevolution
     //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()
