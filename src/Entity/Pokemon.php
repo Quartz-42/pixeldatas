@@ -64,18 +64,6 @@ class Pokemon
     private ?string $weight = null;
 
     /**
-     * @var Collection<int, Evolution>
-     */
-    #[ORM\OneToMany(targetEntity: Evolution::class, mappedBy: 'nextEvolutionId')]
-    private Collection $nextEvolution;
-
-    /**
-     * @var Collection<int, Evolution>
-     */
-    #[ORM\OneToMany(targetEntity: Evolution::class, mappedBy: 'preEvolutionId')]
-    private Collection $preEvolution;
-
-    /**
      * @var Collection<int, Talent>
      */
     #[ORM\ManyToMany(targetEntity: Talent::class, mappedBy: 'pokemons', cascade: ['persist'])]
@@ -87,12 +75,31 @@ class Pokemon
     #[ORM\ManyToMany(targetEntity: Type::class, mappedBy: 'pokemonId', cascade: ['persist'])]
     private Collection $types;
 
+    /**
+     * @var Collection<int, Pokevolution>
+     */
+    #[ORM\OneToMany(targetEntity: Pokevolution::class, mappedBy: 'pokemon')]
+    private Collection $pokevolutions;
+
+    /**
+     * @var Collection<int, Pokevolution>
+     */
+    #[ORM\OneToMany(targetEntity: Pokevolution::class, mappedBy: 'preEvolution')]
+    private Collection $preEvolution;
+
+    /**
+     * @var Collection<int, Pokevolution>
+     */
+    #[ORM\OneToMany(targetEntity: Pokevolution::class, mappedBy: 'nextEvolution')]
+    private Collection $nextEvolution;
+
     public function __construct()
     {
-        $this->nextEvolution = new ArrayCollection();
-        $this->preEvolution = new ArrayCollection();
         $this->talent = new ArrayCollection();
         $this->types = new ArrayCollection();
+        $this->pokevolutions = new ArrayCollection();
+        $this->preEvolution = new ArrayCollection();
+        $this->nextEvolution = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -292,65 +299,6 @@ class Pokemon
         return $this;
     }
 
-    /**
-     * @return Collection<int, Evolution>
-     */
-    public function getNextEvolution(): Collection
-    {
-        return $this->nextEvolution;
-    }
-
-    public function addNextEvolution(Evolution $nextEvolution): static
-    {
-        if (!$this->nextEvolution->contains($nextEvolution)) {
-            $this->nextEvolution->add($nextEvolution);
-            $nextEvolution->setNextEvolutionId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNextEvolution(Evolution $nextEvolution): static
-    {
-        if ($this->nextEvolution->removeElement($nextEvolution)) {
-            // set the owning side to null (unless already changed)
-            if ($nextEvolution->getNextEvolutionId() === $this) {
-                $nextEvolution->setNextEvolutionId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Evolution>
-     */
-    public function getPreEvolution(): Collection
-    {
-        return $this->preEvolution;
-    }
-
-    public function addPreEvolution(Evolution $preEvolution): static
-    {
-        if (!$this->preEvolution->contains($preEvolution)) {
-            $this->preEvolution->add($preEvolution);
-            $preEvolution->setPreEvolutionId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePreEvolution(Evolution $preEvolution): static
-    {
-        if ($this->preEvolution->removeElement($preEvolution)) {
-            // set the owning side to null (unless already changed)
-            if ($preEvolution->getPreEvolutionId() === $this) {
-                $preEvolution->setPreEvolutionId(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Talent>
@@ -401,6 +349,96 @@ class Pokemon
     {
         if ($this->types->removeElement($type)) {
             $type->removePokemonId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pokevolution>
+     */
+    public function getPokevolutions(): Collection
+    {
+        return $this->pokevolutions;
+    }
+
+    public function addPokevolution(Pokevolution $pokevolution): static
+    {
+        if (!$this->pokevolutions->contains($pokevolution)) {
+            $this->pokevolutions->add($pokevolution);
+            $pokevolution->setPokemon($this);
+        }
+
+        return $this;
+    }
+
+    public function removePokevolution(Pokevolution $pokevolution): static
+    {
+        if ($this->pokevolutions->removeElement($pokevolution)) {
+            // set the owning side to null (unless already changed)
+            if ($pokevolution->getPokemon() === $this) {
+                $pokevolution->setPokemon(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pokevolution>
+     */
+    public function getPreEvolution(): Collection
+    {
+        return $this->preEvolution;
+    }
+
+    public function addPreEvolution(Pokevolution $preEvolution): static
+    {
+        if (!$this->preEvolution->contains($preEvolution)) {
+            $this->preEvolution->add($preEvolution);
+            $preEvolution->setPreEvolution($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreEvolution(Pokevolution $preEvolution): static
+    {
+        if ($this->preEvolution->removeElement($preEvolution)) {
+            // set the owning side to null (unless already changed)
+            if ($preEvolution->getPreEvolution() === $this) {
+                $preEvolution->setPreEvolution(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pokevolution>
+     */
+    public function getNextEvolution(): Collection
+    {
+        return $this->nextEvolution;
+    }
+
+    public function addNextEvolution(Pokevolution $nextEvolution): static
+    {
+        if (!$this->nextEvolution->contains($nextEvolution)) {
+            $this->nextEvolution->add($nextEvolution);
+            $nextEvolution->setNextEvolution($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNextEvolution(Pokevolution $nextEvolution): static
+    {
+        if ($this->nextEvolution->removeElement($nextEvolution)) {
+            // set the owning side to null (unless already changed)
+            if ($nextEvolution->getNextEvolution() === $this) {
+                $nextEvolution->setNextEvolution(null);
+            }
         }
 
         return $this;
