@@ -134,16 +134,18 @@ class PokeRequest
                     $poke->setWeight($pokemon['weight']);
 
                     //on set les talents
-                    foreach ($pokemon['talents'] as $talentData) {
-                        // Vérifier si le talent existe déjà dans la base de données
-                        if (!in_array($talentData['name'], $existingTalentNames)) {
-                            // Si le talent n'existe pas, on le crée et on le persiste
-                            $talent = new Talent();
-                            $talent->setName($talentData['name']);
-                            $this->em->persist($talent);
-                            $existingTalentNames[] = $talentData['name'];  // Ajouter le talent à la liste des talents existants
+                    if (!empty($pokemon['talents'])) {
+                        foreach ($pokemon['talents'] as $talentData) {
+                            // Vérifier si le talent existe déjà dans la base de données
+                            if (!in_array($talentData['name'], $existingTalentNames)) {
+                                // Si le talent n'existe pas, on le crée et on le persiste
+                                $talent = new Talent();
+                                $talent->setName($talentData['name']);
+                                $this->em->persist($talent);
+                                $existingTalentNames[] = $talentData['name'];  // Ajouter le talent à la liste des talents existants
+                                $poke->addTalent($talent);
+                            }
                         }
-                        $poke->addTalent($talent);
                     }
 
                     // On set les types
@@ -180,7 +182,7 @@ class PokeRequest
                             }
                         }
                     }
-                    if ($pokemon['evolution']['mega'] != null) {
+                    if (!empty($pokemon['evolution']['mega'])) {
                         $evolution->setMegaEvolution(true);
                     }
 

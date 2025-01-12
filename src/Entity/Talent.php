@@ -25,9 +25,6 @@ class Talent
     #[ORM\ManyToMany(targetEntity: Pokemon::class, inversedBy: 'talent')]
     private Collection $pokemons;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
-
     public function __construct()
     {
         $this->pokemons = new ArrayCollection();
@@ -70,18 +67,6 @@ class Talent
     public function removePokemon(Pokemon $pokemon): static
     {
         $this->pokemons->removeElement($pokemon);
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }
