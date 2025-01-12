@@ -174,42 +174,47 @@ class PokeRequest
             foreach ($pokemonEntities as $poke) {
                 $pokemon = $content[array_search($poke->getPokedexId(), array_column($content, 'pokedex_id'))];
 
-                // Créer une seule instance de Pokevolution pour chaque Pokémon
-                $evolution = new Pokevolution();
-                $evolution->setPokemon($poke);
+                // Vérifier si une évolution existe déjà pour ce Pokémon
+                $existingEvolution = $this->em->getRepository(Pokevolution::class)->findOneBy(['pokemon' => $poke]);
 
-                // On set les évolutions précédentes
-                if (!empty($pokemon['evolution']['pre'])) {
-                    $preEvolutions = $pokemon['evolution']['pre'];
-                    if (isset($preEvolutions[0])) {
-                        $pokemonPre1 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $preEvolutions[0]['pokedex_id']]);
-                        $evolution->setPreEvolution1($pokemonPre1);
+                if (!$existingEvolution) {
+                    // Créer une seule instance de Pokevolution pour chaque Pokémon
+                    $evolution = new Pokevolution();
+                    $evolution->setPokemon($poke);
+
+                    // On set les évolutions précédentes
+                    if (!empty($pokemon['evolution']['pre'])) {
+                        $preEvolutions = $pokemon['evolution']['pre'];
+                        if (isset($preEvolutions[0])) {
+                            $pokemonPre1 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $preEvolutions[0]['pokedex_id']]);
+                            $evolution->setPreEvolution1($pokemonPre1);
+                        }
+                        if (isset($preEvolutions[1])) {
+                            $pokemonPre2 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $preEvolutions[1]['pokedex_id']]);
+                            $evolution->setPreEvolution2($pokemonPre2);
+                        }
                     }
-                    if (isset($preEvolutions[1])) {
-                        $pokemonPre2 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $preEvolutions[1]['pokedex_id']]);
-                        $evolution->setPreEvolution2($pokemonPre2);
+
+                    // On set les évolutions suivantes
+                    if (!empty($pokemon['evolution']['next'])) {
+                        $nextEvolutions = $pokemon['evolution']['next'];
+                        if (isset($nextEvolutions[0])) {
+                            $pokemonNext1 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $nextEvolutions[0]['pokedex_id']]);
+                            $evolution->setNextEvolution1($pokemonNext1);
+                        }
+                        if (isset($nextEvolutions[1])) {
+                            $pokemonNext2 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $nextEvolutions[1]['pokedex_id']]);
+                            $evolution->setNextEvolution2($pokemonNext2);
+                        }
                     }
+
+                    // On set les méga-évolutions
+                    if (!empty($pokemon['evolution']['mega'])) {
+                        $evolution->setMegaEvolution(true);
+                    }
+
+                    $this->em->persist($evolution);
                 }
-
-                // On set les évolutions suivantes
-                if (!empty($pokemon['evolution']['next'])) {
-                    $nextEvolutions = $pokemon['evolution']['next'];
-                    if (isset($nextEvolutions[0])) {
-                        $pokemonNext1 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $nextEvolutions[0]['pokedex_id']]);
-                        $evolution->setNextEvolution1($pokemonNext1);
-                    }
-                    if (isset($nextEvolutions[1])) {
-                        $pokemonNext2 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $nextEvolutions[1]['pokedex_id']]);
-                        $evolution->setNextEvolution2($pokemonNext2);
-                    }
-                }
-
-                // On set les méga-évolutions
-                if (!empty($pokemon['evolution']['mega'])) {
-                    $evolution->setMegaEvolution(true);
-                }
-
-                $this->em->persist($evolution);
             }
 
             $this->em->flush();
