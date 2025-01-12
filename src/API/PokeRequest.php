@@ -78,7 +78,6 @@ class PokeRequest
 
             $content = $response->toArray();
 
-            $pokemons = array_slice($content, 0, 10);
             $pokemonEntities = [];
 
             // Récupérer tous les talents existants dans la base de données
@@ -95,7 +94,7 @@ class PokeRequest
                 $existingTypeNames[$type->getName()] = $type;
             }
 
-            foreach ($pokemons as $pokemon) {
+            foreach ($content as $pokemon) {
                 if ($pokemon['pokedex_id'] != null) {
 
                     // Contrôle pour ne pas faire les choses deux fois
@@ -141,8 +140,8 @@ class PokeRequest
                                 // Si le talent n'existe pas, on le crée et on le persiste
                                 $talent = new Talent();
                                 $talent->setName($talentData['name']);
-                                $this->em->persist($talent);
                                 $existingTalentNames[$talentData['name']] = $talent;
+                                $this->em->persist($talent);
                                 $poke->addTalent($talent);
                             }
                         }
@@ -157,8 +156,8 @@ class PokeRequest
                                 $type = new Type();
                                 $type->setName($typeData['name']);
                                 $type->setImage($typeData['image']);
-                                $this->em->persist($type);
                                 $existingTypeNames[$typeData['name']] = $type;
+                                $this->em->persist($type);
                                 $poke->addType($type);
                             }
                         }
