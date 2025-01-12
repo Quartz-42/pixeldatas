@@ -5,54 +5,41 @@
 		<div class="container mx-auto">
 			<h1 class="font-bold text-xl uppercase text-center mt-8">3 Pokémons aléatoires apparaissent chaque jour !</h1>
 			<div class="flex flex-wrap mx-2 justify-between">
-				{% for pokemon in randomPokemons %}
-
-					{% set types = [] %}
-					{% for type in pokemon.types %}
-						{% set types = types|merge([type.name|lower]) %}
-					{% endfor %}
-
-					{% if pokemon.pokedex_id > 0 %}
-						<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
-							<div class="p-2 border-dashed border-2 border-red-500 rounded">
-								<h2 class="text-xl font-bold mt-2">{{ pokemon.name.fr|upper }}</h2>
-								<div class="mt-2 flex justify-center items-center">
-									{% if pokemon.types|length == 1 %}
-										<img class="grosse-taille lg:petite-taille inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
-									{% else %}
-										{% for image in pokemon.types %}
-											<img class="grosse-taille lg:petite-taille inline {% if not loop.last %}mr-4{% endif %}" src="{{ image.image }}" title="{{ image.name }}">
-										{% endfor %}
-									{% endif %}
-								</div>
-								<a href="{{path('app_pokemon_details', {"name" : pokemon.name.fr})}}">
-									<img src="{{ pokemon.sprites.regular }}" alt="{{ pokemon.name.fr }}" class="w-1/2 h-auto mx-auto">
-								</a>
-								<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
-									N°
-									{{pokemon.pokedex_id}}
-									<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
-										-
-										<span class="underline">
-											Gen.
-											{{ pokemon.generation }}
-										</span>
-									</a>
-								</p>
-								<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
-									{{ pokemon.weight|upper }}
-									-
-									{{ pokemon.height|upper }}
-								</p>
+				{% for data in randomPokemons %}
+					<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
+						<div class="p-2 border-dashed border-2 border-red-500 rounded">
+							<h2 class="text-xl font-bold mt-2">{{ data.pokemon.name }}</h2>
+							<div class="mt-2 flex justify-center items-center">
+								{% for type in data.pokemon.types %}
+									<img class="grosse-taille lg:petite-taille inline {% if not loop.last %}mr-4{% endif %}" src="{{ type.image }}" title="{{ type.name }}" alt="Type {{ type.name }}">
+								{% endfor %}
 							</div>
+							<a href="{{ path('app_pokemon_details', {'name': data.pokemon.name}) }}">
+								<img src="{{ data.pokemon.spriteRegular }}" alt="{{ data.pokemon.name }}" class="w-1/2 h-auto mx-auto">
+							</a>
+							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
+								N°{{ data.pokemon.pokedexId }}
+								<a href="{{ path('app_pokemon_gen', {'generation': data.pokemon.generation}) }}">
+									-
+									<span class="underline">
+										Gen.
+										{{ data.pokemon.generation }}
+									</span>
+								</a>
+							</p>
+							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
+								{{ data.pokemon.weight|upper }}
+								-
+								{{ data.pokemon.height|upper }}
+							</p>
 						</div>
-					{% endif %}
+					</div>
 				{% endfor %}
-				<div class="w-full flex justify-center my-10 lg:mt-[55px]">
-					<a href="{{ path('app_all_pokemon') }}" class="bg-red-500 text-white rounded p-4 font-semibold uppercase inline-block text-center">
-						Voir tous les Pokémons
-					</a>
-				</div>
+			</div>
+			<div class="w-full flex justify-center my-10 lg:mt-[55px]">
+				<a href="{{ path('app_all_pokemon') }}" class="bg-red-500 text-white rounded p-4 font-semibold uppercase inline-block text-center">
+					Voir tous les Pokémons
+				</a>
 			</div>
 		</div>
 	</div>
