@@ -16,11 +16,17 @@ class Pokevolution
     #[ORM\ManyToOne(inversedBy: 'pokevolutions')]
     private ?Pokemon $pokemon = null;
 
-    #[ORM\ManyToOne(inversedBy: 'preEvolution')]
-    private ?Pokemon $preEvolution = null;
+    #[ORM\ManyToOne(inversedBy: 'preEvolution1')]
+    private ?Pokemon $preEvolution1 = null;
 
-    #[ORM\ManyToOne(inversedBy: 'nextEvolution')]
-    private ?Pokemon $nextEvolution = null;
+    #[ORM\ManyToOne(inversedBy: 'preEvolution2')]
+    private ?Pokemon $preEvolution2 = null;
+
+    #[ORM\ManyToOne(inversedBy: 'nextEvolution1')]
+    private ?Pokemon $nextEvolution1 = null;
+
+    #[ORM\ManyToOne(inversedBy: 'nextEvolution2')]
+    private ?Pokemon $nextEvolution2 = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isMegaEvolution = null;
@@ -42,27 +48,47 @@ class Pokevolution
         return $this;
     }
 
-    public function getPreEvolution(): ?Pokemon
+    public function getPreEvolution1(): ?Pokemon
     {
-        return $this->preEvolution;
+        return $this->preEvolution1;
     }
 
-    public function setPreEvolution(?Pokemon $preEvolution): static
+    public function setPreEvolution1(?Pokemon $preEvolution1): static
     {
-        $this->preEvolution = $preEvolution;
-
+        $this->preEvolution1 = $preEvolution1;
         return $this;
     }
 
-    public function getNextEvolution(): ?Pokemon
+    public function getPreEvolution2(): ?Pokemon
     {
-        return $this->nextEvolution;
+        return $this->preEvolution2;
     }
 
-    public function setNextEvolution(?Pokemon $nextEvolution): static
+    public function setPreEvolution2(?Pokemon $preEvolution2): static
     {
-        $this->nextEvolution = $nextEvolution;
+        $this->preEvolution2 = $preEvolution2;
+        return $this;
+    }
 
+    public function getNextEvolution1(): ?Pokemon
+    {
+        return $this->nextEvolution1;
+    }
+
+    public function setNextEvolution1(?Pokemon $nextEvolution1): static
+    {
+        $this->nextEvolution1 = $nextEvolution1;
+        return $this;
+    }
+
+    public function getNextEvolution2(): ?Pokemon
+    {
+        return $this->nextEvolution2;
+    }
+
+    public function setNextEvolution2(?Pokemon $nextEvolution2): static
+    {
+        $this->nextEvolution2 = $nextEvolution2;
         return $this;
     }
 
