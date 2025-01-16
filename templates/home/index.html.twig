@@ -5,32 +5,32 @@
 		<div class="container mx-auto">
 			<h1 class="font-bold text-xl uppercase text-center mt-8">3 Pokémons aléatoires apparaissent chaque jour !</h1>
 			<div class="flex flex-wrap mx-2 justify-between">
-				{% for data in randomPokemons %}
+				{% for pokemon in randomPokemons %}
 					<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
 						<div class="p-2 border-dashed border-2 border-red-500 rounded">
-							<h2 class="text-xl font-bold mt-2">{{ data.pokemon.name }}</h2>
+							<h2 class="text-xl font-bold mt-2">{{ pokemon.name }}</h2>
 							<div class="mt-2 flex justify-center items-center">
-								{% for type in data.pokemon.types %}
+								{% for type in pokemon.types %}
 									<img class="grosse-taille lg:petite-taille inline {% if not loop.last %}mr-4{% endif %}" src="{{ type.image }}" title="{{ type.name }}" alt="Type {{ type.name }}">
 								{% endfor %}
 							</div>
-							<a href="{{ path('app_pokemon_details', {'name': data.pokemon.name}) }}">
-								<img src="{{ data.pokemon.spriteRegular }}" alt="{{ data.pokemon.name }}" class="w-1/2 h-auto mx-auto">
+							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
+								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-1/2 h-auto mx-auto">
 							</a>
 							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
-								N°{{ data.pokemon.pokedexId }}
-								<a href="{{ path('app_pokemon_gen', {'generation': data.pokemon.generation}) }}">
+								N°{{ pokemon.pokedexId }}
+								<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
 									-
 									<span class="underline">
 										Gen.
-										{{ data.pokemon.generation }}
+										{{ pokemon.generation }}
 									</span>
 								</a>
 							</p>
 							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
-								{{ data.pokemon.weight|upper }}
+								{{ pokemon.weight|upper }}
 								-
-								{{ data.pokemon.height|upper }}
+								{{ pokemon.height|upper }}
 							</p>
 						</div>
 					</div>
