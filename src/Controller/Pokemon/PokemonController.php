@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
-
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
 {
@@ -30,9 +29,12 @@ class PokemonController extends AbstractController
         // Calculer les pages visibles
         $visiblePages = $this->getVisiblePages($pager);
 
+        $pokemonTypes = $pokemonRepository->findPokemonTypes();
+
         return $this->render('pokemon/show.html.twig', [
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
+            'pokemonTypes' => $pokemonTypes,
         ]);
     }
 
