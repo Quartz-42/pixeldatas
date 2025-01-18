@@ -24,7 +24,7 @@ class PokemonController extends AbstractController
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->findBySearchQueryBuilder($query)),
             $page,
-            50
+            40
         );
 
         // Calculer les pages visibles
@@ -79,10 +79,28 @@ class PokemonController extends AbstractController
 
 
     #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
-    public function showPokemonByGen($generation, PokeRequest $pokeRequest): Response
-    {
+    public function showPokemonByGen(
+        int $generation,
+        PokemonRepository $pokemonRepository,
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter] string $query = null,
+    ): Response {
+        $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
+            new QueryAdapter($pokemonRepository->getPokemonsByGenerationForSearch($generation, $query)),
+            $page,
+            40
+        );
+
+        $numberOfPokemons = count($pokemonRepository->getPokemonsByGeneration($generation));
+
+        // Calculer les pages visibles
+        $visiblePages = $this->getVisiblePages($pager);
+
         return $this->render('pokemon/show_gen.html.twig', [
-            'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
+            'pokemons' => $pager,
+            'visiblePages' => $visiblePages,
+            'generation' => $generation,
+            'numberOfPokemons' => $numberOfPokemons
         ]);
     }
 
@@ -93,14 +111,6 @@ class PokemonController extends AbstractController
 
         return $this->render('pokemon/show_ranking.html.twig', [
             'pokemonStats' => $pokemonStats,
-        ]);
-    }
-
-    #[Route('/ranking/generation/{generation}', name: 'app_pokemon_ranking_by_gen')]
-    public function showPokemonRankingByGen(PokeRequest $pokeRequest, int $generation): Response
-    {
-        return $this->render('pokemon/show_ranking.html.twig', [
-            'pokemons' => $pokeRequest->getPokemonByGeneration($generation),
         ]);
     }
 }

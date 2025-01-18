@@ -10,67 +10,65 @@
 				<div class="w-3/4 ml-4 text-lg md:text-base">
 					<p class="font-bold text-xl italic text-gray-700">
 						La génération
-						{% set generation = false %}
-						{% for pokemon in pokemons %}
-							{% if generation != true %}
-								{{pokemon.generation}}
-								{% set generation = true %}
-							{% endif %}
-						{% endfor %}
+						{{ generation }}
 						comporte
-						<span class="text-red-500">{{ pokemons|length -1 }}</span>
+						<span class="text-red-500">{{ numberOfPokemons }}</span>
 						Pokémons !
 					</p>
 				</div>
 			</div>
 
+			<form data-controller="autosubmit" method="GET" action="{{ path('app_pokemon_gen', {'generation': generation}) }}" class="my-3 flex justify-between">
+				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit">
+			</form>
 			<div id="pokemon-list" class="grid gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-5">
 				{% for pokemon in pokemons %}
-					{% set types = [] %}
-					{% for type in pokemon.types %}
-						{% set types = types|merge([type.name|lower]) %}
-					{% endfor %}
-
-					{% if pokemon.pokedex_id > 0 %}
-						<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105" data-name="{{ pokemon.name.fr | lower }}" data-type="{{ types|join(' ') }}">
-							<div class="flex justify-between items-center mb-4">
-								<div>
-									<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name.fr }}
-										{% if pokemon.sprites.gmax %}
-											<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded ml-2">GMAX</span>
-										{% endif %}
-									</h2>
-								</div>
-								<div>
-									<p class="text-sm font-bold italic text-gray-500">
-										Pokédex n°{{ pokemon.pokedex_id }}
-									</p>
-								</div>
-							</div>
-							<div class="flex justify-between items-center mb-4">
-								<div>
-									{% if pokemon.types|length == 1 %}
-										<img class="w-2/3 inline" src="{{ pokemon.types[0].image }}" title="{{ pokemon.types[0].name }}">
-									{% else %}
-										{% for type in pokemon.types %}
-											<img class="w-8 inline-block mr-1" src="{{ type.image }}" title="{{ type.name }}">
-										{% endfor %}
+					<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105" ">
+						<div class="flex justify-between items-center mb-4">
+							<div>
+								<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name }}
+									{% if pokemon.spriteGmax %}
+										<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded ml-2">GMAX</span>
 									{% endif %}
-								</div>
-								<a class="font-semibold text-red-500 underline" href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
-									Gen.
-									{{ pokemon.generation }}
-								</a>
+								</h2>
 							</div>
-							<div class="flex justify-center">
-								<a href="{{ path('app_pokemon_details', {"name": pokemon.name.fr}) }}">
-									<img src="{{ pokemon.sprites.regular }}" alt="Image de {{ pokemon.name.fr }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
-								</a>
+							<div>
+								<p class="text-sm font-bold italic text-gray-500">
+									Pokédex n°{{ pokemon.pokedexId }}
+								</p>
 							</div>
 						</div>
+						<div class="flex justify-between items-center my-4">
+							<div>
+								{% for type in pokemon.types %}
+									<img class="w-8 inline-block mr-1" src="{{ type.image }}" title="{{ type.name }} alt=" {{ type.name }} ">
+								{% endfor %}
+							</div>
+							<a class="font-semibold text-red-500 underline" href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
+								Gen.
+								{{ pokemon.generation }}
+							</a>
+						</div>
+						<div class="flex justify-center">
+							<a href="{{ path('app_pokemon_details', {"name": pokemon.name}) }}">
+								<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="flex items-center justify-center text-center mx-auto mt-10 space-x-4">
+				{% for page in visiblePages %}
+					{% if page == 1 or page == pokemons.nbPages or (page >= pokemons.currentPage - 3 and page <= pokemons.currentPage + 3) %}
+						{% if page == pokemons.currentPage %}
+							<span class="block py-2 px-4 bg-black text-amber-500 rounded">{{ page }}</span>
+						{% else %}
+							<a href="{{ pagerfanta_page_url(pokemons, page) }}" class="block py-2 px-4 bg-white text-black rounded">{{ page }}</a>
+						{% endif %}
 					{% endif %}
 				{% endfor %}
 			</div>
+
 			<div class="my-[50px] text-center">
 				<a href={{path('app_all_pokemon')}} class="font-bold border bg-white border-white rounded text-black px-8 py-4">
 					Retour à la liste des Pokémons

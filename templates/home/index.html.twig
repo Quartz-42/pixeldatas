@@ -9,9 +9,9 @@
 					<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
 						<div class="p-2 border-dashed border-2 border-red-500 rounded">
 							<h2 class="text-xl font-bold mt-2">{{ pokemon.name }}</h2>
-							<div class="mt-2 flex justify-center items-center">
+							<div class="my-2 flex justify-center items-center">
 								{% for type in pokemon.types %}
-									<img class="grosse-taille lg:petite-taille inline {% if not loop.last %}mr-4{% endif %}" src="{{ type.image }}" title="{{ type.name }}" alt="Type {{ type.name }}">
+									<img class="w-8 inline-block {% if not loop.last %}mr-4{% endif %}" src="{{ type.image }}" title="{{ type.name }}" alt="Type {{ type.name }}">
 								{% endfor %}
 							</div>
 							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
