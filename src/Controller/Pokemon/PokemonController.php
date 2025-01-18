@@ -2,29 +2,30 @@
 
 namespace App\Controller\Pokemon;
 
-use App\API\PokeRequest;
+use App\Repository\PokemonRepository;
+use App\Repository\PokevolutionRepository;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\Adapter\ArrayAdapter;
+
 
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
 {
     #[Route('/list', name: 'app_all_pokemon')]
-    public function showAllpokemon(
-        PokeRequest $pokeRequest,
+    public function showAllPokemons(
+        PokemonRepository $pokemonRepository,
         #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter] string $query = null,
     ): Response {
-        $pokemons = $pokeRequest->getObjPokemons();
-        $adapter = new ArrayAdapter($pokemons);
-
-        $pager = new Pagerfanta($adapter);
-        $pager->setCurrentPage($page);
-        $pager->setMaxPerPage(50);
+        $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
+            new QueryAdapter($pokemonRepository->findBySearchQueryBuilder($query)),
+            $page,
+            50
+        );
 
         // Calculer les pages visibles
         $visiblePages = $this->getVisiblePages($pager);
@@ -60,25 +61,22 @@ class PokemonController extends AbstractController
     }
 
     #[Route('/details/{name}', name: 'app_pokemon_details')]
-    public function showPokemonDetails(string $name, PokeRequest $pokeRequest): Response
-    {
+    public function showPokemonDetails(
+        PokemonRepository $pokemonRepository,
+        PokevolutionRepository $pokevolutionRepository,
+        string $name
+    ): Response {
+        $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
+
+        // Récupérer les évolutions du Pokémon
+        $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
+
         return $this->render('pokemon/show_details.html.twig', [
-            'pokemon' => $pokeRequest->getPokemonByName($name),
+            'pokemon' => $pokemon,
+            'evolutions' => $evolutions,
         ]);
     }
 
-    // TEMPLATE NON CREE ROUTE NON UTILISEE
-    // #[Route('/pokemons', name: 'app_pokemon_type')]
-    // // public function showPokemonByType($type, PokeRequest $pokeRequest): Response
-    // public function showPokemonByType(Request $request): Response
-    // {
-    //     $type = $request->query->get('type');
-
-    //     return $this->render('pokemon/show_type.html.twig', [
-    //         // 'pokemons' => $pokeRequest->getPokemonByType($type),
-    //         'type' => $type,
-    //     ]);
-    // }
 
     #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
     public function showPokemonByGen($generation, PokeRequest $pokeRequest): Response

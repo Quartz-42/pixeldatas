@@ -4,7 +4,7 @@
 	<div class="bg-red-500 p-4 min-h-screen flex flex-col">
 		<div class="container  mx-auto text-center flex-grow">
 			<div class="bg-white p-4 mt-4 mb-8 rounded-md">
-				<h1 class="uppercase font-bold text-4xl mt-8">{{ pokemon.name.fr }}</h1>
+				<h1 class="uppercase font-bold text-4xl mt-8">{{ pokemon.name }}</h1>
 				{#CV POKEMON #}
 				<div class="flex justify-center mt-[45px]">
 					<div class="border border-dashed border-black shadow-md px-10 pr-4 pl-3 rounded flex w-full md:w-1/2 lg:w-2/3 items-center">
@@ -13,7 +13,7 @@
 						</div>
 						<div class="w-full md:w-2/3 lg:w-2/3 ml-2 sm:w-full lg:text-lg md:text-base sm:text-sm text-center">
 							<p class="mt-2 mb-2">
-								{{pokemon.name.fr}}
+								{{pokemon.name}}
 								est un Pokémon de type
 								{% for type in pokemon.types %}
 									<strong>{{ type.name }}</strong>
@@ -30,52 +30,70 @@
 							</p>
 						</p>
 						<p class="mt-2 mb-2">Il possède
-							{% if pokemon.talents|length > 1 %}
+							{% if pokemon.talent|length > 1 %}
 								les talents
 							{% else %}
 								le talent
 							{% endif %}
-							{% for talent in pokemon.talents %}
+							{% for talent in pokemon.talent %}
 								<strong>{{talent.name}}</strong>
 								{% if not loop.last %}
 									,
 								{% endif %}
 							{% endfor %}
 						</p>
-						{% if pokemon.evolution %}
+						{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null
+						or evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null
+						 %}
 							<p class="mt-2 mb-2">
 								Ce Pokémon est
 								<strong>évolutif !</strong>
-								{% if pokemon.evolution.pre %}
+								{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null %}
 									Il est l'évolution de
-									{% for preEvo in pokemon.evolution.pre %}
+									{% if evolutions.preEvolution1 is not null %}
 										<strong>
-											<a class="underline" href="{{path('app_pokemon_details', {"name" : preEvo.name})}}">
-												{{ preEvo.name }}
+											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.preEvolution1.name})}}">
+												{{ evolutions.preEvolution1.name }}
 											</a>
 										</strong>
-										{% if not loop.last %}
+									{% endif %}
+									{% if evolutions.preEvolution2 is not null %}
+										{% if evolutions.preEvolution1 is not null %}
 											et de
 										{% endif %}
-									{% endfor %}
-								{% endif %}
-							</p>
-							{% if pokemon.evolution.next %}
-								<p class="mt-2 mb-2">
-									Son évolution est
-									{% for nextEvo in pokemon.evolution.next %}
 										<strong>
-											<a class="underline" href="{{path('app_pokemon_details', {"name" : nextEvo.name})}}">
-												{{ nextEvo.name }}
+											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.preEvolution2.name})}}">
+												{{ evolutions.preEvolution2.name }}
 											</a>
 										</strong>
-										{% if not loop.last %}
-											puis
-										{% endif %}
-									{% endfor %}
+									{% endif %}
 								{% endif %}
 							</p>
-							{% if pokemon.evolution.mega %}
+
+							{% if evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null %}
+								<p class="mt-2 mb-2">
+									Son évolution suivante est
+									{% if evolutions.nextEvolution1 is not null %}
+										<strong>
+											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.nextEvolution1.name})}}">
+												{{ evolutions.nextEvolution1.name }}
+											</a>
+										</strong>
+									{% endif %}
+									{% if evolutions.nextEvolution2 is not null %}
+										{% if evolutions.nextEvolution1 is not null %}
+											puis
+										{% endif %}
+										<strong>
+											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.nextEvolution2.name})}}">
+												{{ evolutions.nextEvolution2.name }}
+											</a>
+										</strong>
+									{% endif %}
+								</p>
+							{% endif %}
+
+							{% if evolutions.isMegaEvolution %}
 								<p class="mt-2 mb-2">
 									La légende raconte même qu'il peut
 									<strong>méga-évoluer !</strong>
@@ -83,16 +101,17 @@
 							{% endif %}
 						{% else %}
 							<p class="mt-2 mb-2">
-								Ce Pokémon ne possède pas d'évolution.
+								Ce Pokémon ne possède pas d'évolution
 							</p>
 						{% endif %}
+
 					</div>
 				</div>
 			</div>
 
 			<div class="flex flex-wrap mt-4 justify-center">
 				<div class="w-full md:w-1/4 flex justify-center items-center mb-4 md:mb-0 md:ml-8">
-					<img src="{{ pokemon.sprites.regular }}" alt="Pokemon Image" class="w-2/3 md:w-full">
+					<img src="{{ pokemon.spriteRegular }}" alt="Pokemon Image" class="w-2/3 md:w-full">
 				</div>
 				<div class="w-full md:w-1/2 flex flex-col justify-center items-center">
 					<h2 class="text-center font-bold text-xl">Statistiques :</h2>
@@ -109,12 +128,12 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.hp }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.atk }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.def }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.spe_atk }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.spe_def }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.stats.vit }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.hp }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.atk }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.def }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.speAtk }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.speDef }}</td>
+								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.vit }}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -122,21 +141,21 @@
 			</div>
 
 			<div class="flex flex-wrap justify-center md:space-x-10 lg:space-x-10 my-11">
-				{% if pokemon.sprites.shiny %}
+				{% if pokemon.spriteShiny %}
 					<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
 						<h2 class="font-bold text-xl mt-4">Forme Shiny</h2>
-						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.shiny }}" alt="Shiny Pokemon Image">
+						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.spriteShiny }}" alt="Shiny Pokemon Image">
 					</div>
 				{% endif %}
 
-				{% if pokemon.sprites.gmax %}
+				{% if pokemon.spriteGmax %}
 					<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
 						<h2 class="font-bold text-xl mt-4">Forme GMAX</h2>
-						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.gmax.regular }}" alt="GMAX Pokemon Image">
+						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.spriteGmax }}" alt="GMAX Pokemon Image">
 					</div>
 					<div class="border border-dashed border-black shadow-md rounded flex flex-col items-center w-full md:w-full lg:w-1/4 mb-4">
 						<h2 class="font-bold text-xl mt-4">Forme GMAX Shiny</h2>
-						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.sprites.gmax.shiny }}" alt="Shiny GMAX Pokemon Image">
+						<img class="w-2/3 mt-4 mb-4" src="{{ pokemon.spriteGmaxShiny }}" alt="Shiny GMAX Pokemon Image">
 					</div>
 				{% endif %}
 			</div>
