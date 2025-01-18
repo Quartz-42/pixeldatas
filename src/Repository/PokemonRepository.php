@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Pokemon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Pokemon>
@@ -42,5 +43,17 @@ class PokemonRepository extends ServiceEntityRepository
         }
 
         return $pokemons;
+    }
+
+    public function findBySearchQueryBuilder(?string $query): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        if ($query) {
+            $qb->andWhere('p.name LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
+
+        return $qb;
     }
 }
