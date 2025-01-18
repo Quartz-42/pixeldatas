@@ -63,13 +63,6 @@
     transform-style: preserve-3d;
 }
 
-.grosse-taille {
-    width: 10% !important;
-}
-
-.petite-taille {
-    width: 7% !important;
-}
 
 [data-popover-target=card]:after {
     content: "";
