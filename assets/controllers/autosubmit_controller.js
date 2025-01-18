@@ -14,6 +14,4 @@ export default class extends Controller {
   debouncedSubmit() {
     this.submit()
   }
-
 }
-console.log('yes');

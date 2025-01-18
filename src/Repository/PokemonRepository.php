@@ -87,4 +87,13 @@ class PokemonRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findPokemonTypes(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('t.image, t.name')
+            ->join('p.types', 't')
+            ->getQuery()
+            ->getResult();
+    }
 }
