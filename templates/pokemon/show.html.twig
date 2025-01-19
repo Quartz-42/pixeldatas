@@ -17,7 +17,7 @@
 
 			{# RECHERCHE PAR NOM OU GEN#}
 			<form data-controller="autosubmit" method="GET" action="{{ path('app_all_pokemon') }}" class="my-3 flex justify-between">
-				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon par son nom ou sa génération (1,2,3...)" class="rounded border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit">
+				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit" autofocus>
 			</form>
 
 			{# RECHERCHE PAR TYPE#}
