@@ -48,19 +48,8 @@ class PokemonRepository extends ServiceEntityRepository
     public function findBySearchQueryBuilder(?string $query): QueryBuilder
     {
         $qb = $this->createQueryBuilder('p');
-
-        if ($query) {
-            // Si query est un nombre
-            if (is_numeric($query)) {
-                // Recherche par génération
-                $qb->andWhere('p.generation = :queryGen')
-                    ->setParameter('queryGen', (int)$query);
-            } else {
-                // Recherche par nom de Pokémon
-                $qb->andWhere('p.name LIKE :query')
-                    ->setParameter('query', '%' . $query . '%');
-            }
-        }
+        $qb->andWhere('p.name LIKE :query')
+            ->setParameter('query', '%' . $query . '%');
 
         return $qb;
     }
