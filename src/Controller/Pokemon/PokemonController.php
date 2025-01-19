@@ -30,11 +30,13 @@ class PokemonController extends AbstractController
         $visiblePages = $this->getVisiblePages($pager);
 
         $pokemonTypes = $pokemonRepository->findPokemonTypes();
+        $generations = $pokemonRepository->findPokemonGenerations();
 
         return $this->render('pokemon/show.html.twig', [
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'pokemonTypes' => $pokemonTypes,
+            'generations' => $generations
         ]);
     }
 
@@ -129,16 +131,6 @@ class PokemonController extends AbstractController
             'visiblePages' => $visiblePages,
             'type' => $type,
             'numberOfPokemons' => $numberOfPokemons
-        ]);
-    }
-
-    #[Route('/ranking', name: 'app_pokemon_ranking')]
-    public function showPokemonRanking(PokeRequest $pokeRequest): Response
-    {
-        $pokemonStats = $pokeRequest->getPokemonStats(10);
-
-        return $this->render('pokemon/show_ranking.html.twig', [
-            'pokemonStats' => $pokemonStats,
         ]);
     }
 
