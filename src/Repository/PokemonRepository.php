@@ -89,6 +89,7 @@ class PokemonRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.generation = :generation')
             ->setParameter(':generation', $generation)
+            ->orderBy('p.generation', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -108,7 +109,19 @@ class PokemonRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->select('t.image, t.name')
             ->join('p.types', 't')
+            ->orderBy('t.name', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findPokemonGenerations()
+    {
+        $results = $this->createQueryBuilder('p')
+            ->select('DISTINCT p.generation')
+            ->orderBy('p.generation', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return array_column($results, 'generation');
     }
 }
