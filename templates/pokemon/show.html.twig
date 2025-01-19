@@ -29,7 +29,7 @@
 						<div class="flex justify-between items-center mb-4">
 							<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name }}
 								{% if pokemon.spriteGmax %}
-									<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded ml-2">GMAX</span>
+									<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded-lg ml-2">GMAX</span>
 								{% endif %}
 							</h2>
 							<p class="text-sm font-bold italic text-gray-500">Pokédex n°{{ pokemon.pokedexId }}</p>
@@ -40,7 +40,7 @@
 								{% for type in pokemon.types %}
 									<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
 										<a href="{{path('app_pokemon_type', {'type' : type.name })}}">
-											<img class="w-8 inline-block mr-3" src="{{ type.image }}" alt="{{ type.name }}">
+											<img class="w-8 inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
 											<template data-popover-target="content">
 												<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
 													<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}">
