@@ -106,6 +106,32 @@ class PokemonController extends AbstractController
         ]);
     }
 
+    #[Route('/type/{type}', name: 'app_pokemon_type')]
+    public function showPokemonByType(
+        string $type,
+        PokemonRepository $pokemonRepository,
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter] string $query = null,
+    ): Response {
+        $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
+            new QueryAdapter($pokemonRepository->getPokemonsByTypeForSearch($type, $query)),
+            $page,
+            40
+        );
+
+        $numberOfPokemons = count($pokemonRepository->getPokemonsByType($type));
+
+        // Calculer les pages visibles
+        $visiblePages = $this->getVisiblePages($pager);
+
+        return $this->render('pokemon/show_type.html.twig', [
+            'pokemons' => $pager,
+            'visiblePages' => $visiblePages,
+            'type' => $type,
+            'numberOfPokemons' => $numberOfPokemons
+        ]);
+    }
+
     #[Route('/ranking', name: 'app_pokemon_ranking')]
     public function showPokemonRanking(PokeRequest $pokeRequest): Response
     {
@@ -113,6 +139,14 @@ class PokemonController extends AbstractController
 
         return $this->render('pokemon/show_ranking.html.twig', [
             'pokemonStats' => $pokemonStats,
+        ]);
+    }
+
+    #[Route('/{type}/card', name: 'app_type_show_card', methods: ['GET'])]
+    public function showCard(string $type): Response
+    {
+        return $this->render('pokemon/_card.html.twig', [
+            'type' => $type,
         ]);
     }
 }
