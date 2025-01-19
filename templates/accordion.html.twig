@@ -15,7 +15,7 @@
 				{% if type.image not in typeDisplayed %}
 					<a href="{{ path('app_pokemon_type', { 'type': type.name }) }}" class="flex flex-col items-center space-y-2 p-2 rounded-lg">
 						<img src="{{ type.image }}" alt="{{ type.name }}" class="w-12 h-12 md:w-10 md:h-10 sm:w-8 sm:h-8 rounded-lg">
-						<span class="text-gray-800 text-sm sm:text-xs font-medium text-center">{{ type.name }}</span>
+						<span class="text-gray-800  text-xs md:text-sm lg:text-base font-medium text-center">{{ type.name }}</span>
 					</a>
 					{% set typeDisplayed = typeDisplayed | merge([type.image]) %}
 				{% endif %}
@@ -26,7 +26,7 @@
 		<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 place-items-center">
 			{% for generation in generations %}
 				<a href="{{ path('app_pokemon_gen', { 'generation': generation }) }}" class="flex flex-col items-center space-y-2 p-2">
-					<span class="text-center text-sm sm:text-xs md:text-sm font-medium bg-black text-amber-400 py-1 md:py-2 px-4 md:px-5 rounded-lg">
+					<span class="text-center text-xs md:text-sm lg:text-base font-medium bg-black text-amber-400 py-1 md:py-2 px-4 md:px-5 rounded-lg">
 						Génération
 						{{ generation }}
 					</span>
