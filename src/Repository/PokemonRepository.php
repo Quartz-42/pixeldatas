@@ -68,11 +68,37 @@ class PokemonRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    public function getPokemonsByTypeForSearch(string $type, ?string $query)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->join('p.types', 't') // Joindre l'entité Type
+            ->where('t.name = :type') // Filtrer par nom de type
+            ->setParameter('type', $type);
+
+        if ($query) {
+            $qb->andWhere('p.name LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
+
+        return $qb;
+    }
+
+
     public function getPokemonsByGeneration($generation)
     {
         return $this->createQueryBuilder('p')
             ->where('p.generation = :generation')
             ->setParameter(':generation', $generation)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getPokemonsByType(string $type)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.types', 't') // Joindre l'entité Type
+            ->where('t.name = :type') // Filtrer par nom de type
+            ->setParameter(':type', $type)
             ->getQuery()
             ->getResult();
     }
