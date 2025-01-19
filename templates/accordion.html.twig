@@ -1,0 +1,25 @@
+<div id="accordion" data-controller="accordion" class="overflow-hidden">
+	<h2 id="accordion-1">
+		<button type="button" class="text-white flex items-center justify-between w-50 px-3 py-3 font-medium bg-transparent focus:outline-none hover:bg-transparent focus:ring-0 active:bg-transparent" aria-expanded="true" aria-controls="accordion-body-1">
+			<span class="font-bold text-white">Recherche avancée</span>
+			<svg class="ml-2 w-4 h-4 transition-transform transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+			</svg>
+		</button>
+	</h2>
+	<div id="accordion-body-1" class="hidden p-3 bg-gray-50 rounded-lg" aria-labelledby="accordion-1">
+		<h3 class="font-bold text-grey-500 mb-4 ml-4 text-xl">Type :</h3>
+		<div class="flex flex-wrap gap-4">
+			{% set typeDisplayed = [] %}
+			{% for type in pokemonTypes %}
+				{% if type.image not in typeDisplayed %}
+					<a href="{{ path('app_pokemon_type', { 'type': type.name }) }}" class="flex items-center space-x-3 p-3 rounded-lg">
+						<img src="{{ type.image }}" alt="{{ type.name }}" class="w-10 h-10">
+						<span class="text-gray-800 font-medium">{{ type.name }}</span>
+					</a>
+					{% set typeDisplayed = typeDisplayed | merge([type.image]) %}
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</div>

@@ -17,26 +17,11 @@
 
 			{# RECHERCHE PAR NOM OU GEN#}
 			<form data-controller="autosubmit" method="GET" action="{{ path('app_all_pokemon') }}" class="my-3 flex justify-between">
-				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit" autofocus>
+				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-4 my-4" data-action="autosubmit#debouncedSubmit">
 			</form>
 
-			{# RECHERCHE PAR TYPE#}
-			{# Affichage des types de Pokémon #}
-			<div class="my-[30px] flex flex-wrap gap-4">
-				{% set typeDisplayed = [] %}
-				{% for type in pokemonTypes %}
-					{% if type.image not in typeDisplayed %}
-						<a href="{{path('app_pokemon_type', {'type' : type.name })}}">
-							<div class="flex items-center space-x-2">
-								<img src="{{ type.image }}" alt="{{ type.name }}" class="w-10 h-10">
-								<span class="text-white">{{ type.name }}</span>
-							</div>
-						</a>
-						{% set typeDisplayed = typeDisplayed | merge([type.image]) %}
-					{% endif %}
-				{% endfor %}
-			</div>
-
+			{# RECHERCHE AVANCEE#}
+			{% include ('accordion.html.twig') %}
 
 			<div id="pokemon-list" class="grid gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-5">
 				{% for pokemon in pokemons %}
