@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Pokemon;
+namespace App\Controller;
 
 use App\Repository\PokemonRepository;
 use App\Repository\PokevolutionRepository;
@@ -18,7 +18,7 @@ class PokemonController extends AbstractController
     public function showAllPokemons(
         PokemonRepository $pokemonRepository,
         #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] string $query = null,
+        #[MapQueryParameter] ?string $query = null,
     ): Response {
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->findBySearchQueryBuilder($query)),
@@ -36,7 +36,7 @@ class PokemonController extends AbstractController
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'pokemonTypes' => $pokemonTypes,
-            'generations' => $generations
+            'generations' => $generations,
         ]);
     }
 
@@ -51,7 +51,7 @@ class PokemonController extends AbstractController
         $pages[] = 1;
 
         // Pages autour de la page actuelle (3 avant et 3 après)
-        for ($i = max(2, $currentPage - 3); $i <= min($nbPages - 1, $currentPage + 3); $i++) {
+        for ($i = max(2, $currentPage - 3); $i <= min($nbPages - 1, $currentPage + 3); ++$i) {
             $pages[] = $i;
         }
 
@@ -68,7 +68,7 @@ class PokemonController extends AbstractController
     public function showPokemonDetails(
         PokemonRepository $pokemonRepository,
         PokevolutionRepository $pokevolutionRepository,
-        string $name
+        string $name,
     ): Response {
         $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
 
@@ -81,13 +81,12 @@ class PokemonController extends AbstractController
         ]);
     }
 
-
     #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
     public function showPokemonByGen(
         int $generation,
         PokemonRepository $pokemonRepository,
         #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] string $query = null,
+        #[MapQueryParameter] ?string $query = null,
     ): Response {
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->getPokemonsByGenerationForSearch($generation, $query)),
@@ -104,7 +103,7 @@ class PokemonController extends AbstractController
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'generation' => $generation,
-            'numberOfPokemons' => $numberOfPokemons
+            'numberOfPokemons' => $numberOfPokemons,
         ]);
     }
 
@@ -113,7 +112,7 @@ class PokemonController extends AbstractController
         string $type,
         PokemonRepository $pokemonRepository,
         #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] string $query = null,
+        #[MapQueryParameter] ?string $query = null,
     ): Response {
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->getPokemonsByTypeForSearch($type, $query)),
@@ -130,7 +129,7 @@ class PokemonController extends AbstractController
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'type' => $type,
-            'numberOfPokemons' => $numberOfPokemons
+            'numberOfPokemons' => $numberOfPokemons,
         ]);
     }
 

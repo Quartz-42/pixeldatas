@@ -20,7 +20,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-
     #[Route('/legal', name: 'app_legal')]
     public function showLegal(): Response
     {

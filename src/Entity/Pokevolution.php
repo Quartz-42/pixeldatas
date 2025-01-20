@@ -56,6 +56,7 @@ class Pokevolution
     public function setPreEvolution1(?Pokemon $preEvolution1): static
     {
         $this->preEvolution1 = $preEvolution1;
+
         return $this;
     }
 
@@ -67,6 +68,7 @@ class Pokevolution
     public function setPreEvolution2(?Pokemon $preEvolution2): static
     {
         $this->preEvolution2 = $preEvolution2;
+
         return $this;
     }
 
@@ -78,6 +80,7 @@ class Pokevolution
     public function setNextEvolution1(?Pokemon $nextEvolution1): static
     {
         $this->nextEvolution1 = $nextEvolution1;
+
         return $this;
     }
 
@@ -89,6 +92,7 @@ class Pokevolution
     public function setNextEvolution2(?Pokemon $nextEvolution2): static
     {
         $this->nextEvolution2 = $nextEvolution2;
+
         return $this;
     }
 
