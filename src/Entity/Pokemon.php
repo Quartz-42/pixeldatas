@@ -313,7 +313,6 @@ class Pokemon
         return $this;
     }
 
-
     /**
      * @return Collection<int, Talent>
      */

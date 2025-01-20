@@ -4,8 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Pokemon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Pokemon>
@@ -49,7 +49,7 @@ class PokemonRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p');
         $qb->andWhere('p.name LIKE :query')
-            ->setParameter('query', '%' . $query . '%');
+            ->setParameter('query', '%'.$query.'%');
 
         return $qb;
     }
@@ -62,7 +62,7 @@ class PokemonRepository extends ServiceEntityRepository
 
         if ($query) {
             $qb->andWhere('p.name LIKE :query')
-                ->setParameter('query', '%' . $query . '%');
+                ->setParameter('query', '%'.$query.'%');
         }
 
         return $qb;
@@ -77,14 +77,13 @@ class PokemonRepository extends ServiceEntityRepository
 
         if ($query) {
             $qb->andWhere('p.name LIKE :query')
-                ->setParameter('query', '%' . $query . '%');
+                ->setParameter('query', '%'.$query.'%');
         }
 
         return $qb;
     }
 
-
-    public function getPokemonsByGeneration($generation)
+    public function getPokemonsByGeneration(int $generation)
     {
         return $this->createQueryBuilder('p')
             ->where('p.generation = :generation')

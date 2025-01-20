@@ -11,24 +11,27 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PokeRequest
 {
-    private $client;
+    private HttpClientInterface $client;
     private EntityManagerInterface $em;
 
     public function __construct(
         HttpClientInterface $client,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ) {
         $this->client = $client;
         $this->em = $em;
     }
 
-    //cette fonction ne doit etre utilisée qu'une fois pour peupler la BDD
-    //la relancer pour vérifier des maj
+    // cette fonction ne doit etre utilisée qu'une fois pour peupler la BDD
+    // la relancer pour vérifier des maj
     public function fromAPiToObjects(): array
     {
         $response = $this->client->request(
             'GET',
-            'https://tyradex.vercel.app/api/v1/pokemon'
+            'https://tyradex.vercel.app/api/v1/pokemon',
+            [
+                'timeout' => 240,
+            ]
         );
 
         // Gestion d'erreur pour la requête HTTP
@@ -55,8 +58,7 @@ class PokeRequest
         }
 
         foreach ($content as $pokemon) {
-            if ($pokemon['pokedex_id'] != null) {
-
+            if (null != $pokemon['pokedex_id']) {
                 // Contrôle pour ne pas faire les choses deux fois
                 $pokemonExistant = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $pokemon['pokedex_id']]);
                 if ($pokemonExistant) {
