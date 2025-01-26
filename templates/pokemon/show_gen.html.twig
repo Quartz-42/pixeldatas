@@ -19,7 +19,7 @@
 			</div>
 
 			<form data-controller="autosubmit" method="GET" action="{{ path('app_pokemon_gen', {'generation': generation}) }}" class="my-3 flex justify-between">
-				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" autofocus placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit">
+				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons"  placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit">
 			</form>
 			<div id="pokemon-list" class="grid gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-5">
 				{% for pokemon in pokemons %}
