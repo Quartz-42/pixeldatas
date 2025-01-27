@@ -16,70 +16,73 @@
 			</div>
 
 			{# RECHERCHE PAR NOM OU GEN#}
-			<form data-controller="autosubmit" method="GET" action="{{ path('app_all_pokemon') }}" class="my-3 flex justify-between">
+			<form data-controller=" autosubmit" method=" GET" action=" {{ path('app_all_pokemon') }} " class=" my-3 flex justify-between" data-turbo-frame="pokemon-list">
 				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-4 my-4" data-action="autosubmit#debouncedSubmit">
 			</form>
 
 			{# RECHERCHE AVANCEE#}
 			{% include ('accordion.html.twig') %}
 
-			<div id="pokemon-list" class="grid gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-5">
-				{% for pokemon in pokemons %}
-					<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105">
-						<div class="flex justify-between items-center mb-4">
-							<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name }}
-								{% if pokemon.spriteGmax %}
-									<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded-lg ml-2">GMAX</span>
-								{% endif %}
-							</h2>
-							<p class="text-sm font-bold italic text-gray-500">Pokédex n°{{ pokemon.pokedexId }}</p>
-						</div>
-
-						<div class="flex justify-between items-center my-4">
-							<div class="flex">
-								{% for type in pokemon.types %}
-									<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
-										<a href="{{path('app_pokemon_type', {'type' : type.name })}}">
-											<img class="w-8 inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
-											<template data-popover-target="content">
-												<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
-													<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}">
-														<div class="p-5">
-															<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" width="18" height="18" viewbox="0 0 18 18" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-																<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-																<path d="M12 3a9 9 0 1 0 9 9"></path>
-															</svg>
-														</div>
-													</turbo-frame>
-												</div>
-											</template>
-										</a>
-									</div>
-								{% endfor %}
+			<turbo-frame id="pokemon-list" target="_top" data-turbo-action="advance" class="aria-busy:opacity-50 aria-busy:blur-sm transition-all">
+				<div id="pokemon-list" class="grid gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-5">
+					{% for pokemon in pokemons %}
+						<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105">
+							<div class="flex justify-between items-center mb-4">
+								<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name }}
+									{% if pokemon.spriteGmax %}
+										<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded-lg ml-2">GMAX</span>
+									{% endif %}
+								</h2>
+								<p class="text-sm font-bold italic text-gray-500">Pokédex n°{{ pokemon.pokedexId }}</p>
 							</div>
-							<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" class="font-semibold text-red-500 underline">Gen.
-								{{ pokemon.generation }}</a>
-						</div>
 
-						<div class="flex justify-center">
-							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
-								<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
-							</a>
+							<div class="flex justify-between items-center my-4">
+								<div class="flex">
+									{% for type in pokemon.types %}
+										<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
+											<a href="{{path('app_pokemon_type', {'type' : type.name })}}" data-turbo-frame="_top">
+												<img class="w-8 inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
+												<template data-popover-target="content">
+													<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
+														<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}">
+															<div class="p-5">
+																<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" width="18" height="18" viewbox="0 0 18 18" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+																	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+																	<path d="M12 3a9 9 0 1 0 9 9"></path>
+																</svg>
+															</div>
+														</turbo-frame>
+													</div>
+												</template>
+											</a>
+										</div>
+									{% endfor %}
+								</div>
+								<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" class="font-semibold text-red-500 underline" data-turbo-frame="_top">Gen.
+									{{ pokemon.generation }}</a>
+							</div>
+
+							<div class="flex justify-center">
+								<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" data-turbo-frame="_top">
+									<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
+								</a>
+							</div>
 						</div>
-					</div>
-				{% endfor %}
-			</div>
-			<div class="flex items-center justify-center text-center mx-auto mt-10 space-x-4">
-				{% for page in visiblePages %}
-					{% if page == 1 or page == pokemons.nbPages or (page >= pokemons.currentPage - 3 and page <= pokemons.currentPage + 3) %}
-						{% if page == pokemons.currentPage %}
-							<span class="block py-2 px-4 bg-black text-amber-500 rounded">{{ page }}</span>
-						{% else %}
-							<a href="{{ pagerfanta_page_url(pokemons, page) }}" class="block py-2 px-4 bg-white text-black rounded">{{ page }}</a>
+					{% endfor %}
+				</div>
+				<div class="flex items-center justify-center text-center mx-auto mt-10 space-x-4">
+					{% for page in visiblePages %}
+						{% if page == 1 or page == pokemons.nbPages or (page >= pokemons.currentPage - 3 and page <= pokemons.currentPage + 3) %}
+							{% if page == pokemons.currentPage %}
+								<span class="block py-2 px-4 bg-black text-amber-500 rounded" data-turbo-frame="_top">{{ page }}
+								</span>
+							{% else %}
+								<a href="{{ pagerfanta_page_url(pokemons, page) }}" data-turbo-frame="_top" class="block py-2 px-4 bg-white text-black rounded">{{ page }}</a>
+							{% endif %}
 						{% endif %}
-					{% endif %}
-				{% endfor %}
-			</div>
+					{% endfor %}
+				</div>.
+			</turbo-frame>
 		</div>
 	</div>
 {% endblock %}
