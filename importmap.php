@@ -67,4 +67,7 @@ return [
         'version' => '2.5.2',
         'type' => 'css',
     ],
+    'turbo-view-transitions' => [
+        'version' => '0.3.0',
+    ],
 ];

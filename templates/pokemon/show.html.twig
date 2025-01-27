@@ -44,7 +44,7 @@
 												<img class="w-8 inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
 												<template data-popover-target="content">
 													<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
-														<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}">
+														<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
 															<div class="p-5">
 																<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" width="18" height="18" viewbox="0 0 18 18" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
 																	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
