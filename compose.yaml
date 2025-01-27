@@ -12,7 +12,7 @@ services:
   adminer:
     image: "adminer:latest"
     ports:
-      - "8080:8080"
+      - "8081:8081"
 
   mailer:
     image: axllent/mailpit
