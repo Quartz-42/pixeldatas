@@ -30,3 +30,9 @@ raz-db:
 regenerate-db:
 	symfony console doctrine:migrations:diff --from-empty-schema
 	symfony console doctrine:migrations:rollup
+
+.PHONY : generate-db
+generate-db:
+	symfony console doctrine:database:create --if-not-exists
+	symfony console doctrine:schema:create
+	symfony console doctrine:fixtures:load

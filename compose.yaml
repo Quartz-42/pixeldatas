@@ -2,6 +2,7 @@ services:
   database:
     image: "mysql:latest"
     environment:
+      #user root
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: main
     ports:
@@ -12,13 +13,4 @@ services:
   adminer:
     image: "adminer:latest"
     ports:
-      - "8081:8081"
-
-  mailer:
-    image: axllent/mailpit
-    ports:
-      - "1025"
-      - "8025"
-    environment:
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      - "8080:8080"
