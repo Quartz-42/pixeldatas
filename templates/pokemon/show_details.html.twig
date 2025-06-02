@@ -160,11 +160,12 @@
 				{% endif %}
 			</div>
 
-			<div class="my-[50px]">
-				<a href={{path('app_all_pokemon')}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
-					Retour à la liste des Pokémons
-				</a>
-			</div>
+			{# commented out for now : think another way to stock page number....#}
+			{# <div class="my-[50px]">
+							<a href={{path('app_all_pokemon', {'page' : currentPage} )}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
+								Retour à la liste des Pokémons
+							</a>
+						</div> #}
 		</div>
 	</div>
 {% endblock %}
