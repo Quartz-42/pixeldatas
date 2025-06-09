@@ -43,7 +43,7 @@
     "symfony/translation": "7.3.*",
     "symfony/twig-bundle": "7.3.*",
     "symfony/ux-autocomplete": "^2.22",
-    "symfony/ux-chartjs": "^2.21",
+    "symfony/ux-chartjs": "^2.26",
     "symfony/ux-live-component": "^2.21",
     "symfony/ux-turbo": "^2.22",
     "symfony/validator": "7.3.*",
