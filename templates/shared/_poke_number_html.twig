@@ -1,22 +1,24 @@
-<div class="bg-white shadow-lg py-3 px-2 my-8 rounded-lg w-full md:w-3/5 lg:w-2/5 mx-auto flex items-center">
-	<div class="ml-5 w-1/3 flex justify-center">
-		<img class="w-1/2 lg:w-1/3" src="{{ asset('/img/pokeFact.png') }}">
-	</div>
-	<div class="w-2/3 ml-2 lg:ml-5 text-lg md:text-base">
-		<p class="font-bold text-lg lg:text-xl italic text-gray-700">
-			{% if generation is defined %}
-				La génération
-				<span class="text-red-500">{{ generation }}</span>
-				comporte
-			{% elseif type is defined %}
-				Le type
-				<span class="text-red-500">{{ type }}</span>
-				comporte
-			{% else %}
-				Notre Pokédex recense actuellement
-			{% endif %}
-			<span class="text-red-500">{{ numberOfPokemons }}</span>
-			Pokémons !
-		</p>
+<div class="container mx-auto">
+	<div class="bg-white shadow-lg p-4 my-6 rounded-md w-full md:w-2/3 lg:w-1/2 mx-auto flex items-center">
+		<div class="ml-3 w-1/4 flex justify-center">
+			<img class="w-full lg:w-1/3" src="{{ asset('/img/pokeFact.png') }}">
+		</div>
+		<div class="w-3/4 ml-3 lg:ml-4 text-center">
+			<p class="font-bold text-xl italic text-gray-700">
+				{% if generation is defined %}
+					La génération
+					<span class="text-red-500">{{ generation }}</span>
+					comporte
+				{% elseif type is defined %}
+					Le type
+					<span class="text-red-500">{{ type }}</span>
+					comporte
+				{% else %}
+					Notre Pokédex recense actuellement
+				{% endif %}
+				<span class="text-red-500">{{ numberOfPokemons }}</span>
+				Pokémons !
+			</p>
+		</div>
 	</div>
 </div>
