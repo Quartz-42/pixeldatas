@@ -7,8 +7,6 @@ use App\Repository\PokevolutionRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\BrowserKit\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,13 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
 {
-    public function __construct(
-        private RequestStack $requestStack,
-    ) {
-        // Accessing the session in the constructor is *NOT* recommended, since
-        // it might not be accessible yet or lead to unwanted side-effects
-        // $this->session = $requestStack->getSession();
-    }
 
     #[Route('/list', name: 'app_all_pokemon')]
     public function showAllPokemons(
@@ -33,15 +24,11 @@ class PokemonController extends AbstractController
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->findBySearchQueryBuilder($query)),
             $page,
-            40
+            42
         );
 
         // Calculer les pages visibles
         $visiblePages = $this->getVisiblePages($pager);
-
-        //recupérer la page en cours et stocker en session
-        $session = $this->requestStack->getSession();
-        $session->set('current_page', $pager->getCurrentPage());
 
         $pokemonTypes = $pokemonRepository->findPokemonTypes();
         $generations = $pokemonRepository->findPokemonGenerations();
@@ -65,13 +52,9 @@ class PokemonController extends AbstractController
         // Récupérer les évolutions du Pokémon
         $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
 
-        //recuperer la page en cours
-        $currentPage = $this->getCurrentPage();
-
         return $this->render('pokemon/show_details.html.twig', [
             'pokemon' => $pokemon,
-            'evolutions' => $evolutions,
-            'currentPage' => $currentPage,
+            'evolutions' => $evolutions
         ]);
     }
 
@@ -85,7 +68,7 @@ class PokemonController extends AbstractController
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->getPokemonsByGenerationForSearch($generation, $query)),
             $page,
-            40
+            42
         );
 
         $numberOfPokemons = count($pokemonRepository->getPokemonsByGeneration($generation));
@@ -111,11 +94,8 @@ class PokemonController extends AbstractController
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->getPokemonsByTypeForSearch($type, $query)),
             $page,
-            40
+            42
         );
-
-        //recuperer la page en cours
-        $currentPage = $this->getCurrentPage();
 
         $numberOfPokemons = count($pokemonRepository->getPokemonsByType($type));
 
@@ -127,19 +107,15 @@ class PokemonController extends AbstractController
             'visiblePages' => $visiblePages,
             'type' => $type,
             'numberOfPokemons' => $numberOfPokemons,
-            'currentPage' => $currentPage,
         ]);
     }
 
     #[Route('/{type}/card', name: 'app_type_show_card', methods: ['GET'])]
     public function showCard(string $type): Response
     {
-        //recuperer la page en cours
-        $currentPage = $this->getCurrentPage();
 
         return $this->render('pokemon/_card.html.twig', [
             'type' => $type,
-            'currentPage' => $currentPage,
         ]);
     }
 
@@ -166,11 +142,5 @@ class PokemonController extends AbstractController
 
         // Éliminer les doublons et maintenir l'ordre
         return array_values(array_unique($pages));
-    }
-
-    private function getCurrentPage(): int
-    {
-        $session = $this->requestStack->getSession();
-        return $session->get('current_page', 1);
     }
 }
