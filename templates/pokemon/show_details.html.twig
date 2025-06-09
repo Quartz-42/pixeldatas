@@ -109,34 +109,12 @@
 				</div>
 			</div>
 
-			<div class="flex flex-wrap mt-4 justify-center">
+			<div class="flex flex-wrap mt-4 justify-center items-center">
 				<div class="w-full md:w-1/4 flex justify-center items-center mb-4 md:mb-0 md:ml-8">
 					<img src="{{ pokemon.spriteRegular }}" alt="Pokemon Image" class="w-2/3 md:w-full">
 				</div>
-				<div class="w-full md:w-1/2 flex flex-col justify-center items-center">
-					<h2 class="text-center font-bold text-xl">Statistiques :</h2>
-					<table class="mt-6 mx-auto text-sm font-bold border-collapse border border-gray-500 w-full md:w-2/3">
-						<thead>
-							<tr>
-								<th class="border border-gray-500 p-2 md:p-4">PV</th>
-								<th class="border border-gray-500 p-2 md:p-4">ATK</th>
-								<th class="border border-gray-500 p-2 md:p-4">DEF</th>
-								<th class="border border-gray-500 p-2 md:p-4">ATK_SPE</th>
-								<th class="border border-gray-500 p-2 md:p-4">DEF_SPE</th>
-								<th class="border border-gray-500 p-2 md:p-4">VIT</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.hp }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.atk }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.def }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.speAtk }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.speDef }}</td>
-								<td class="border border-gray-500 p-2 md:p-4">{{ pokemon.vit }}</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="w-full md:w-1/3 ml-4 mt-2 flex justify-center items-center">
+					{{ render_chart(chart) }}
 				</div>
 			</div>
 
@@ -162,10 +140,10 @@
 
 			{# commented out for now : think another way to stock page number....#}
 			{# <div class="my-[50px]">
-							<a href={{path('app_all_pokemon', {'page' : currentPage} )}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
-								Retour à la liste des Pokémons
-							</a>
-						</div> #}
+																																					<a href={{path('app_all_pokemon', {'page' : currentPage} )}} class="font-bold border bg-black border-black rounded text-amber-400 px-8 py-4">
+																																						Retour à la liste des Pokémons
+																																					</a>
+																																				</div> #}
 		</div>
 	</div>
 {% endblock %}

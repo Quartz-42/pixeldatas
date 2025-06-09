@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0209bc10166a93c48a3385a98852de5",
+    "content-hash": "3d3abf9666a6911b9a2b319006513b53",
     "packages": [
         {
             "name": "babdev/pagerfanta-bundle",
@@ -7250,16 +7250,16 @@
         },
         {
             "name": "symfony/ux-chartjs",
-            "version": "v2.25.2",
+            "version": "v2.26.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-chartjs.git",
-                "reference": "1cccd5f4cb7d0b1dcf88870138b77e6d832d464b"
+                "reference": "9fde76ad08fb3954971c6cbb3be04783c1bc4463"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-chartjs/zipball/1cccd5f4cb7d0b1dcf88870138b77e6d832d464b",
-                "reference": "1cccd5f4cb7d0b1dcf88870138b77e6d832d464b",
+                "url": "https://api.github.com/repos/symfony/ux-chartjs/zipball/9fde76ad08fb3954971c6cbb3be04783c1bc4463",
+                "reference": "9fde76ad08fb3954971c6cbb3be04783c1bc4463",
                 "shasum": ""
             },
             "require": {
@@ -7310,7 +7310,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-chartjs/tree/v2.25.2"
+                "source": "https://github.com/symfony/ux-chartjs/tree/v2.26.1"
             },
             "funding": [
                 {
@@ -7326,7 +7326,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-19T11:54:27+00:00"
+            "time": "2025-06-05T17:25:17+00:00"
         },
         {
             "name": "symfony/ux-live-component",

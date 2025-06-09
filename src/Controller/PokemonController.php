@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
@@ -46,15 +48,80 @@ class PokemonController extends AbstractController
         PokemonRepository $pokemonRepository,
         PokevolutionRepository $pokevolutionRepository,
         string $name,
+        ChartBuilderInterface $chartBuilder
     ): Response {
         $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
+
+        $chart = $chartBuilder
+            ->createChart(Chart::TYPE_POLAR_AREA)
+            ->setData([
+                'labels' => ['PV', 'ATK', 'DEF', 'ATK SPE', 'DEF SPE', 'Vitesse'],
+                'datasets' => [
+                    [
+                        'label' => 'Stats',
+                        'data' => [
+                            $pokemon->getHp(),
+                            $pokemon->getAtk(),
+                            $pokemon->getDef(),
+                            $pokemon->getSpeAtk(),
+                            $pokemon->getSpeDef(),
+                            $pokemon->getVit(),
+                        ],
+                        'backgroundColor' => [
+                            'rgba(255, 0, 0, 0.6)',
+                            'rgba(0, 128, 0, 0.6)',
+                            'rgba(0, 0, 255, 0.6)',
+                            'rgba(128, 0, 128, 0.6)',
+                            'rgba(255, 165, 0, 0.6)',
+                            'rgba(0, 255, 255, 0.6)'
+                        ],
+                        'borderColor' => [
+                            'rgba(255, 0, 0, 1)',
+                            'rgba(0, 128, 0, 1)',
+                            'rgba(0, 0, 255, 1)',
+                            'rgba(128, 0, 128, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(0, 255, 255, 1)'
+                        ],
+                        'borderWidth' => 1
+                    ],
+                ],
+            ])
+            ->setOptions([
+                'responsive' => true,
+                'maintainAspectRatio' => true,
+                'animation' => [
+                    'duration' => 0,
+                ],
+                'plugins' => [
+                    'legend' => [
+                        'display' => true,
+                        'position' => 'top',
+                    ],
+                    'tooltip' => [
+                        'enabled' => true,
+                    ],
+                ],
+                'scales' => [
+                    'r' => [
+                        'beginAtZero' => true,
+                        'ticks' => [
+                            'display' => true,
+                            'font' => [
+                                'size' => 12,
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
 
         // Récupérer les évolutions du Pokémon
         $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
 
         return $this->render('pokemon/show_details.html.twig', [
             'pokemon' => $pokemon,
-            'evolutions' => $evolutions
+            'evolutions' => $evolutions,
+            'chart' => $chart,
         ]);
     }
 

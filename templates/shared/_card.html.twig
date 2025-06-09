@@ -46,7 +46,7 @@
 	{# 4. Image du Pokémon #}
 	<div class="flex justify-center">
 		<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" data-turbo-frame="_top">
-			<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
+			<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5">
 		</a>
 	</div>
 </div>
