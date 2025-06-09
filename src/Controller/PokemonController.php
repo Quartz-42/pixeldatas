@@ -100,6 +100,21 @@ class PokemonController extends AbstractController
                     ],
                     'tooltip' => [
                         'enabled' => true,
+                        'titleFont' => [
+                            'size' => 16, // Augmenter la taille de la police du titre
+                            'weight' => 'bold',
+                        ],
+                        'bodyFont' => [
+                            'size' => 14, // Augmenter la taille de la police du corps
+                        ],
+                    ],
+                    'datalabels' => [
+                        'display' => true,
+                        'color' => 'black',
+                        'font' => [
+                            'size' => 18, // Augmenter la taille des datalabels
+                            'weight' => 'bold',
+                        ],
                     ],
                 ],
                 'scales' => [
@@ -108,7 +123,7 @@ class PokemonController extends AbstractController
                         'ticks' => [
                             'display' => true,
                             'font' => [
-                                'size' => 12,
+                                'size' => 14,
                             ],
                         ],
                     ],
