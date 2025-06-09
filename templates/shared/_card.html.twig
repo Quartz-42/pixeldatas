@@ -1,0 +1,52 @@
+<div
+	class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105">
+
+	{# 1. Nom centré #}
+	<h2 class="text-center text-2xl font-bold text-gray-800 mb-2">
+		{{ pokemon.name }}
+	</h2>
+
+	{# 2. Ligne : Pokédex + GMAX #}
+	<div class="flex justify-between items-center mb-3">
+		<p class="text-base lg:text-lg font-bold italic text-gray-500">Pokédex n°{{ pokemon.pokedexId }}</p>
+		{% if pokemon.spriteGmax %}
+			<span class="text-base font-semibold bg-black text-amber-400 py-1 px-2 rounded-lg">GMAX</span>
+		{% endif %}
+	</div>
+
+	{# 3. Ligne : Types + Génération #}
+	<div class="flex justify-between items-center mb-4">
+		<div class="flex space-x-2">
+			{% for type in pokemon.types %}
+				<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
+					<a href="{{ path('app_pokemon_type', {'type': type.name}) }}" data-turbo-frame="_top">
+						<img class="w-8 h-8 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
+						<template data-popover-target="content">
+							<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
+								<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
+									<div class="p-5">
+										<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" width="18" height="18" viewbox="0 0 18 18" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+											<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+											<path d="M12 3a9 9 0 1 0 9 9"></path>
+										</svg>
+									</div>
+								</turbo-frame>
+							</div>
+						</template>
+					</a>
+				</div>
+			{% endfor %}
+		</div>
+		<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" class="text-base lg:text-lg font-semibold text-red-500 underline" data-turbo-frame="_top">
+			Gen.
+			{{ pokemon.generation }}
+		</a>
+	</div>
+
+	{# 4. Image du Pokémon #}
+	<div class="flex justify-center">
+		<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" data-turbo-frame="_top">
+			<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
+		</a>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+<div
+	class="flex items-center justify-center text-center mt-10 space-x-4">
+	{# Lien vers la première page #}
+	{% if pokemons.currentPage > 1 %}
+		<a href="{{ pagerfanta_page_url(pokemons, 1) }}" class="flex items-center justify-center w-10 h-10 bg-white text-black rounded font-bold">
+			<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewbox="0 0 16 16">
+				<path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+				<path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+			</svg>
+		</a>
+	{% endif %}
+
+	{# Pages visibles #}
+	{% for page in visiblePages %}
+		{% if page >= pokemons.currentPage - 2 and page <= pokemons.currentPage + 2 %}
+			{% if page == pokemons.currentPage %}
+				<span class="block p-2 md:py-2 md:px-4 lg:py-2 lg:px-4 bg-black text-amber-500 rounded">
+					{{ page }}</span>
+			{% else %}
+				<a href="{{ pagerfanta_page_url(pokemons, page) }}" class="block p-2 md:py-2 md:px-4 lg:py-2 lg:px-4 bg-white text-black rounded">{{ page }}</a>
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+
+	{# Lien vers la dernière page #}
+	{% if pokemons.currentPage < pokemons.nbPages %}
+		<a href="{{ pagerfanta_page_url(pokemons, pokemons.nbPages) }}" class="flex items-center justify-center w-10 h-10 bg-white text-black rounded font-bold">
+			<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewbox="0 0 16 16">
+				<path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+				<path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+			</svg>
+		</a>
+	{% endif %}
+</div>

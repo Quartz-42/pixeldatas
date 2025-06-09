@@ -2,95 +2,26 @@
 
 {% block content %}
 	<div class="bg-red-600 p-4 min-h-screen">
-		<div class="container mx-auto">
-			<div class="bg-white shadow-lg p-6 my-8 rounded-lg w-full md:w-3/5 lg:w-2/5 mx-auto flex items-center">
-				<div class="w-1/4 flex justify-center">
-					<img class="w-1/2" src="{{ asset('/img/pokeFact.png') }}">
-				</div>
-				<div class="w-3/4 ml-4 text-lg md:text-base">
-					<p class="font-bold text-xl italic text-gray-700">
-						Le type
-						{{ type }}
-						comporte
-						<span class="text-red-500">{{ numberOfPokemons }}</span>
-						Pokémons !
-					</p>
-				</div>
-			</div>
+		<div
+			class="mx-auto">
+
+			{#info nombre de pokemons #}
+			{% include 'shared/_poke_number_html.twig' with { 'type': type, 'numberOfPokemons': pokemons|length } %}
 
 			<form data-controller="autosubmit" method="GET" action="{{ path('app_pokemon_type', {'type': type}) }}" class="my-3 flex justify-between" data-turbo-frame="pokemon-list">
 				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit">
 			</form>
 
 			<turbo-frame id="pokemon-list" target="_top" data-turbo-action="advance" class="aria-busy:opacity-50 aria-busy:blur-sm transition-all">
-				<div id="pokemon-list" class="grid gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-5">
+
+				<div id="pokemon-list" class="grid gap-6 mt-5 grid-cols-1 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 2xl:grid-cols-6">
 					{% for pokemon in pokemons %}
-						<div class="pokemon-card bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition transform hover:scale-105" ">
-							<div class="flex justify-between items-center mb-4">
-								<div>
-									<h2 class="text-xl font-bold text-gray-800">{{ pokemon.name }}
-										{% if pokemon.spriteGmax %}
-											<span class="text-xs font-semibold bg-black text-amber-400 py-1 px-2 rounded-lg ml-2">GMAX</span>
-										{% endif %}
-									</h2>
-								</div>
-								<div>
-									<p class="text-sm font-bold italic text-gray-500">
-										Pokédex n°{{ pokemon.pokedexId }}
-									</p>
-								</div>
-							</div>
-							<div class="flex justify-between items-center my-4">
-								<div class="flex">
-									{% for type in pokemon.types %}
-										<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
-											<a href="{{path('app_pokemon_type', {'type' : type.name })}}" data-turbo-frame="_top">
-												<img class="w-8 inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
-												<template data-popover-target="content">
-													<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
-														<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
-															<div class="p-5">
-																<svg xmlns="http://www.w3.org/2000/svg" class="animate-spin" width="18" height="18" viewbox="0 0 18 18" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-																	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-																	<path d="M12 3a9 9 0 1 0 9 9"></path>
-																</svg>
-															</div>
-														</turbo-frame>
-													</div>
-												</template>
-											</a>
-										</div>
-									{% endfor %}
-								</div>
-								<a class="font-semibold text-red-500 underline" href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" data-turbo-frame="_top">
-									Gen.
-									{{ pokemon.generation }}
-								</a>
-							</div>
-							<div class="flex justify-center">
-								<a href="{{ path('app_pokemon_details', {"name": pokemon.name}) }}" data-turbo-frame="_top">
-									<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 mt-[-10px] transform transition hover:scale-110">
-								</a>
-							</div>
-						</div>
+						{% include 'shared/_card.html.twig' %}
 					{% endfor %}
 				</div>
-				<div class="flex items-center justify-center text-center mx-auto mt-10 space-x-4">
-					{% for page in visiblePages %}
-						{% if page == 1 or page == pokemons.nbPages or (page >= pokemons.currentPage - 3 and page <= pokemons.currentPage + 3) %}
-							{% if page == pokemons.currentPage %}
-								<span class="block py-2 px-4 bg-black text-amber-500 rounded" data-turbo-frame="_top">{{ page }}</span>
-							{% else %}
-								<a href="{{ pagerfanta_page_url(pokemons, page) }}" class="block py-2 px-4 bg-white text-black rounded" data-turbo-frame="_top">{{ page }}</a>
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				</div>
-				<div class="my-[50px] text-center">
-					<a href={{path('app_all_pokemon')}} class="font-bold border bg-white border-white rounded text-black px-8 py-4">
-						Retour à la liste des Pokémons
-					</a>
-				</div>
+
+				{% include 'shared/_pagination.html.twig' %}
+
 			</turbo-frame>
 		</div>
 	</div>
