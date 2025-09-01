@@ -1,6 +1,6 @@
 # PixelDatas
 
-**PixelDatas** est un site web dédié aux Pokémons qui permet de retrouver toutes les informations sur les Pokémons de toutes les générations.
+**PixelDatas** est un site web dédié aux Pokémons qui permet de retrouver toutes les informations sur les Pokémons de toutes les générations
 
 ## 🎯 Fonctionnalités
 
