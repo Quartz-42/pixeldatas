@@ -24,8 +24,6 @@
 - **Navigation** : Turbo (Hotwired)
 - **Conteneurisation** : Docker
 
-```
-
 ## 📱 Utilisation
 
 ### Page d'accueil
