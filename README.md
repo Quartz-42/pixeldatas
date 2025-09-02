@@ -53,7 +53,4 @@
 
 ## 🎮 Source des données
 
-Les données des Pokémons sont récupérées via une API externe et stockées en base de données pour optimiser les performances.
-
-
-```
+Les données des Pokémons sont récupérées via une API externe et stockées en base de données pour optimiser les performances
