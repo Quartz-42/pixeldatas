@@ -47,7 +47,10 @@ class PokemonRepository extends ServiceEntityRepository
 
     public function findBySearchQueryBuilder(?string $query): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('p');
+        $qb = $this->createQueryBuilder('p')
+        ->leftJoin('p.types', 't')
+        ->addSelect('t');
+        
         $qb->andWhere('p.name LIKE :query')
             ->setParameter('query', '%'.$query.'%');
 
@@ -57,6 +60,8 @@ class PokemonRepository extends ServiceEntityRepository
     public function getPokemonsByGenerationForSearch($generation, ?string $query)
     {
         $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.types', 't')
+            ->addSelect('t')
             ->where('p.generation = :generation')
             ->setParameter(':generation', $generation);
 
@@ -71,8 +76,9 @@ class PokemonRepository extends ServiceEntityRepository
     public function getPokemonsByTypeForSearch(string $type, ?string $query)
     {
         $qb = $this->createQueryBuilder('p')
-            ->join('p.types', 't') // Joindre l'entité Type
-            ->where('t.name = :type') // Filtrer par nom de type
+            ->join('p.types', 't')
+            ->addSelect('t')
+            ->where('t.name = :type')
             ->setParameter('type', $type);
 
         if ($query) {
@@ -86,6 +92,8 @@ class PokemonRepository extends ServiceEntityRepository
     public function getPokemonsByGeneration(int $generation)
     {
         return $this->createQueryBuilder('p')
+            ->leftJoin('p.types', 't')
+            ->addSelect('t')
             ->where('p.generation = :generation')
             ->setParameter(':generation', $generation)
             ->orderBy('p.generation', 'ASC')
@@ -96,8 +104,9 @@ class PokemonRepository extends ServiceEntityRepository
     public function getPokemonsByType(string $type)
     {
         return $this->createQueryBuilder('p')
-            ->join('p.types', 't') // Joindre l'entité Type
-            ->where('t.name = :type') // Filtrer par nom de type
+            ->join('p.types', 't') 
+            ->addSelect('t')
+            ->where('t.name = :type') 
             ->setParameter(':type', $type)
             ->getQuery()
             ->getResult();
@@ -106,8 +115,8 @@ class PokemonRepository extends ServiceEntityRepository
     public function findPokemonTypes(): array
     {
         return $this->createQueryBuilder('p')
-            ->select('t.image, t.name')
-            ->join('p.types', 't')
+            ->leftJoin('p.types', 't')
+            ->select('DISTINCT t.image, t.name')
             ->orderBy('t.name', 'ASC')
             ->getQuery()
             ->getResult();
