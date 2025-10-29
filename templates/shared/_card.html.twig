@@ -20,7 +20,7 @@
 			{% for type in pokemon.types %}
 				<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
 					<a href="{{ path('app_pokemon_type', {'type': type.name}) }}" data-turbo-frame="_top">
-						<img class="w-8 h-8 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
+						<img class="w-8 h-8 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}" fetchpriority="high">
 						<template data-popover-target="content">
 							<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
 								<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
@@ -46,7 +46,7 @@
 	{# 4. Image du Pokémon #}
 	<div class="flex justify-center">
 		<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" data-turbo-frame="_top">
-			<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5">
+			<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-4/5 h-auto" fetchpriority="high">
 		</a>
 	</div>
 </div>

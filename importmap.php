@@ -16,26 +16,26 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
-    '@hotwired/stimulus' => [
-        'version' => '3.2.2',
-    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
-    ],
-    '@hotwired/turbo' => [
-        'version' => '7.3.0',
     ],
     '@symfony/ux-live-component' => [
         'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
     ],
+    '@hotwired/stimulus' => [
+        'version' => '3.2.2',
+    ],
+    '@hotwired/turbo' => [
+        'version' => '8.0.20',
+    ],
     'chart.js' => [
-        'version' => '3.9.1',
+        'version' => '4.5.1',
     ],
     'tom-select' => [
-        'version' => '2.4.1',
+        'version' => '2.4.3',
     ],
     'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.4.1',
+        'version' => '2.4.3',
         'type' => 'css',
     ],
     'debounce' => [
@@ -48,26 +48,37 @@ return [
         'version' => '1.1.2',
     ],
     'tom-select/dist/css/tom-select.default.min.css' => [
-        'version' => '2.4.1',
+        'version' => '2.4.3',
         'type' => 'css',
     ],
     'stimulus-popover' => [
         'version' => '6.2.0',
     ],
     'flowbite' => [
-        'version' => '2.5.2',
+        'version' => '3.1.2',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
     ],
     'flowbite-datepicker' => [
-        'version' => '1.3.0',
+        'version' => '1.3.2',
     ],
     'flowbite/dist/flowbite.min.css' => [
-        'version' => '2.5.2',
+        'version' => '3.1.2',
         'type' => 'css',
     ],
     'turbo-view-transitions' => [
         'version' => '0.3.0',
+    ],
+    'tom-select/dist/css/tom-select.bootstrap4.css' => [
+        'version' => '2.4.3',
+        'type' => 'css',
+    ],
+    'tom-select/dist/css/tom-select.bootstrap5.css' => [
+        'version' => '2.4.3',
+        'type' => 'css',
+    ],
+    '@kurkle/color' => [
+        'version' => '0.3.4',
     ],
 ];

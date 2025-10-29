@@ -14,7 +14,7 @@
 			{% for type in pokemonTypes %}
 				{% if type.image not in typeDisplayed %}
 					<a href="{{ path('app_pokemon_type', { 'type': type.name }) }}" class="flex flex-col items-center space-y-2 p-2 rounded-lg">
-						<img src="{{ type.image }}" alt="{{ type.name }}" class="w-12 h-12 md:w-10 md:h-10 sm:w-8 sm:h-8 rounded-lg">
+						<img src="{{ type.image }}" alt="{{ type.name }}" class="w-12 h-12 md:w-10 md:h-10 sm:w-8 sm:h-8 rounded-lg" fetchpriority="high">
 						<span class="text-gray-800  text-sm md:text-base lg:text-lg font-medium text-center">{{ type.name }}</span>
 					</a>
 					{% set typeDisplayed = typeDisplayed | merge([type.image]) %}
