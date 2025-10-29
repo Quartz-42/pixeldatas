@@ -14,7 +14,7 @@
 									{% for type in pokemon.types %}
 										<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
 											<a href="{{path('app_pokemon_type', {'type' : type.name })}}">
-												<img class="w-8 inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}">
+												<img class="w-8 h-auto inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}" fetchpriority="high">
 												<template data-popover-target="content">
 													<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
 														<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
@@ -33,7 +33,7 @@
 								</div>
 							</div>
 							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
-								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-1/2 h-auto mx-auto">
+								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-1/2 h-auto mx-auto" fetchpriority="high">
 							</a>
 							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
 								N°{{ pokemon.pokedexId }}
