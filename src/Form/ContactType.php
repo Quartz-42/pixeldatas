@@ -22,7 +22,7 @@ class ContactType extends AbstractType
                 'label' => 'Nom',
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['min' => 3]),
+                    new Length(min: 3),
                     new NoSuspiciousCharacters(),
                     new NoHtml(),
                     new Regex(
@@ -44,7 +44,7 @@ class ContactType extends AbstractType
                 'label' => 'Sujet',
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['min' => 3]),
+                    new Length(min: 3),
                     new NoSuspiciousCharacters(),
                     new NoHtml(),
                 ],
@@ -53,7 +53,7 @@ class ContactType extends AbstractType
                 'label' => 'Message',
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['min' => 3]),
+                    new Length(min: 3),
                     new NoSuspiciousCharacters(),
                     new NoHtml(),
                 ],
