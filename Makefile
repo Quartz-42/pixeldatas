@@ -1,3 +1,11 @@
+.PHONY: launch
+launch:
+	docker compose up -d && symfony server:start
+
+.PHONY: stop
+stop:
+	docker compose down && symfony server:stop	
+
 .PHONY: php-stan
 php-stan: 
 	vendor/bin/phpstan analyse src templates

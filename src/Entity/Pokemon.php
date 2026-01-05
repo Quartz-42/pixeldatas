@@ -432,7 +432,7 @@ class Pokemon
      */
     public function getPreEvolution2(): Collection
     {
-        return $this->preEvolution1;
+        return $this->preEvolution2;
     }
 
     public function addPreEvolution2(Pokevolution $preEvolution2): static
@@ -492,7 +492,7 @@ class Pokemon
      */
     public function getNextEvolution2(): Collection
     {
-        return $this->getNextEvolution2();
+        return $this->nextEvolution2;
     }
 
     public function addNextEvolution2(Pokevolution $nextEvolution2): static
