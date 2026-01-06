@@ -29,7 +29,7 @@ return [
         'version' => '8.0.20',
     ],
     'chart.js' => [
-        'version' => '4.5.1',
+        'version' => '4.0.1',
     ],
     'tom-select' => [
         'version' => '2.4.3',
@@ -80,5 +80,11 @@ return [
     ],
     '@kurkle/color' => [
         'version' => '0.3.4',
+    ],
+    'chartjs-plugin-datalabels' => [
+        'version' => '2.2.0',
+    ],
+    'chart.js/helpers' => [
+        'version' => '4.0.1',
     ],
 ];
