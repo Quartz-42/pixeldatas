@@ -1,31 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-	<div class="bg-red-600 p-6 min-h-screen">
-		<div class="mx-auto">
+	<div class="bg-red-600 p-6 min-h-screen mx-auto">
 
-			{% include 'shared/_poke_number_html.twig' with { 'numberOfPokemons': pokemons|length } %}
+		{% include 'shared/_poke_number_html.twig' with { 'numberOfPokemons': pokemons|length } %}
 
-			{# RECHERCHE PAR NOM OU GEN#}
-			<form data-controller="autosubmit" method="GET" action="{{ path('app_all_pokemon') }} " class="my-3 flex justify-between" data-turbo-frame="pokemon-list">
-				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-4 my-4" data-action="autosubmit#debouncedSubmit">
-			</form>
+		{# RECHERCHE PAR NOM OU GEN#}
+		<form data-controller="autosubmit" method="GET" action="{{ path('app_all_pokemon') }} " class="my-3 flex justify-between" data-turbo-frame="pokemon-list">
+			<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-4 my-4" data-action="autosubmit#debouncedSubmit">
+		</form>
 
-			{# RECHERCHE AVANCEE#}
-			{% include ('shared/_accordion.html.twig') %}
+		{# RECHERCHE AVANCEE#}
+		{% include ('shared/_accordion.html.twig') %}
 
-			<turbo-frame id="pokemon-list" target="_top" data-turbo-action="advance" class="aria-busy:opacity-50 aria-busy:blur-sm transition-all">
+		<turbo-frame id="pokemon-list" target="_top" data-turbo-action="advance" class="aria-busy:opacity-50 aria-busy:blur-sm transition-all">
 
-				<div id="pokemon-list" class="grid gap-3 lg:gap-4 mt-5 grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 min-[2400px]:grid-cols-8">
-					{% for pokemon in pokemons %}
-						{% include 'shared/_card.html.twig' %}
-					{% endfor %}
-				</div>
+			<div id="pokemon-list" class="grid gap-3 lg:gap-4 mt-5 grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 min-[2400px]:grid-cols-8">
+				{% for pokemon in pokemons %}
+					{% include 'shared/_card.html.twig' %}
+				{% endfor %}
+			</div>
 
-				{# pagination #}
-				{% include 'shared/_pagination.html.twig' %}
+			{# pagination #}
+			{% include 'shared/_pagination.html.twig' %}
 
-			</turbo-frame>
-		</div>
+		</turbo-frame>
 	</div>
 {% endblock %}

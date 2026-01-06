@@ -1,0 +1,281 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comparateur de Pokémon
+{% endblock %}
+
+{% block flashes %}{% endblock %}
+
+{% block content %}
+	<div class="bg-red-600 p-6 min-h-screen mx-auto">
+		<div class="container mx-auto max-w-6xl">
+			{% include "shared/_flash.html.twig" %}
+		</div>
+		<h1 class="text-3xl font-bold text-center text-white mb-8">Comparateur de Pokémon</h1>
+
+		{% if pokemons is empty %}
+			<div class="text-center bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+				<p class="text-xl text-gray-600 mb-4">Votre comparateur est vide</p>
+				<a href="{{ path('app_all_pokemon') }}" class="text-large font-semibold bg-black text-amber-400 p-3 rounded-lg">
+					Choisir des Pokémons
+				</a>
+			</div>
+		{% else %}
+			<!-- Vue Desktop (Tableau) -->
+			<div class="hidden md:block overflow-x-auto">
+				<table class="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+					<thead>
+						<tr class="bg-gray-100 border-b border-gray-200">
+							<th class="p-4 text-left text-gray-600 w-1/6 min-w-[150px]">Caractéristique</th>
+							{% for pokemon in pokemons %}
+								<th class="p-4 w-1/4 min-w-[200px] text-center relative group">
+									<a href="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-100 transition shadow hover:bg-red-600" title="Retirer">
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+										</svg>
+									</a>
+									<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
+										<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-24 h-24 mx-auto object-contain hover:scale-110 transition">
+										<div class="mt-2 text-lg font-bold text-gray-800">{{ pokemon.name }}</div>
+									</a>
+								</th>
+							{% endfor %}
+							{# Remplissage des colonnes vides si < 4 #}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<th class="p-4 w-1/4 bg-gray-50 text-gray-400 text-sm font-normal">
+										<div class="h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
+											Vide
+										</div>
+									</th>
+								{% endfor %}
+							{% endif %}
+						</tr>
+					</thead>
+					<tbody
+						class="divide-y divide-gray-200">
+						<!-- Génération -->
+						<tr class="hover:bg-gray-50">
+							<td class="p-4 font-semibold text-gray-700">Génération</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4 text-center">Génération
+									{{ pokemon.generation }}</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+
+						<!-- Types -->
+						<tr class="hover:bg-gray-50">
+							<td class="p-4 font-semibold text-gray-700">Types</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4 text-center">
+									<div class="flex justify-center gap-2">
+										{% for type in pokemon.types %}
+											<img src="{{ type.image }}" alt="{{ type.name }}" class="w-6 h-6" title="{{ type.name }}">
+										{% endfor %}
+									</div>
+								</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+
+						<!-- Statistiques -->
+						{% set stats = {
+                        'PV': 'hp',
+                        'Attaque': 'atk',
+                        'Défense': 'def',
+                        'Atk. Spéciale': 'speAtk',
+                        'Déf. Spéciale': 'speDef',
+                        'Vitesse': 'vit'
+                    } %}
+
+						{% for label, field in stats %}
+							<tr class="hover:bg-gray-50">
+								<td class="p-4 font-semibold text-gray-700">{{ label }}</td>
+								{% for pokemon in pokemons %}
+									{% set value = attribute(pokemon, field) %}
+									<td class="p-4 text-center">
+										<div class="flex items-center justify-center gap-2">
+											<span class="font-bold">{{ value }}</span>
+											<div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+												<div class="h-full bg-blue-500" style="width: {{ min(value / 255 * 100, 100) }}%"></div>
+											</div>
+										</div>
+									</td>
+								{% endfor %}
+								{% if pokemons|length < 4 %}
+									{% for i in (pokemons|length + 1)..4 %}
+										<td class="bg-gray-50"></td>
+									{% endfor %}
+								{% endif %}
+							</tr>
+						{% endfor %}
+
+						<!-- Total Stats -->
+						<tr class="bg-blue-50 font-bold border-t-2 border-blue-100">
+							<td class="p-4 text-blue-900">Total Stats</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4 text-center text-blue-900">
+									{{ pokemon.hp + pokemon.atk + pokemon.def + pokemon.speAtk + pokemon.speDef + pokemon.vit }}
+								</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+
+						<!-- Évolutif -->
+						<tr class="hover:bg-gray-50">
+							<td class="p-4 font-semibold text-gray-700">Évolutif ?</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4 text-center">
+									{% set hasEvolution = false %}
+									{% for evo in pokemon.pokevolutions %}
+										{% if evo.nextEvolution1 is not null or evo.preEvolution1 is not null or evo.preEvolution2 is not null %}
+											{% set hasEvolution = true %}
+										{% endif %}
+									{% endfor %}
+
+									{% if hasEvolution %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+											Oui
+										</span>
+									{% else %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+											Non
+										</span>
+									{% endif %}
+								</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+
+						<!-- GMAX -->
+						<tr class="hover:bg-gray-50">
+							<td class="p-4 font-semibold text-gray-700">Forme GMAX ?</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4 text-center">
+									{% if pokemon.spriteGmax %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+											Oui
+										</span>
+									{% else %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+											Non
+										</span>
+									{% endif %}
+								</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Vue Mobile (Cartes) -->
+			<div class="md:hidden space-y-6">
+				{% for pokemon in pokemons %}
+					<div class="bg-white rounded-lg shadow-lg overflow-hidden relative">
+						<a href="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 shadow z-10 hover:bg-red-600 transition" title="Retirer">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+							</svg>
+						</a>
+
+						<div class="flex flex-col items-center bg-blue-50 p-4 border-b border-blue-100">
+							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" class="flex flex-col items-center">
+								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-32 h-32 object-contain hover:scale-110 transition">
+								<h2 class="text-xl font-bold text-gray-800 mt-2">{{ pokemon.name }}</h2>
+							</a>
+							<div class="text-sm text-gray-500 mt-1">Génération
+								{{ pokemon.generation }}</div>
+							<div class="flex gap-2 mt-2">
+								{% for type in pokemon.types %}
+									<img src="{{ type.image }}" alt="{{ type.name }}" class="w-6 h-6" title="{{ type.name }}">
+								{% endfor %}
+							</div>
+						</div>
+
+						<div
+							class="p-4 space-y-3">
+							<!-- Stats -->
+							{% set stats = {
+                                'PV': 'hp',
+                                'Attaque': 'atk',
+                                'Défense': 'def',
+                                'Atk. Spéciale': 'speAtk',
+                                'Déf. Spéciale': 'speDef',
+                                'Vitesse': 'vit'
+                            } %}
+							{% for label, field in stats %}
+								{% set value = attribute(pokemon, field) %}
+								<div>
+									<div class="flex justify-between items-center text-sm mb-1">
+										<span class="text-gray-600">{{ label }}</span>
+										<span class="font-bold">{{ value }}</span>
+									</div>
+									<div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+										<div class="h-full bg-blue-500" style="width: {{ min(value / 255 * 100, 100) }}%"></div>
+									</div>
+								</div>
+							{% endfor %}
+
+							<div class="flex justify-between items-center font-bold text-blue-900 border-t pt-2 mt-4">
+								<span>Total Stats</span>
+								<span>{{ pokemon.hp + pokemon.atk + pokemon.def + pokemon.speAtk + pokemon.speDef + pokemon.vit }}</span>
+							</div>
+
+							<!-- Extras -->
+							<div class="grid grid-cols-2 gap-4 mt-4">
+								<div class="flex flex-col items-center bg-gray-50 p-2 rounded">
+									<span class="text-sm text-gray-600 mb-1">Évolutif ?</span>
+									{% set hasEvolution = false %}
+									{% for evo in pokemon.pokevolutions %}
+										{% if evo.nextEvolution1 is not null or evo.preEvolution1 is not null or evo.preEvolution2 is not null %}
+											{% set hasEvolution = true %}
+										{% endif %}
+									{% endfor %}
+									{% if hasEvolution %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Oui</span>
+									{% else %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Non</span>
+									{% endif %}
+								</div>
+
+								<div class="flex flex-col items-center bg-gray-50 p-2 rounded">
+									<span class="text-sm text-gray-600 mb-1">GMAX ?</span>
+									{% if pokemon.spriteGmax %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Oui</span>
+									{% else %}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Non</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div class="mt-8 text-center">
+				<a href="{{ path('app_all_pokemon') }}" class="text-white underline">Retourner à la liste</a>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

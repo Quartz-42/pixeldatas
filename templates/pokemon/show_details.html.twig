@@ -1,10 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{% block flashes %}{% endblock %}
+
 {% block content %}
 	<div class="bg-red-600 p-4 min-h-screen flex flex-col">
+		<div class="container mx-auto">
+			{% include "shared/_flash.html.twig" %}
+		</div>
 		<div class="container  mx-auto text-center flex-grow">
-			<div class="bg-white p-4 mt-4 mb-8 rounded-md">
+			<div class="bg-white p-4 mt-4 mb-8 rounded-md relative">
 				<h1 class="uppercase font-bold text-4xl mt-8">{{ pokemon.name }}</h1>
+				<a href="{{ path('app_comparison_add', {'id': pokemon.id}) }}" class="absolute top-4 right-4 inline-flex items-center gap-1.5 md:gap-2 font-bold bg-black border border-black rounded text-amber-400 hover:text-amber-200 transition shadow text-xs px-3 py-1.5 md:text-sm md:px-5 md:py-2.5">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+					</svg>
+					Comparer
+				</a>
 				{#CV POKEMON #}
 				<div class="flex justify-center mt-[45px]">
 					<div class="border border-dashed border-black shadow-md px-10 pr-4 pl-3 rounded flex w-full md:w-1/2 lg:w-2/3 items-center">
