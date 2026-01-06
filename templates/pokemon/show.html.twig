@@ -2,10 +2,8 @@
 
 {% block content %}
 	<div class="bg-red-600 p-6 min-h-screen">
-		<div
-			class="mx-auto">
+		<div class="mx-auto">
 
-			{#info nombre de pokemons #}
 			{% include 'shared/_poke_number_html.twig' with { 'numberOfPokemons': pokemons|length } %}
 
 			{# RECHERCHE PAR NOM OU GEN#}
@@ -18,7 +16,7 @@
 
 			<turbo-frame id="pokemon-list" target="_top" data-turbo-action="advance" class="aria-busy:opacity-50 aria-busy:blur-sm transition-all">
 
-				<div id="pokemon-list" class="grid gap-6 mt-5 grid-cols-1 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 2xl:grid-cols-6">
+				<div id="pokemon-list" class="grid gap-3 lg:gap-4 mt-5 grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 min-[2400px]:grid-cols-8">
 					{% for pokemon in pokemons %}
 						{% include 'shared/_card.html.twig' %}
 					{% endfor %}
