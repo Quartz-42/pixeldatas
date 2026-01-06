@@ -29,7 +29,7 @@ return [
         'version' => '8.0.20',
     ],
     'chart.js' => [
-        'version' => '4.0.1',
+        'version' => '4.5.1',
     ],
     'tom-select' => [
         'version' => '2.4.3',
@@ -39,7 +39,7 @@ return [
         'type' => 'css',
     ],
     'debounce' => [
-        'version' => '2.2.0',
+        'version' => '3.0.0',
     ],
     '@orchidjs/sifter' => [
         'version' => '1.1.0',
@@ -55,16 +55,16 @@ return [
         'version' => '6.2.0',
     ],
     'flowbite' => [
-        'version' => '3.1.2',
+        'version' => '4.0.1',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
     ],
     'flowbite-datepicker' => [
-        'version' => '1.3.2',
+        'version' => '2.0.0',
     ],
     'flowbite/dist/flowbite.min.css' => [
-        'version' => '3.1.2',
+        'version' => '4.0.1',
         'type' => 'css',
     ],
     'turbo-view-transitions' => [
@@ -79,12 +79,12 @@ return [
         'type' => 'css',
     ],
     '@kurkle/color' => [
-        'version' => '0.3.4',
+        'version' => '0.4.0',
     ],
     'chartjs-plugin-datalabels' => [
         'version' => '2.2.0',
     ],
     'chart.js/helpers' => [
-        'version' => '4.0.1',
+        'version' => '4.5.1',
     ],
 ];
