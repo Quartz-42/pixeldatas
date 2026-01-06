@@ -20,14 +20,14 @@
 				</a>
 			</div>
 		{% else %}
-			<!-- Vue Desktop (Tableau) -->
+
 			<div class="hidden md:block overflow-x-auto">
 				<table class="w-full bg-white shadow-lg rounded-lg overflow-hidden">
 					<thead>
 						<tr class="bg-gray-100 border-b border-gray-200">
-							<th class="p-4 text-left text-gray-600 w-1/6 min-w-[150px]">Caractéristique</th>
+							<th class="p-4 text-left text-gray-600 w-1/5 min-w-[150px]">Caractéristiques</th>
 							{% for pokemon in pokemons %}
-								<th class="p-4 w-1/4 min-w-[200px] text-center relative group">
+								<th class="p-4 w-1/5 min-w-[200px] text-center relative group">
 									<a href="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-100 transition shadow hover:bg-red-600" title="Retirer">
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -39,10 +39,10 @@
 									</a>
 								</th>
 							{% endfor %}
-							{# Remplissage des colonnes vides si < 4 #}
+
 							{% if pokemons|length < 4 %}
 								{% for i in (pokemons|length + 1)..4 %}
-									<th class="p-4 w-1/4 bg-gray-50 text-gray-400 text-sm font-normal">
+									<th class="p-4 w-1/5 bg-gray-50 text-gray-400 text-sm font-normal">
 										<div class="h-24 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
 											Vide
 										</div>
@@ -51,9 +51,8 @@
 							{% endif %}
 						</tr>
 					</thead>
-					<tbody
-						class="divide-y divide-gray-200">
-						<!-- Génération -->
+					<tbody class="divide-y divide-gray-200">
+
 						<tr class="hover:bg-gray-50">
 							<td class="p-4 font-semibold text-gray-700">Génération</td>
 							{% for pokemon in pokemons %}
@@ -67,7 +66,6 @@
 							{% endif %}
 						</tr>
 
-						<!-- Types -->
 						<tr class="hover:bg-gray-50">
 							<td class="p-4 font-semibold text-gray-700">Types</td>
 							{% for pokemon in pokemons %}
@@ -86,7 +84,6 @@
 							{% endif %}
 						</tr>
 
-						<!-- Statistiques -->
 						{% set stats = {
                         'PV': 'hp',
                         'Attaque': 'atk',
@@ -118,7 +115,6 @@
 							</tr>
 						{% endfor %}
 
-						<!-- Total Stats -->
 						<tr class="bg-blue-50 font-bold border-t-2 border-blue-100">
 							<td class="p-4 text-blue-900">Total Stats</td>
 							{% for pokemon in pokemons %}
@@ -133,7 +129,6 @@
 							{% endif %}
 						</tr>
 
-						<!-- Évolutif -->
 						<tr class="hover:bg-gray-50">
 							<td class="p-4 font-semibold text-gray-700">Évolutif ?</td>
 							{% for pokemon in pokemons %}
@@ -163,7 +158,6 @@
 							{% endif %}
 						</tr>
 
-						<!-- GMAX -->
 						<tr class="hover:bg-gray-50">
 							<td class="p-4 font-semibold text-gray-700">Forme GMAX ?</td>
 							{% for pokemon in pokemons %}
@@ -189,7 +183,6 @@
 				</table>
 			</div>
 
-			<!-- Vue Mobile (Cartes) -->
 			<div class="md:hidden space-y-6">
 				{% for pokemon in pokemons %}
 					<div class="bg-white rounded-lg shadow-lg overflow-hidden relative">
@@ -213,9 +206,7 @@
 							</div>
 						</div>
 
-						<div
-							class="p-4 space-y-3">
-							<!-- Stats -->
+						<div class="p-4 space-y-3">
 							{% set stats = {
                                 'PV': 'hp',
                                 'Attaque': 'atk',
@@ -242,7 +233,6 @@
 								<span>{{ pokemon.hp + pokemon.atk + pokemon.def + pokemon.speAtk + pokemon.speDef + pokemon.vit }}</span>
 							</div>
 
-							<!-- Extras -->
 							<div class="grid grid-cols-2 gap-4 mt-4">
 								<div class="flex flex-col items-center bg-gray-50 p-2 rounded">
 									<span class="text-sm text-gray-600 mb-1">Évolutif ?</span>
