@@ -26,7 +26,7 @@ class PokemonController extends AbstractController
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->findBySearchQueryBuilder($query)),
             $page,
-            42
+            48
         );
 
         // Calculer les pages visibles
