@@ -47,12 +47,8 @@ class PokemonControllerTest extends WebTestCase
         $client->request('GET', '/pokemons/list');
         $this->assertResponseIsSuccessful();
         
-        // Si vous avez un Pokémon dans votre base, remplacez 'pikachu' par un nom valide
-        // Pour ce test, nous testons simplement qu'une requête est faite
         $crawler = $client->request('GET', '/pokemons/details/pikachu');
         
-        // Le test échouera si le Pokémon n'existe pas, ce qui est attendu
-        // Dans un vrai test, vous devriez d'abord insérer des données de test
     }
 
     public function testShowPokemonDetailsWith404(): void
@@ -60,8 +56,6 @@ class PokemonControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/pokemons/details/pokemon-inexistant-xyz-123');
 
-        // Devrait retourner une erreur 500 ou null pointer si le Pokemon n'existe pas
-        // Ce comportement pourrait être amélioré dans le contrôleur
         $this->assertTrue(
             $client->getResponse()->isServerError() || 
             $client->getResponse()->isClientError()
