@@ -1,5 +1,5 @@
-.PHONY: launch
-launch:
+.PHONY: start
+start:
 	docker compose up -d && symfony server:start
 
 .PHONY: stop
