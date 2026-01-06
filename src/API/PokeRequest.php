@@ -11,175 +11,352 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PokeRequest
 {
-    private HttpClientInterface $client;
-    private EntityManagerInterface $em;
+    private const API_URL = 'https://tyradex.vercel.app/api/v1/pokemon';
+    private const BATCH_SIZE = 50;
+
+    /** @var array<string, Talent> */
+    private array $talentCache = [];
+
+    /** @var array<string, Type> */
+    private array $typeCache = [];
+
+    /** @var array<int, Pokemon> */
+    private array $pokemonCache = [];
 
     public function __construct(
-        HttpClientInterface $client,
-        EntityManagerInterface $em,
+        private readonly HttpClientInterface $client,
+        private readonly EntityManagerInterface $em,
     ) {
-        $this->client = $client;
-        $this->em = $em;
     }
 
-    // cette fonction ne doit etre utilisée qu'une fois pour peupler la BDD
-    // la relancer pour vérifier des maj
+    /**
+     * Peuple la BDD avec les données de l'API
+     * @return Pokemon[]
+     */
     public function fromAPiToObjects(): array
     {
-        $response = $this->client->request(
-            'GET',
-            'https://tyradex.vercel.app/api/v1/pokemon',
-            [
-                'timeout' => 240,
-            ]
-        );
+        $content = $this->fetchPokemonData();
 
-        // Gestion d'erreur pour la requête HTTP
+        $contentByPokedexId = $this->indexContentByPokedexId($content);
+        
+        $this->loadCaches();
+
+        // Créer/récupérer les Pokémon
+        $pokemonEntities = $this->processPokemonData($content);
+
+        // Traiter les évolutions en batch
+        $this->processEvolutions($pokemonEntities, $contentByPokedexId);
+
+        // Nettoyer les caches
+        $this->clearCaches();
+
+        return $pokemonEntities;
+    }
+
+    /**
+     * Récupère les données depuis l'API.
+     */
+    private function fetchPokemonData(): array
+    {
+        $response = $this->client->request('GET', self::API_URL, [
+            'timeout' => 240,
+        ]);
+
         if (200 !== $response->getStatusCode()) {
-            throw new \Exception('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
+            throw new \RuntimeException(
+                'Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...'
+            );
         }
 
-        $content = $response->toArray();
+        return $response->toArray();
+    }
 
-        $pokemonEntities = [];
-
-        // Récupérer tous les talents existants dans la base de données
-        $existingTalents = $this->em->getRepository(Talent::class)->findAll();
-        $existingTalentNames = [];
-        foreach ($existingTalents as $talent) {
-            $existingTalentNames[$talent->getName()] = $talent;
-        }
-
-        // Récupérer tous les types existants en une seule requête
-        $existingType = $this->em->getRepository(Type::class)->findAll();
-        $existingTypeNames = [];
-        foreach ($existingType as $type) {
-            $existingTypeNames[$type->getName()] = $type;
-        }
-
+    /**
+     * Indexe le contenu de l'API par pokedex_id pour un accès rapide.
+     *
+     * @return array<int, array>
+     */
+    private function indexContentByPokedexId(array $content): array
+    {
+        $indexed = [];
         foreach ($content as $pokemon) {
-            if (null != $pokemon['pokedex_id']) {
-                // Contrôle pour ne pas faire les choses deux fois
-                $pokemonExistant = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $pokemon['pokedex_id']]);
-                if ($pokemonExistant) {
-                    $pokemonEntities[] = $pokemonExistant;
-                    continue;
-                }
-
-                $poke = new Pokemon();
-                $poke->setPokedexId($pokemon['pokedex_id']);
-                $poke->setGeneration($pokemon['generation']);
-                $poke->setCategory($pokemon['category']);
-
-                // On set les images
-                $poke->setSpriteRegular($pokemon['sprites']['regular']);
-                if (isset($pokemon['sprites']['shiny'])) {
-                    $poke->setSpriteShiny($pokemon['sprites']['shiny']);
-                }
-                if (isset($pokemon['sprites']['gmax']['regular'])) {
-                    $poke->setSpriteGmax($pokemon['sprites']['gmax']['regular']);
-                }
-                if (isset($pokemon['sprites']['gmax']['regular'])) {
-                    $poke->setSpriteGmaxShiny($pokemon['sprites']['gmax']['shiny']);
-                }
-
-                $poke->setName($pokemon['name']['fr']);
-                $poke->setHp($pokemon['stats']['hp']);
-                $poke->setAtk($pokemon['stats']['atk']);
-                $poke->setDef($pokemon['stats']['def']);
-                $poke->setSpeAtk($pokemon['stats']['spe_atk']);
-                $poke->setSpeDef($pokemon['stats']['spe_def']);
-                $poke->setVit($pokemon['stats']['vit']);
-                $poke->setHeight($pokemon['height']);
-                $poke->setWeight($pokemon['weight']);
-
-                // On set les talents
-                if (!empty($pokemon['talents'])) {
-                    foreach ($pokemon['talents'] as $talentData) {
-                        if (isset($existingTalentNames[$talentData['name']])) {
-                            $poke->addTalent($existingTalentNames[$talentData['name']]);
-                        } else {
-                            // Si le talent n'existe pas, on le crée et on le persiste
-                            $talent = new Talent();
-                            $talent->setName($talentData['name']);
-                            $existingTalentNames[$talentData['name']] = $talent;
-                            $this->em->persist($talent);
-                            $poke->addTalent($talent);
-                        }
-                    }
-                }
-
-                // On set les types
-                if (!empty($pokemon['types'])) {
-                    foreach ($pokemon['types'] as $typeData) {
-                        if (isset($existingTypeNames[$typeData['name']])) {
-                            $poke->addType($existingTypeNames[$typeData['name']]);
-                        } else {
-                            $type = new Type();
-                            $type->setName($typeData['name']);
-                            $type->setImage($typeData['image']);
-                            $existingTypeNames[$typeData['name']] = $type;
-                            $this->em->persist($type);
-                            $poke->addType($type);
-                        }
-                    }
-                }
-
-                $this->em->persist($poke);
-                $pokemonEntities[] = $poke;
+            if (is_array($pokemon) && !empty($pokemon['pokedex_id'])) {
+                $indexed[$pokemon['pokedex_id']] = $pokemon;
             }
         }
-        $this->em->flush();
 
-        // Mettre à jour les évolutions après que tous les Pokémon ont été enregistrés
-        foreach ($pokemonEntities as $poke) {
-            $pokemon = $content[array_search($poke->getPokedexId(), array_column($content, 'pokedex_id'))];
+        return $indexed;
+    }
 
-            // Vérifier si une évolution existe déjà pour ce Pokémon
-            $existingEvolution = $this->em->getRepository(Pokevolution::class)->findOneBy(['pokemon' => $poke]);
+    /**
+     * Charge tous les caches nécessaires en une seule passe.
+     */
+    private function loadCaches(): void
+    {
+        // Cache des talents
+        foreach ($this->em->getRepository(Talent::class)->findAll() as $talent) {
+            $this->talentCache[$talent->getName()] = $talent;
+        }
 
-            if (!$existingEvolution) {
-                // Créer une seule instance de Pokevolution pour chaque Pokémon
-                $evolution = new Pokevolution();
-                $evolution->setPokemon($poke);
+        // Cache des types
+        foreach ($this->em->getRepository(Type::class)->findAll() as $type) {
+            $this->typeCache[$type->getName()] = $type;
+        }
 
-                // On set les évolutions précédentes
-                if (!empty($pokemon['evolution']['pre'])) {
-                    $preEvolutions = $pokemon['evolution']['pre'];
-                    if (isset($preEvolutions[0])) {
-                        $pokemonPre1 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $preEvolutions[0]['pokedex_id']]);
-                        $evolution->setPreEvolution1($pokemonPre1);
-                    }
-                    if (isset($preEvolutions[1])) {
-                        $pokemonPre2 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $preEvolutions[1]['pokedex_id']]);
-                        $evolution->setPreEvolution2($pokemonPre2);
-                    }
-                }
+        // Cache des Pokémon existants (indexé par pokedexId)
+        foreach ($this->em->getRepository(Pokemon::class)->findAll() as $pokemon) {
+            $this->pokemonCache[$pokemon->getPokedexId()] = $pokemon;
+        }
+    }
 
-                // On set les évolutions suivantes
-                if (!empty($pokemon['evolution']['next'])) {
-                    $nextEvolutions = $pokemon['evolution']['next'];
-                    if (isset($nextEvolutions[0])) {
-                        $pokemonNext1 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $nextEvolutions[0]['pokedex_id']]);
-                        $evolution->setNextEvolution1($pokemonNext1);
-                    }
-                    if (isset($nextEvolutions[1])) {
-                        $pokemonNext2 = $this->em->getRepository(Pokemon::class)->findOneBy(['pokedexId' => $nextEvolutions[1]['pokedex_id']]);
-                        $evolution->setNextEvolution2($pokemonNext2);
-                    }
-                }
+    /**
+     * Traite les données Pokémon et retourne les entités.
+     *
+     * @return Pokemon[]
+     */
+    private function processPokemonData(array $content): array
+    {
+        $pokemonEntities = [];
+        $batchCount = 0;
 
-                // On set les méga-évolutions
-                if (!empty($pokemon['evolution']['mega'])) {
-                    $evolution->setMegaEvolution(true);
-                }
+        foreach ($content as $pokemonData) {
+            if (!is_array($pokemonData) || empty($pokemonData['pokedex_id'])) {
+                continue;
+            }
 
-                $this->em->persist($evolution);
+            // Vérifier si le Pokémon existe déjà en cache
+            if (isset($this->pokemonCache[$pokemonData['pokedex_id']])) {
+                $pokemonEntities[] = $this->pokemonCache[$pokemonData['pokedex_id']];
+                continue;
+            }
+
+            $pokemon = $this->createPokemonFromData($pokemonData);
+            $this->em->persist($pokemon);
+            
+            // Mettre à jour le cache
+            $this->pokemonCache[$pokemon->getPokedexId()] = $pokemon;
+            $pokemonEntities[] = $pokemon;
+
+            // Flush par batch pour optimiser la mémoire
+            if (++$batchCount % self::BATCH_SIZE === 0) {
+                $this->em->flush();
             }
         }
 
         $this->em->flush();
 
         return $pokemonEntities;
+    }
+
+    /**
+     * Crée une entité Pokemon à partir des données de l'API.
+     */
+    private function createPokemonFromData(array $data): Pokemon
+    {
+        $pokemon = new Pokemon();
+        $pokemon->setPokedexId($data['pokedex_id']);
+        $pokemon->setGeneration($data['generation'] ?? 0);
+        $pokemon->setCategory($data['category'] ?? '');
+        $pokemon->setName($data['name']['fr'] ?? 'Inconnu');
+
+        // Stats (avec valeurs par défaut si null)
+        $stats = $data['stats'] ?? [];
+        $pokemon->setHp($stats['hp'] ?? 0);
+        $pokemon->setAtk($stats['atk'] ?? 0);
+        $pokemon->setDef($stats['def'] ?? 0);
+        $pokemon->setSpeAtk($stats['spe_atk'] ?? 0);
+        $pokemon->setSpeDef($stats['spe_def'] ?? 0);
+        $pokemon->setVit($stats['vit'] ?? 0);
+
+        // Dimensions
+        $pokemon->setHeight($data['height'] ?? null);
+        $pokemon->setWeight($data['weight'] ?? null);
+
+        // Sprites
+        if (!empty($data['sprites'])) {
+            $this->setSprites($pokemon, $data['sprites']);
+        }
+
+        // Relations
+        $this->attachTalents($pokemon, $data['talents'] ?? []);
+        $this->attachTypes($pokemon, $data['types'] ?? []);
+
+        return $pokemon;
+    }
+
+    /**
+     * Configure les sprites du Pokémon.
+     */
+    private function setSprites(Pokemon $pokemon, array $sprites): void
+    {
+        $pokemon->setSpriteRegular($sprites['regular'] ?? null);
+        
+        if (!empty($sprites['shiny'])) {
+            $pokemon->setSpriteShiny($sprites['shiny']);
+        }
+        
+        if (!empty($sprites['gmax']['regular'])) {
+            $pokemon->setSpriteGmax($sprites['gmax']['regular']);
+        }
+        
+        if (!empty($sprites['gmax']['shiny'])) {
+            $pokemon->setSpriteGmaxShiny($sprites['gmax']['shiny']);
+        }
+    }
+
+    /**
+     * Attache les talents au Pokémon (crée si nécessaire).
+     */
+    private function attachTalents(Pokemon $pokemon, array $talentsData): void
+    {
+        foreach ($talentsData as $talentData) {
+            if (!is_array($talentData) || empty($talentData['name'])) {
+                continue;
+            }
+
+            $name = $talentData['name'];
+            
+            if (!isset($this->talentCache[$name])) {
+                $talent = new Talent();
+                $talent->setName($name);
+                $this->em->persist($talent);
+                $this->talentCache[$name] = $talent;
+            }
+
+            $pokemon->addTalent($this->talentCache[$name]);
+        }
+    }
+
+    /**
+     * Attache les types au Pokémon (crée si nécessaire).
+     */
+    private function attachTypes(Pokemon $pokemon, array $typesData): void
+    {
+        foreach ($typesData as $typeData) {
+            if (!is_array($typeData) || empty($typeData['name'])) {
+                continue;
+            }
+
+            $name = $typeData['name'];
+            
+            if (!isset($this->typeCache[$name])) {
+                $type = new Type();
+                $type->setName($name);
+                $type->setImage($typeData['image'] ?? null);
+                $this->em->persist($type);
+                $this->typeCache[$name] = $type;
+            }
+
+            $pokemon->addType($this->typeCache[$name]);
+        }
+    }
+
+    /**
+     * Traite les évolutions pour tous les Pokémon.
+     *
+     * @param Pokemon[] $pokemonEntities
+     * @param array<int, array> $contentByPokedexId
+     */
+    private function processEvolutions(array $pokemonEntities, array $contentByPokedexId): void
+    {
+        // Charger toutes les évolutions existantes en une seule requête
+        $existingEvolutions = $this->em->getRepository(Pokevolution::class)->findAll();
+        $evolutionsByPokemonId = [];
+        foreach ($existingEvolutions as $evolution) {
+            $evolutionsByPokemonId[$evolution->getPokemon()->getId()] = $evolution;
+        }
+
+        $batchCount = 0;
+
+        foreach ($pokemonEntities as $pokemon) {
+            // Vérifier si l'évolution existe déjà
+            if (isset($evolutionsByPokemonId[$pokemon->getId()])) {
+                continue;
+            }
+
+            $pokemonData = $contentByPokedexId[$pokemon->getPokedexId()] ?? null;
+            if (null === $pokemonData) {
+                continue;
+            }
+
+            $evolution = $this->createEvolution($pokemon, $pokemonData['evolution'] ?? []);
+            $this->em->persist($evolution);
+
+            if (++$batchCount % self::BATCH_SIZE === 0) {
+                $this->em->flush();
+            }
+        }
+
+        $this->em->flush();
+    }
+
+    /**
+     * Crée une entité Pokevolution à partir des données.
+     */
+    private function createEvolution(Pokemon $pokemon, array $evolutionData): Pokevolution
+    {
+        $evolution = new Pokevolution();
+        $evolution->setPokemon($pokemon);
+
+        // Pré-évolutions
+        if (!empty($evolutionData['pre'])) {
+            $this->setEvolutionRelations(
+                $evolution,
+                $evolutionData['pre'],
+                'setPreEvolution1',
+                'setPreEvolution2'
+            );
+        }
+
+        // Évolutions suivantes
+        if (!empty($evolutionData['next'])) {
+            $this->setEvolutionRelations(
+                $evolution,
+                $evolutionData['next'],
+                'setNextEvolution1',
+                'setNextEvolution2'
+            );
+        }
+
+        // Méga-évolution
+        if (!empty($evolutionData['mega'])) {
+            $evolution->setMegaEvolution(true);
+        }
+
+        return $evolution;
+    }
+
+    /**
+     * Configure les relations d'évolution (pré ou next).
+     */
+    private function setEvolutionRelations(
+        Pokevolution $evolution,
+        array $relations,
+        string $setter1,
+        string $setter2
+    ): void {
+        if (isset($relations[0]) && is_array($relations[0]) && !empty($relations[0]['pokedex_id'])) {
+            $pokemon1 = $this->pokemonCache[$relations[0]['pokedex_id']] ?? null;
+            if ($pokemon1) {
+                $evolution->$setter1($pokemon1);
+            }
+        }
+
+        if (isset($relations[1]) && is_array($relations[1]) && !empty($relations[1]['pokedex_id'])) {
+            $pokemon2 = $this->pokemonCache[$relations[1]['pokedex_id']] ?? null;
+            if ($pokemon2) {
+                $evolution->$setter2($pokemon2);
+            }
+        }
+    }
+
+    /**
+     * Libère la mémoire des caches.
+     */
+    private function clearCaches(): void
+    {
+        $this->talentCache = [];
+        $this->typeCache = [];
+        $this->pokemonCache = [];
     }
 }
