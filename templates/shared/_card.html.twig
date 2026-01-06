@@ -40,7 +40,7 @@
 
 	<div class="flex justify-center">
 		<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" data-turbo-frame="_top">
-			<img src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-full h-auto" fetchpriority="high">
+			<img loading="lazy" src="{{ pokemon.spriteRegular }}" alt="Image de {{ pokemon.name }}" class="w-full h-auto" fetchpriority="high">
 		</a>
 	</div>
 </div>
