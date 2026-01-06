@@ -48,3 +48,7 @@ generate-db:
 .PHONY : import-pokemons
 import-pokemons:
 	symfony console app:import-pokemons
+
+.PHONY : test
+test:
+	php bin/phpunit

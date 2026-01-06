@@ -16,96 +16,96 @@
 								{{pokemon.name}}
 								est un Pokémon de type
 								{% for type in pokemon.types %}
-									<strong>{{ type.name }}</strong>
+									<a href="{{ path('app_pokemon_type', {'type': type.name}) }}" class="font-bold underline">
+										{{ type.name }}
+									</a>
 									{% if not loop.last %}
 										/
 									{% endif %}
 								{% endfor %}
 								appartenant à la
-								<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
-									<span class="font-bold underline">Gen.
-										{{ pokemon.generation }}
-									</span>
+								<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" class="font-bold underline">
+									Gen.
+									{{ pokemon.generation }}
 								</a>
 							</p>
-						</p>
-						<p class="mt-2 mb-2">Il possède
-							{% if pokemon.talent|length > 1 %}
-								les talents
-							{% else %}
-								le talent
-							{% endif %}
-							{% for talent in pokemon.talent %}
-								<strong>{{talent.name}}</strong>
-								{% if not loop.last %}
-									,
+							<p class="mt-2 mb-2">Il possède
+								{% if pokemon.talent|length > 1 %}
+									les talents
+								{% else %}
+									le talent
 								{% endif %}
-							{% endfor %}
-						</p>
-						{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null
+								{% for talent in pokemon.talent %}
+									<strong>{{talent.name}}</strong>
+									{% if not loop.last %}
+										,
+									{% endif %}
+								{% endfor %}
+							</p>
+							{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null
 						or evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null
 						 %}
-							<p class="mt-2 mb-2">
-								Ce Pokémon est
-								<strong>évolutif !</strong>
-								{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null %}
-									Il est l'évolution de
-									{% if evolutions.preEvolution1 is not null %}
-										<strong>
-											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.preEvolution1.name})}}">
-												{{ evolutions.preEvolution1.name }}
-											</a>
-										</strong>
-									{% endif %}
-									{% if evolutions.preEvolution2 is not null %}
+								<p class="mt-2 mb-2">
+									Ce Pokémon est
+									<strong>évolutif !</strong>
+									{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null %}
+										Il est l'évolution de
 										{% if evolutions.preEvolution1 is not null %}
-											et de
+											<strong>
+												<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.preEvolution1.name})}}">
+													{{ evolutions.preEvolution1.name }}
+												</a>
+											</strong>
 										{% endif %}
-										<strong>
-											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.preEvolution2.name})}}">
-												{{ evolutions.preEvolution2.name }}
-											</a>
-										</strong>
+										{% if evolutions.preEvolution2 is not null %}
+											{% if evolutions.preEvolution1 is not null %}
+												et de
+											{% endif %}
+											<strong>
+												<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.preEvolution2.name})}}">
+													{{ evolutions.preEvolution2.name }}
+												</a>
+											</strong>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-							</p>
+								</p>
 
-							{% if evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null %}
-								<p class="mt-2 mb-2">
-									Son évolution suivante est
-									{% if evolutions.nextEvolution1 is not null %}
-										<strong>
-											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.nextEvolution1.name})}}">
-												{{ evolutions.nextEvolution1.name }}
-											</a>
-										</strong>
-									{% endif %}
-									{% if evolutions.nextEvolution2 is not null %}
+								{% if evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null %}
+									<p class="mt-2 mb-2">
+										Son évolution suivante est
 										{% if evolutions.nextEvolution1 is not null %}
-											puis
+											<strong>
+												<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.nextEvolution1.name})}}">
+													{{ evolutions.nextEvolution1.name }}
+												</a>
+											</strong>
 										{% endif %}
-										<strong>
-											<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.nextEvolution2.name})}}">
-												{{ evolutions.nextEvolution2.name }}
-											</a>
-										</strong>
-									{% endif %}
-								</p>
-							{% endif %}
+										{% if evolutions.nextEvolution2 is not null %}
+											{% if evolutions.nextEvolution1 is not null %}
+												puis
+											{% endif %}
+											<strong>
+												<a class="underline" href="{{path('app_pokemon_details', {"name" : evolutions.nextEvolution2.name})}}">
+													{{ evolutions.nextEvolution2.name }}
+												</a>
+											</strong>
+										{% endif %}
+									</p>
+								{% endif %}
 
-							{% if evolutions.isMegaEvolution %}
+								{% if evolutions.isMegaEvolution %}
+									<p class="mt-2 mb-2">
+										La légende raconte même qu'il peut
+										<strong>méga-évoluer !</strong>
+									</p>
+								{% endif %}
+							{% else %}
 								<p class="mt-2 mb-2">
-									La légende raconte même qu'il peut
-									<strong>méga-évoluer !</strong>
+									Ce Pokémon ne possède pas d'évolution
 								</p>
 							{% endif %}
-						{% else %}
-							<p class="mt-2 mb-2">
-								Ce Pokémon ne possède pas d'évolution
-							</p>
-						{% endif %}
-
-					</div>
+						</div>
+					</p>
 				</div>
 			</div>
 
