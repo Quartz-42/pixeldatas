@@ -10,6 +10,7 @@
 - **Filtrage par génération** : Explorez les Pokémons par génération (1 à 9)
 - **Filtrage par type** : Découvrez les Pokémons selon leurs types (Feu, Eau, Plante, etc.)
 - **Graphiques de statistiques** : Visualisez les stats de chaque Pokémon sous forme de graphique
+- **Comparaison de Pokemons** : Comparez jusqu'à 4 Pokémons : génération, type, statistiques...
 - **Évolutions** : Consultez les chaînes d'évolution, pré-évolutions et méga-évolutions
 - **Sprites multiples** : Affichez les formes normales, shiny, Gmax et Gmax shiny
 - **Interface responsive** : Navigation optimisée sur tous les appareils
