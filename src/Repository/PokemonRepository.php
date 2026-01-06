@@ -19,97 +19,66 @@ class PokemonRepository extends ServiceEntityRepository
 
     public function getRandomPokemons(int $count): array
     {
-        $conn = $this->getEntityManager()->getConnection();
+        // 1. Récupérer tous les IDs
+        $ids = $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->getQuery()
+            ->getSingleColumnResult();
 
-        $sql = 'SELECT * FROM pokemon
-            ORDER BY RAND() 
-            LIMIT :count';
+        // 2. Mélanger et prendre X IDs au hasard
+        shuffle($ids);
+        $randomIds = array_slice($ids, 0, $count);
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue('count', $count, \PDO::PARAM_INT);
-        $resultSet = $stmt->executeQuery();
+        return $this->createQueryBuilder('p')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $randomIds)
+            ->getQuery()
+            ->getResult();
+    }
 
-        $result = $resultSet->fetchAllAssociative();
+    private function createSearchQueryBuilder(?string $search = null, ?string $type = null, ?int $generation = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.types', 't')
+            ->addSelect('t')
+            ->orderBy('p.pokedexId', 'ASC');
 
-        // Transformer chaque ligne en objet Pokemon
-        $pokemonRepository = $this->getEntityManager()->getRepository(Pokemon::class);
-        $pokemons = [];
-
-        foreach ($result as $row) {
-            $pokemon = $pokemonRepository->find($row['id']);
-            if ($pokemon) {
-                $pokemons[] = $pokemon;
-            }
+        if ($search) {
+            $qb->andWhere('p.name LIKE :search')
+                ->setParameter('search', '%'.$search.'%');
         }
 
-        return $pokemons;
+        if ($generation) {
+            $qb->andWhere('p.generation = :generation')
+                ->setParameter('generation', $generation);
+        }
+
+        if ($type) {
+            $qb->andWhere('p.id IN (
+                SELECT p2.id 
+                FROM App\Entity\Pokemon p2 
+                JOIN p2.types t2 
+                WHERE t2.name = :type
+            )')
+            ->setParameter('type', $type);
+        }
+
+        return $qb;
     }
 
     public function findBySearchQueryBuilder(?string $query): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('p')
-        ->leftJoin('p.types', 't')
-        ->addSelect('t');
-        
-        $qb->andWhere('p.name LIKE :query')
-            ->setParameter('query', '%'.$query.'%');
-
-        return $qb;
+        return $this->createSearchQueryBuilder($query);
     }
 
-    public function getPokemonsByGenerationForSearch($generation, ?string $query)
+    public function getPokemonsByGenerationForSearch($generation, ?string $query): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('p')
-            ->leftJoin('p.types', 't')
-            ->addSelect('t')
-            ->where('p.generation = :generation')
-            ->setParameter(':generation', $generation);
-
-        if ($query) {
-            $qb->andWhere('p.name LIKE :query')
-                ->setParameter('query', '%'.$query.'%');
-        }
-
-        return $qb;
+        return $this->createSearchQueryBuilder($query, null, (int) $generation);
     }
 
-    public function getPokemonsByTypeForSearch(string $type, ?string $query)
+    public function getPokemonsByTypeForSearch(string $type, ?string $query): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('p')
-            ->join('p.types', 't')
-            ->addSelect('t')
-            ->where('t.name = :type')
-            ->setParameter('type', $type);
-
-        if ($query) {
-            $qb->andWhere('p.name LIKE :query')
-                ->setParameter('query', '%'.$query.'%');
-        }
-
-        return $qb;
-    }
-
-    public function getPokemonsByGeneration(int $generation)
-    {
-        return $this->createQueryBuilder('p')
-            ->leftJoin('p.types', 't')
-            ->addSelect('t')
-            ->where('p.generation = :generation')
-            ->setParameter(':generation', $generation)
-            ->orderBy('p.generation', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function getPokemonsByType(string $type)
-    {
-        return $this->createQueryBuilder('p')
-            ->join('p.types', 't') 
-            ->addSelect('t')
-            ->where('t.name = :type') 
-            ->setParameter(':type', $type)
-            ->getQuery()
-            ->getResult();
+        return $this->createSearchQueryBuilder($query, $type);
     }
 
     public function findPokemonTypes(): array

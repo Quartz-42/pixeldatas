@@ -4,9 +4,8 @@
 	<div class="bg-red-600 p-4 min-h-screen">
 		<div
 			class="mx-auto">
-
 			{#info nombre de pokemons #}
-			{% include 'shared/_poke_number_html.twig' with { 'type': type, 'numberOfPokemons': pokemons|length } %}
+			{% include 'shared/_poke_number_html.twig' with { 'type': type, 'numberOfPokemons': pokemons.nbResults } %}
 
 			<form data-controller="autosubmit" method="GET" action="{{ path('app_pokemon_type', {'type': type}) }}" class="my-3 flex justify-between" data-turbo-frame="pokemon-list">
 				<input type="search" name="query" value="{{ app.request.query.get('query') }}" aria-label="Search pokemons" placeholder="Rechercher un Pokémon..." class="rounded-lg border border-gray-300 w-full p-2 my-4" data-action="autosubmit#debouncedSubmit">

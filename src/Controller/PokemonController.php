@@ -53,12 +53,11 @@ class PokemonController extends AbstractController
         $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
 
         $chart = $chartBuilder
-            ->createChart(Chart::TYPE_POLAR_AREA)
+            ->createChart(Chart::TYPE_BAR)
             ->setData([
-                'labels' => ['PV', 'ATK', 'DEF', 'ATK SPE', 'DEF SPE', 'Vitesse'],
+                'labels' => ['PV', 'Attaque', 'Défense', 'Atq. Spé.', 'Déf. Spé.', 'Vitesse'],
                 'datasets' => [
                     [
-                        'label' => 'Stats',
                         'data' => [
                             $pokemon->getHp(),
                             $pokemon->getAtk(),
@@ -68,63 +67,72 @@ class PokemonController extends AbstractController
                             $pokemon->getVit(),
                         ],
                         'backgroundColor' => [
-                            'rgba(255, 0, 0, 0.6)',
-                            'rgba(0, 128, 0, 0.6)',
-                            'rgba(0, 0, 255, 0.6)',
-                            'rgba(128, 0, 128, 0.6)',
-                            'rgba(255, 165, 0, 0.6)',
-                            'rgba(0, 255, 255, 0.6)'
+                            'rgba(239, 68, 68, 0.8)',  // Rouge (PV)
+                            'rgba(249, 115, 22, 0.8)', // Orange (ATK)
+                            'rgba(234, 179, 8, 0.8)',  // Jaune (DEF)
+                            'rgba(59, 130, 246, 0.8)', // Bleu (SPE ATK)
+                            'rgba(34, 197, 94, 0.8)',  // Vert (SPE DEF)
+                            'rgba(168, 85, 247, 0.8)', // Mauve (VIT)
                         ],
                         'borderColor' => [
-                            'rgba(255, 0, 0, 1)',
-                            'rgba(0, 128, 0, 1)',
-                            'rgba(0, 0, 255, 1)',
-                            'rgba(128, 0, 128, 1)',
-                            'rgba(255, 165, 0, 1)',
-                            'rgba(0, 255, 255, 1)'
+                            'rgba(220, 38, 38, 1)',
+                            'rgba(234, 88, 12, 1)',
+                            'rgba(202, 138, 4, 1)',
+                            'rgba(37, 99, 235, 1)',
+                            'rgba(22, 163, 74, 1)',
+                            'rgba(147, 51, 234, 1)',
                         ],
-                        'borderWidth' => 1
+                        'borderWidth' => 2,
+                        'borderRadius' => 6,
+                        'barPercentage' => 0.5, 
                     ],
                 ],
             ])
             ->setOptions([
+                'indexAxis' => 'y',
                 'responsive' => true,
-                'maintainAspectRatio' => true,
-                'animation' => [
-                    'duration' => 0,
-                ],
+                'maintainAspectRatio' => false,
+                'animation' => false,
                 'plugins' => [
                     'legend' => [
-                        'display' => true,
-                        'position' => 'top',
-                    ],
-                    'tooltip' => [
-                        'enabled' => true,
-                        'titleFont' => [
-                            'size' => 16, // Augmenter la taille de la police du titre
-                            'weight' => 'bold',
-                        ],
-                        'bodyFont' => [
-                            'size' => 14, // Augmenter la taille de la police du corps
-                        ],
+                        'display' => false,
                     ],
                     'datalabels' => [
                         'display' => true,
                         'color' => 'black',
+                        'anchor' => 'end',
+                        'align' => 'end',
                         'font' => [
-                            'size' => 18, // Augmenter la taille des datalabels
+                            'size' => 14,
                             'weight' => 'bold',
                         ],
+                        'formatter' => function($value) {
+                            return $value;
+                        }
+                    ],
+                    'tooltip' => [
+                        'enabled' => true,
+                        'callbacks' => [
+                           'title' => function () { return ''; },
+                        ]
                     ],
                 ],
                 'scales' => [
-                    'r' => [
+                    'x' => [
+                        'display' => false,
+                        'max' => 260,
                         'beginAtZero' => true,
+                    ],
+                    'y' => [
+                        'grid' => [
+                            'display' => false,
+                        ],
                         'ticks' => [
-                            'display' => true,
                             'font' => [
                                 'size' => 14,
+                                'weight' => 'bold',
                             ],
+                            'color' => '#374151'
                         ],
                     ],
                 ],
@@ -153,8 +161,6 @@ class PokemonController extends AbstractController
             42
         );
 
-        $numberOfPokemons = count($pokemonRepository->getPokemonsByGeneration($generation));
-
         // Calculer les pages visibles
         $visiblePages = $this->getVisiblePages($pager);
 
@@ -162,7 +168,6 @@ class PokemonController extends AbstractController
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'generation' => $generation,
-            'numberOfPokemons' => $numberOfPokemons,
         ]);
     }
 
@@ -179,8 +184,6 @@ class PokemonController extends AbstractController
             42
         );
 
-        $numberOfPokemons = count($pokemonRepository->getPokemonsByType($type));
-
         // Calculer les pages visibles
         $visiblePages = $this->getVisiblePages($pager);
 
@@ -188,7 +191,6 @@ class PokemonController extends AbstractController
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'type' => $type,
-            'numberOfPokemons' => $numberOfPokemons,
         ]);
     }
 

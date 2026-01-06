@@ -1,5 +1,10 @@
 import "./bootstrap.js";
 import "./styles/app.css";
+import { Chart } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+Chart.register(ChartDataLabels);
+
 import {
   shouldPerformTransition,
   performTransition,
