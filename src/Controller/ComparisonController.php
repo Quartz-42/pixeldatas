@@ -34,22 +34,27 @@ class ComparisonController extends AbstractController
         $session = $requestStack->getSession();
         $comparison = $session->get('comparison', []);
 
+        // Assurer que les IDs sont des entiers
+        $comparison = array_map('intval', $comparison);
+
         // Vérification doublon
-        if (!in_array($id, $comparison)) {
+        if (!in_array($id, $comparison, true)) {
             // Vérification limite (4 max)
             if (count($comparison) >= 4) {
                 $this->addFlash('warning', 'Vous ne pouvez comparer que 4 Pokémons maximum');
             } else {
                 $comparison[] = $id;
                 $session->set('comparison', $comparison);
+                // Forcer la sauvegarde de la session
+                $session->save();
+
                 $this->addFlash('success', 'Le Pokémon a été ajouté au comparateur !');
             }
         } else {
             $this->addFlash('info', 'Ce Pokémon est déjà dans le comparateur');
         }
 
-        // Redirection vers la page précédente
-        return $this->redirect($request->headers->get('referer'));
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('app_all_pokemon'));
     }
 
     #[Route('/comparison/remove/{id}', name: 'app_comparison_remove')]
@@ -58,11 +63,18 @@ class ComparisonController extends AbstractController
         $session = $requestStack->getSession();
         $comparison = $session->get('comparison', []);
 
+        // Assurer que les IDs sont des entiers
+        $comparison = array_map('intval', $comparison);
+
         // On retire l'ID du tableau
-        if (($key = array_search($id, $comparison)) !== false) {
+        if (($key = array_search($id, $comparison, true)) !== false) {
             unset($comparison[$key]);
+
             // On réindexe le tableau pour éviter les trous
-            $session->set('comparison', array_values($comparison));
+            $newComparison = array_values($comparison);
+            $session->set('comparison', $newComparison);
+            $session->save();
+
             $this->addFlash('success', 'Le Pokémon a été retiré du comparateur.');
         }
 

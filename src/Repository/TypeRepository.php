@@ -16,9 +16,12 @@ class TypeRepository extends ServiceEntityRepository
         parent::__construct($registry, Type::class);
     }
 
-    public function getPokemonTypes(int $pokemonId)
+    /**
+     * @return string[]
+     */
+    public function getPokemonTypes(int $pokemonId): array
     {
-        $this->createQueryBuilder('t')
+        return $this->createQueryBuilder('t')
             ->select('t.name')
             ->innerJoin('t.pokemons', 'p')
             ->where('p.id = :pokemonId')
