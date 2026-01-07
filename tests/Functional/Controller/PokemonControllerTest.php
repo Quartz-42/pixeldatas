@@ -9,7 +9,7 @@ class PokemonControllerTest extends WebTestCase
     public function testShowAllPokemonsPageLoads(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/pokemons/list');
+        $crawler = $client->request('GET', '/pokemons');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('html');
@@ -18,7 +18,7 @@ class PokemonControllerTest extends WebTestCase
     public function testShowAllPokemonsWithPageParameter(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/pokemons/list?page=1');
+        $crawler = $client->request('GET', '/pokemons?page=1');
 
         $this->assertResponseIsSuccessful();
     }
@@ -26,7 +26,7 @@ class PokemonControllerTest extends WebTestCase
     public function testShowAllPokemonsWithSearchQuery(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/pokemons/list?query=pika');
+        $crawler = $client->request('GET', '/pokemons?query=pika');
 
         $this->assertResponseIsSuccessful();
     }
@@ -34,7 +34,7 @@ class PokemonControllerTest extends WebTestCase
     public function testShowAllPokemonsWithEmptySearch(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/pokemons/list?query=');
+        $crawler = $client->request('GET', '/pokemons?query=');
 
         $this->assertResponseIsSuccessful();
     }
@@ -44,17 +44,17 @@ class PokemonControllerTest extends WebTestCase
         $client = static::createClient();
         
         // D'abord récupérer la liste pour avoir un nom valide
-        $client->request('GET', '/pokemons/list');
+        $client->request('GET', '/pokemons');
         $this->assertResponseIsSuccessful();
         
-        $crawler = $client->request('GET', '/pokemons/details/pikachu');
+        $crawler = $client->request('GET', '/pokemons/pikachu');
         
     }
 
     public function testShowPokemonDetailsWith404(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/pokemons/details/pokemon-inexistant-xyz-123');
+        $client->request('GET', '/pokemons/pokemon-inexistant-xyz-123');
 
         $this->assertTrue(
             $client->getResponse()->isServerError() || 
@@ -115,11 +115,11 @@ class PokemonControllerTest extends WebTestCase
         $client = static::createClient();
         
         // Test page 1
-        $client->request('GET', '/pokemons/list?page=1');
+        $client->request('GET', '/pokemons?page=1');
         $this->assertResponseIsSuccessful();
         
         // Test page 2
-        $client->request('GET', '/pokemons/list?page=2');
+        $client->request('GET', '/pokemons?page=2');
         $this->assertResponseIsSuccessful();
     }
 

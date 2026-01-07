@@ -15,7 +15,7 @@ class NavigationTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         
         // Naviguer vers la liste des Pokémon
-        $client->request('GET', '/pokemons/list');
+        $client->request('GET', '/pokemons');
         $this->assertResponseIsSuccessful();
     }
 
@@ -25,7 +25,7 @@ class NavigationTest extends WebTestCase
         
         $routes = [
             '/',
-            '/pokemons/list',
+            '/pokemons',
             '/pokemons/generation/1',
         ];
         
@@ -41,7 +41,7 @@ class NavigationTest extends WebTestCase
         
         // Tester différentes pages
         for ($page = 1; $page <= 3; $page++) {
-            $client->request('GET', "/pokemons/list?page={$page}");
+            $client->request('GET', "/pokemons?page={$page}");
             $this->assertResponseIsSuccessful("La page {$page} devrait être accessible");
         }
     }
@@ -53,7 +53,7 @@ class NavigationTest extends WebTestCase
         $searchQueries = ['pika', 'char', 'bulb', ''];
         
         foreach ($searchQueries as $query) {
-            $client->request('GET', '/pokemons/list', ['query' => $query]);
+            $client->request('GET', '/pokemons', ['query' => $query]);
             $this->assertResponseIsSuccessful("La recherche pour '{$query}' devrait fonctionner");
         }
     }
