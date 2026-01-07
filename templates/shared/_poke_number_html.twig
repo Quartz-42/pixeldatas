@@ -1,64 +1,14 @@
-<style>
-	.poke-card {
-		width: 80%;
-		padding: 1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.poke-img {
-		display: none;
-	}
-	.poke-text-container {
-		text-align: center;
-		width: 100%;
-	}
-	.poke-text {
-		font-size: 1rem;
-		line-height: 1.4;
-	}
-
-	@media(min-width: 1024px) {
-		.poke-card {
-			width: 55%;
-			gap: 2rem;
-		}
-		.poke-img {
-			display: block;
-			width: 5rem;
-		}
-		.poke-text-container {
-			text-align: left;
-			width: auto;
-		}
-		.poke-text {
-			font-size: 1.4rem;
-			white-space: nowrap;
-		}
-	}
-</style>
-
-<div class="container mx-auto px-2">
-	<div class="poke-card bg-white shadow-lg my-4 rounded-lg mx-auto">
-		<div class="flex-shrink-0">
-			<img class="poke-img h-auto object-contain" src="{{ asset('/img/pokeFact.png') }}" fetchpriority="high" alt="Icône PokéFact">
-		</div>
-		<div class="poke-text-container">
-			<p class="poke-text font-bold italic text-gray-700">
-				{% if generation is defined and generation is not null %}
-					La génération
-					<span class="text-red-500">{{ generation }}</span>
-					contient
-				{% elseif type is defined and type is not null %}
-					Le type
-					<span class="text-red-500">{{ type }}</span>
-					contient
-				{% else %}
-					Le Pokédex comporte
-				{% endif %}
-				<span class="text-red-500">{{ numberOfPokemons }}</span>
-				Pokémons !
-			</p>
-		</div>
-	</div>
+<div class="bg-white shadow-lg my-4 rounded-lg mx-auto flex items-center justify-center p-4 lg:p-6 w-full gap-8">
+	<img class="hidden lg:block w-16 object-contain" src="{{ asset('/img/pokeFact.png') }}" fetchpriority="high" alt="Icône PokéFact">
+	<p class="poke-text font-bold italic text-gray-700 text-center">
+		{% if generation is defined and generation is not null %}
+			La génération 
+			<span class="text-red-500">{{ generation }}</span> contient
+		{% elseif type is defined and type is not null %}
+			Le type <span class="text-red-500">{{ type }}</span> contient
+		{% else %}
+			Le Pokédex comporte
+		{% endif %}
+		<span class="text-red-500">{{ numberOfPokemons }}</span> Pokémons !
+	</p>
 </div>

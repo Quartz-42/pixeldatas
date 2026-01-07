@@ -71,3 +71,12 @@
   border-width: 0.75rem;
   @apply border-t-white dark:border-t-gray-900 border-transparent;
 }
+
+.poke-text {
+  font-size: 0.915rem;
+}
+@media (min-width: 1024px) {
+  .poke-text {
+    font-size: 1.25rem;
+  }
+}
