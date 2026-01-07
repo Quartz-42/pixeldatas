@@ -1,10 +1,52 @@
-<div class="container mx-auto">
-	<div class="bg-white shadow-lg p-4 my-6 rounded-md w-full md:w-2/3 lg:w-1/2 mx-auto flex items-center">
-		<div class="ml-3 w-1/4 flex justify-center">
-			<img class="w-full h-auto lg:w-1/3" src="{{ asset('/img/pokeFact.png') }}" fetchpriority="high" alt="Icône PokéFact">
+<style>
+	.poke-card {
+		width: 100%;
+		gap: 0.5rem;
+		padding: 0.5rem;
+	}
+	.poke-img {
+		width: 3rem;
+	}
+	.poke-text {
+		font-size: 1rem;
+		white-space: nowrap;
+	}
+
+	@media(min-width: 640px) {
+		.poke-text {
+			font-size: 1.2rem;
+		}
+	}
+
+	@media(min-width: 768px) {
+		.poke-card {
+			width: 60%;
+			gap: 1.5rem;
+			padding: 1rem;
+		}
+		.poke-img {
+			width: 4.5rem;
+		}
+		.poke-text {
+			font-size: 1.25rem;
+			line-height: 1.75rem;
+		}
+	}
+
+	@media(min-width: 1024px) {
+		.poke-card {
+			width: 66.66%;
+		}
+	}
+</style>
+
+<div class="container mx-auto px-2">
+	<div class="poke-card bg-white shadow-lg my-4 rounded-lg mx-auto flex flex-row items-center justify-center">
+		<div class="flex-shrink-0">
+			<img class="poke-img h-auto object-contain" src="{{ asset('/img/pokeFact.png') }}" fetchpriority="high" alt="Icône PokéFact">
 		</div>
-		<div class="w-3/4 ml-3 lg:ml-4 text-center">
-			<p class="font-bold text-xl italic text-gray-700">
+		<div class="text-left">
+			<p class="poke-text font-bold italic text-gray-700 leading-none">
 				{% if generation is defined and generation is not null %}
 					La génération
 					<span class="text-red-500">{{ generation }}</span>
@@ -14,7 +56,7 @@
 					<span class="text-red-500">{{ type }}</span>
 					contient
 				{% else %}
-					Le Pokédex recense actuellement
+					Le Pokédex comporte
 				{% endif %}
 				<span class="text-red-500">{{ numberOfPokemons }}</span>
 				Pokémons !
