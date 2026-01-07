@@ -1,52 +1,50 @@
 <style>
 	.poke-card {
-		width: 100%;
-		gap: 0.5rem;
-		padding: 0.5rem;
+		width: 80%;
+		padding: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.poke-img {
-		width: 3rem;
+		display: none;
+	}
+	.poke-text-container {
+		text-align: center;
+		width: 100%;
 	}
 	.poke-text {
 		font-size: 1rem;
-		white-space: nowrap;
-	}
-
-	@media(min-width: 640px) {
-		.poke-text {
-			font-size: 1.2rem;
-		}
-	}
-
-	@media(min-width: 768px) {
-		.poke-card {
-			width: 60%;
-			gap: 1.5rem;
-			padding: 1rem;
-		}
-		.poke-img {
-			width: 4.5rem;
-		}
-		.poke-text {
-			font-size: 1.25rem;
-			line-height: 1.75rem;
-		}
+		line-height: 1.4;
 	}
 
 	@media(min-width: 1024px) {
 		.poke-card {
-			width: 66.66%;
+			width: 55%;
+			gap: 2rem;
+		}
+		.poke-img {
+			display: block;
+			width: 5rem;
+		}
+		.poke-text-container {
+			text-align: left;
+			width: auto;
+		}
+		.poke-text {
+			font-size: 1.4rem;
+			white-space: nowrap;
 		}
 	}
 </style>
 
 <div class="container mx-auto px-2">
-	<div class="poke-card bg-white shadow-lg my-4 rounded-lg mx-auto flex flex-row items-center justify-center">
+	<div class="poke-card bg-white shadow-lg my-4 rounded-lg mx-auto">
 		<div class="flex-shrink-0">
 			<img class="poke-img h-auto object-contain" src="{{ asset('/img/pokeFact.png') }}" fetchpriority="high" alt="Icône PokéFact">
 		</div>
-		<div class="text-left">
-			<p class="poke-text font-bold italic text-gray-700 leading-none">
+		<div class="poke-text-container">
+			<p class="poke-text font-bold italic text-gray-700">
 				{% if generation is defined and generation is not null %}
 					La génération
 					<span class="text-red-500">{{ generation }}</span>

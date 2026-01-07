@@ -36,7 +36,7 @@
 										</button>
 									</form>
 									<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
-										<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-24 h-24 mx-auto object-contain hover:scale-110 transition">
+										<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-32 h-32 mx-auto object-contain hover:scale-110 transition">
 										<div class="mt-2 text-lg font-bold text-gray-800">{{ pokemon.name }}</div>
 									</a>
 								</th>
@@ -74,7 +74,7 @@
 								<td class="p-4 text-center">
 									<div class="flex justify-center gap-2">
 										{% for type in pokemon.types %}
-											<img src="{{ type.image }}" alt="{{ type.name }}" class="w-8 h-8" title="{{ type.name }}">
+											<img src="{{ type.image }}" alt="{{ type.name }}" class="w-10 h-10" title="{{ type.name }}">
 										{% endfor %}
 									</div>
 								</td>
