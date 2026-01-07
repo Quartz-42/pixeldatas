@@ -17,9 +17,10 @@
 
 ## 🛠️ Technologies utilisées
 
-- **Framework** : Symfony 7.3
+- **Framework** : Symfony 7.3-->8
+- **Langage** : PHP 8.4
 - **Frontend** : Twig, TailwindCSS, Stimulus
-- **Base de données** : MySQL avec Doctrine ORM
+- **Base de données** : MySQL
 - **Graphiques** : Chart.js
 - **Pagination** : Pagerfanta
 - **Navigation** : Turbo (Hotwired)
