@@ -16,28 +16,18 @@ class PokevolutionRepository extends ServiceEntityRepository
         parent::__construct($registry, Pokevolution::class);
     }
 
-    //    /**
-    //     * @return Pokevolution[] Returns an array of Pokevolution objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Pokevolution
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findAllEvoliNames(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('pokemon.name')
+            ->innerJoin('e.pokemon', 'pokemon')
+            ->where('e.preEvolution1 = :evoliId')
+            ->setParameter('evoliId', 133)
+            ->orderBy('pokemon.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

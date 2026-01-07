@@ -53,8 +53,21 @@
 									{% endif %}
 								{% endfor %}
 							</p>
-							{% if evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null
-						or evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null
+							{% if evoliNames is defined and evoliNames is not empty %}
+								<p class="mt-2 mb-2">
+									Ce Pokémon est instable génétiquement ! Il peut évoluer en :
+									{% for evo in evoliNames %}
+										<strong>
+											<a class="underline" href="{{ path('app_pokemon_details', {'name': evo.name}) }}">
+												{{ evo.name }}
+											</a>
+										</strong>
+										{% if not loop.last %},
+										{% endif %}
+									{% endfor %}
+								</p>
+							{% elseif evolutions is not null and (evolutions.preEvolution1 is not null or evolutions.preEvolution2 is not null
+						or evolutions.nextEvolution1 is not null or evolutions.nextEvolution2 is not null)
 						 %}
 								<p class="mt-2 mb-2">
 									Ce Pokémon est
