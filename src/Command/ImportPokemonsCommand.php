@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ImportPokemonsCommand extends Command
 {
     public function __construct(
-        private PokeRequest $pokeRequest
+        private PokeRequest $pokeRequest,
     ) {
         parent::__construct();
     }
@@ -28,16 +28,15 @@ class ImportPokemonsCommand extends Command
 
         try {
             $io->text('Récupération des données...');
-            
-            // Appel du service 
+
+            // Appel du service
             $pokemons = $this->pokeRequest->fromAPiToObjects();
 
             $count = count($pokemons);
-            
+
             $io->success(sprintf('Succès ! %d Pokémons ont été sauvegardés.', $count));
 
             return Command::SUCCESS;
-
         } catch (\Exception $e) {
             $io->error('Une erreur est survenue :');
             $io->text($e->getMessage());

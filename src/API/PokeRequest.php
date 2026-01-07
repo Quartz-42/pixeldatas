@@ -30,7 +30,8 @@ class PokeRequest
     }
 
     /**
-     * Peuple la BDD avec les données de l'API
+     * Peuple la BDD avec les données de l'API.
+     *
      * @return Pokemon[]
      */
     public function fromAPiToObjects(): array
@@ -38,7 +39,7 @@ class PokeRequest
         $content = $this->fetchPokemonData();
 
         $contentByPokedexId = $this->indexContentByPokedexId($content);
-        
+
         $this->loadCaches();
 
         // Créer/récupérer les Pokémon
@@ -55,6 +56,8 @@ class PokeRequest
 
     /**
      * Récupère les données depuis l'API.
+     *
+    * @return array<int, mixed>
      */
     private function fetchPokemonData(): array
     {
@@ -63,9 +66,7 @@ class PokeRequest
         ]);
 
         if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException(
-                'Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...'
-            );
+            throw new \RuntimeException('Erreur lors de la récupération des données des Pokémon. Veuillez réessayer dans quelques instants...');
         }
 
         return $response->toArray();
@@ -74,7 +75,8 @@ class PokeRequest
     /**
      * Indexe le contenu de l'API par pokedex_id pour un accès rapide.
      *
-     * @return array<int, array>
+    * @param array<int, mixed> $content
+    * @return array<int, mixed>
      */
     private function indexContentByPokedexId(array $content): array
     {
@@ -112,6 +114,7 @@ class PokeRequest
     /**
      * Traite les données Pokémon et retourne les entités.
      *
+    * @param array<int, mixed> $content
      * @return Pokemon[]
      */
     private function processPokemonData(array $content): array
@@ -132,13 +135,13 @@ class PokeRequest
 
             $pokemon = $this->createPokemonFromData($pokemonData);
             $this->em->persist($pokemon);
-            
+
             // Mettre à jour le cache
             $this->pokemonCache[$pokemon->getPokedexId()] = $pokemon;
             $pokemonEntities[] = $pokemon;
 
             // Flush par batch pour optimiser la mémoire
-            if (++$batchCount % self::BATCH_SIZE === 0) {
+            if (0 === ++$batchCount % self::BATCH_SIZE) {
                 $this->em->flush();
             }
         }
@@ -150,6 +153,8 @@ class PokeRequest
 
     /**
      * Crée une entité Pokemon à partir des données de l'API.
+     *
+     * @param array<string, mixed> $data
      */
     private function createPokemonFromData(array $data): Pokemon
     {
@@ -186,19 +191,21 @@ class PokeRequest
 
     /**
      * Configure les sprites du Pokémon.
+     *
+     * @param array<string, mixed> $sprites
      */
     private function setSprites(Pokemon $pokemon, array $sprites): void
     {
         $pokemon->setSpriteRegular($sprites['regular'] ?? null);
-        
+
         if (!empty($sprites['shiny'])) {
             $pokemon->setSpriteShiny($sprites['shiny']);
         }
-        
+
         if (!empty($sprites['gmax']['regular'])) {
             $pokemon->setSpriteGmax($sprites['gmax']['regular']);
         }
-        
+
         if (!empty($sprites['gmax']['shiny'])) {
             $pokemon->setSpriteGmaxShiny($sprites['gmax']['shiny']);
         }
@@ -206,6 +213,8 @@ class PokeRequest
 
     /**
      * Attache les talents au Pokémon (crée si nécessaire).
+     *
+    * @param array<int, mixed> $talentsData
      */
     private function attachTalents(Pokemon $pokemon, array $talentsData): void
     {
@@ -215,7 +224,7 @@ class PokeRequest
             }
 
             $name = $talentData['name'];
-            
+
             if (!isset($this->talentCache[$name])) {
                 $talent = new Talent();
                 $talent->setName($name);
@@ -229,6 +238,8 @@ class PokeRequest
 
     /**
      * Attache les types au Pokémon (crée si nécessaire).
+     *
+    * @param array<int, mixed> $typesData
      */
     private function attachTypes(Pokemon $pokemon, array $typesData): void
     {
@@ -238,7 +249,7 @@ class PokeRequest
             }
 
             $name = $typeData['name'];
-            
+
             if (!isset($this->typeCache[$name])) {
                 $type = new Type();
                 $type->setName($name);
@@ -254,8 +265,8 @@ class PokeRequest
     /**
      * Traite les évolutions pour tous les Pokémon.
      *
-     * @param Pokemon[] $pokemonEntities
-     * @param array<int, array> $contentByPokedexId
+    * @param Pokemon[] $pokemonEntities
+    * @param array<int, mixed> $contentByPokedexId
      */
     private function processEvolutions(array $pokemonEntities, array $contentByPokedexId): void
     {
@@ -282,7 +293,7 @@ class PokeRequest
             $evolution = $this->createEvolution($pokemon, $pokemonData['evolution'] ?? []);
             $this->em->persist($evolution);
 
-            if (++$batchCount % self::BATCH_SIZE === 0) {
+            if (0 === ++$batchCount % self::BATCH_SIZE) {
                 $this->em->flush();
             }
         }
@@ -292,6 +303,8 @@ class PokeRequest
 
     /**
      * Crée une entité Pokevolution à partir des données.
+     *
+    * @param array<string, mixed> $evolutionData
      */
     private function createEvolution(Pokemon $pokemon, array $evolutionData): Pokevolution
     {
@@ -328,12 +341,14 @@ class PokeRequest
 
     /**
      * Configure les relations d'évolution (pré ou next).
+     *
+    * @param array<int, mixed> $relations
      */
     private function setEvolutionRelations(
         Pokevolution $evolution,
         array $relations,
         string $setter1,
-        string $setter2
+        string $setter2,
     ): void {
         if (isset($relations[0]) && is_array($relations[0]) && !empty($relations[0]['pokedex_id'])) {
             $pokemon1 = $this->pokemonCache[$relations[0]['pokedex_id']] ?? null;

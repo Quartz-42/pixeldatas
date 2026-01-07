@@ -16,7 +16,6 @@ use Symfony\UX\Chartjs\Model\Chart;
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
 {
-
     #[Route('/list', name: 'app_all_pokemon')]
     public function showAllPokemons(
         PokemonRepository $pokemonRepository,
@@ -48,7 +47,7 @@ class PokemonController extends AbstractController
         PokemonRepository $pokemonRepository,
         PokevolutionRepository $pokevolutionRepository,
         string $name,
-        ChartBuilderInterface $chartBuilder
+        ChartBuilderInterface $chartBuilder,
     ): Response {
         $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
 
@@ -84,7 +83,7 @@ class PokemonController extends AbstractController
                         ],
                         'borderWidth' => 2,
                         'borderRadius' => 6,
-                        'barPercentage' => 0.5, 
+                        'barPercentage' => 0.5,
                     ],
                 ],
             ])
@@ -106,15 +105,15 @@ class PokemonController extends AbstractController
                             'size' => 14,
                             'weight' => 'bold',
                         ],
-                        'formatter' => function($value) {
+                        'formatter' => function ($value) {
                             return $value;
-                        }
+                        },
                     ],
                     'tooltip' => [
                         'enabled' => true,
                         'callbacks' => [
-                           'title' => function () { return ''; },
-                        ]
+                            'title' => function () { return ''; },
+                        ],
                     ],
                 ],
                 'scales' => [
@@ -132,7 +131,7 @@ class PokemonController extends AbstractController
                                 'size' => 14,
                                 'weight' => 'bold',
                             ],
-                            'color' => '#374151'
+                            'color' => '#374151',
                         ],
                     ],
                 ],
@@ -197,12 +196,15 @@ class PokemonController extends AbstractController
     #[Route('/{type}/card', name: 'app_type_show_card', methods: ['GET'])]
     public function showCard(string $type): Response
     {
-
         return $this->render('pokemon/_card.html.twig', [
             'type' => $type,
         ]);
     }
 
+    /**
+     * @param Pagerfanta<mixed> $pager
+     * @return int[]
+     */
     private function getVisiblePages(Pagerfanta $pager): array
     {
         $currentPage = $pager->getCurrentPage();

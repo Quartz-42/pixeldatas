@@ -17,6 +17,9 @@ class PokemonRepository extends ServiceEntityRepository
         parent::__construct($registry, Pokemon::class);
     }
 
+    /**
+     * @return Pokemon[]
+     */
     public function getRandomPokemons(int $count): array
     {
         // 1. Récupérer tous les IDs
@@ -71,9 +74,9 @@ class PokemonRepository extends ServiceEntityRepository
         return $this->createSearchQueryBuilder($query);
     }
 
-    public function getPokemonsByGenerationForSearch($generation, ?string $query): QueryBuilder
+    public function getPokemonsByGenerationForSearch(int $generation, ?string $query): QueryBuilder
     {
-        return $this->createSearchQueryBuilder($query, null, (int) $generation);
+        return $this->createSearchQueryBuilder($query, null, $generation);
     }
 
     public function getPokemonsByTypeForSearch(string $type, ?string $query): QueryBuilder
@@ -81,6 +84,9 @@ class PokemonRepository extends ServiceEntityRepository
         return $this->createSearchQueryBuilder($query, $type);
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function findPokemonTypes(): array
     {
         return $this->createQueryBuilder('p')
@@ -91,7 +97,10 @@ class PokemonRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findPokemonGenerations()
+    /**
+     * @return int[]
+     */
+    public function findPokemonGenerations(): array
     {
         $results = $this->createQueryBuilder('p')
             ->select('DISTINCT p.generation')

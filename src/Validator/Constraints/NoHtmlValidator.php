@@ -7,9 +7,10 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class NoHtmlValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
-        if (preg_match('/<[^>]+>/', $value)) {
+        /** @var NoHtml $constraint */
+        if (preg_match('/<[^>]+>/', (string) $value)) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
         }
