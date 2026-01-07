@@ -17,14 +17,37 @@ use Symfony\UX\Chartjs\Model\Chart;
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
 {
-    #[Route('/list', name: 'app_all_pokemon')]
-    public function showAllPokemons(
+    #[Route('', name: 'app_pokemons')]
+    #[Route('/type/{type}', name: 'app_pokemon_type')]
+    #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
+    public function listPokemons(
         PokemonRepository $pokemonRepository,
+        TypeRepository $typeRepository,
+        ?string $type = null,
+        ?int $generation = null,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] ?string $query = null,
     ): Response {
+        // Validation des filtres
+        if ($type && !$typeRepository->findOneBy(['name' => $type])) {
+            throw $this->createNotFoundException('Ce type n\'existe pas.');
+        }
+
+        if ($generation && !$pokemonRepository->findOneBy(['generation' => $generation])) {
+            throw $this->createNotFoundException('Cette génération n\'existe pas.');
+        }
+
+        // Construire le query builder selon le filtre
+        if ($type) {
+            $queryBuilder = $pokemonRepository->getPokemonsByTypeForSearch($type, $query);
+        } elseif ($generation) {
+            $queryBuilder = $pokemonRepository->getPokemonsByGenerationForSearch($generation, $query);
+        } else {
+            $queryBuilder = $pokemonRepository->findBySearchQueryBuilder($query);
+        }
+
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
-            new QueryAdapter($pokemonRepository->findBySearchQueryBuilder($query)),
+            new QueryAdapter($queryBuilder),
             $page,
             48
         );
@@ -32,18 +55,25 @@ class PokemonController extends AbstractController
         // Calculer les pages visibles
         $visiblePages = $this->getVisiblePages($pager);
 
-        $pokemonTypes = $pokemonRepository->findPokemonTypes();
-        $generations = $pokemonRepository->findPokemonGenerations();
-        
-        return $this->render('pokemon/show.html.twig', [
+        // Données pour l'accordéon (uniquement sur la page principale)
+        $pokemonTypes = null;
+        $generations = null;
+        if (!$type && !$generation) {
+            $pokemonTypes = $pokemonRepository->findPokemonTypes();
+            $generations = $pokemonRepository->findPokemonGenerations();
+        }
+
+        return $this->render('pokemon/list.html.twig', [
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'pokemonTypes' => $pokemonTypes,
-            'generations' => $generations
+            'generations' => $generations,
+            'type' => $type,
+            'generation' => $generation,
         ]);
     }
 
-    #[Route('/details/{name}', name: 'app_pokemon_details')]
+    #[Route('/{name}', name: 'app_pokemon_details')]
     public function showPokemonDetails(
         PokemonRepository $pokemonRepository,
         PokevolutionRepository $pokevolutionRepository,
@@ -56,95 +86,95 @@ class PokemonController extends AbstractController
             throw $this->createNotFoundException('Erreur');
         }
 
-           $chart = $chartBuilder
-            ->createChart(Chart::TYPE_BAR)
-            ->setData([
-                'labels' => ['PV', 'Attaque', 'Défense', 'Atq. Spé.', 'Déf. Spé.', 'Vitesse'],
-                'datasets' => [
-                    [
-                        'data' => [
-                            $pokemon->getHp(),
-                            $pokemon->getAtk(),
-                            $pokemon->getDef(),
-                            $pokemon->getSpeAtk(),
-                            $pokemon->getSpeDef(),
-                            $pokemon->getVit()
-                        ],
-                        'backgroundColor' => [
-                            'rgba(239, 68, 68, 0.8)',  // Rouge (PV)
-                            'rgba(249, 115, 22, 0.8)', // Orange (ATK)
-                            'rgba(234, 179, 8, 0.8)',  // Jaune (DEF)
-                            'rgba(59, 130, 246, 0.8)', // Bleu (SPE ATK)
-                            'rgba(34, 197, 94, 0.8)',  // Vert (SPE DEF)
-                            'rgba(168, 85, 247, 0.8)', // Mauve (VIT)
-                        ],
-                        'borderColor' => [
-                            'rgba(220, 38, 38, 1)',
-                            'rgba(234, 88, 12, 1)',
-                            'rgba(202, 138, 4, 1)',
-                            'rgba(37, 99, 235, 1)',
-                            'rgba(22, 163, 74, 1)',
-                            'rgba(147, 51, 234, 1)',
-                        ],
-                        'borderWidth' => 2,
-                        'borderRadius' => 6,
-                        'barPercentage' => 0.5,
-                    ],
-                ],
-            ])
-            ->setOptions([
-                'indexAxis' => 'y',
-                'responsive' => true,
-                'maintainAspectRatio' => false,
-                'animation' => false,
-                'plugins' => [
-                    'legend' => [
-                        'display' => false,
-                    ],
-                    'datalabels' => [
-                        'display' => true,
-                        'color' => 'black',
-                        'anchor' => 'end',
-                        'align' => 'end',
-                        'font' => [
-                            'size' => 14,
-                            'weight' => 'bold',
-                        ],
-                        'formatter' => function ($value) {
-                            return $value;
-                        },
-                    ],
-                    'tooltip' => [
-                        'enabled' => true,
-                        'callbacks' => [
-                            'title' => function () { return ''; },
-                        ],
-                    ],
-                ],
-                'scales' => [
-                    'x' => [
-                        'display' => false,
-                        'max' => 260,
-                        'beginAtZero' => true,
-                    ],
-                    'y' => [
-                        'grid' => [
-                            'display' => false,
-                        ],
-                        'ticks' => [
-                            'font' => [
-                                'size' => 14,
-                                'weight' => 'bold',
-                            ],
-                            'color' => '#374151',
-                        ],
-                    ],
-                ],
-            ]);
+        $chart = $chartBuilder
+         ->createChart(Chart::TYPE_BAR)
+         ->setData([
+             'labels' => ['PV', 'Attaque', 'Défense', 'Atq. Spé.', 'Déf. Spé.', 'Vitesse'],
+             'datasets' => [
+                 [
+                     'data' => [
+                         $pokemon->getHp(),
+                         $pokemon->getAtk(),
+                         $pokemon->getDef(),
+                         $pokemon->getSpeAtk(),
+                         $pokemon->getSpeDef(),
+                         $pokemon->getVit(),
+                     ],
+                     'backgroundColor' => [
+                         'rgba(239, 68, 68, 0.8)',  // Rouge (PV)
+                         'rgba(249, 115, 22, 0.8)', // Orange (ATK)
+                         'rgba(234, 179, 8, 0.8)',  // Jaune (DEF)
+                         'rgba(59, 130, 246, 0.8)', // Bleu (SPE ATK)
+                         'rgba(34, 197, 94, 0.8)',  // Vert (SPE DEF)
+                         'rgba(168, 85, 247, 0.8)', // Mauve (VIT)
+                     ],
+                     'borderColor' => [
+                         'rgba(220, 38, 38, 1)',
+                         'rgba(234, 88, 12, 1)',
+                         'rgba(202, 138, 4, 1)',
+                         'rgba(37, 99, 235, 1)',
+                         'rgba(22, 163, 74, 1)',
+                         'rgba(147, 51, 234, 1)',
+                     ],
+                     'borderWidth' => 2,
+                     'borderRadius' => 6,
+                     'barPercentage' => 0.5,
+                 ],
+             ],
+         ])
+         ->setOptions([
+             'indexAxis' => 'y',
+             'responsive' => true,
+             'maintainAspectRatio' => false,
+             'animation' => false,
+             'plugins' => [
+                 'legend' => [
+                     'display' => false,
+                 ],
+                 'datalabels' => [
+                     'display' => true,
+                     'color' => 'black',
+                     'anchor' => 'end',
+                     'align' => 'end',
+                     'font' => [
+                         'size' => 14,
+                         'weight' => 'bold',
+                     ],
+                     'formatter' => function ($value) {
+                         return $value;
+                     },
+                 ],
+                 'tooltip' => [
+                     'enabled' => true,
+                     'callbacks' => [
+                         'title' => function () { return ''; },
+                     ],
+                 ],
+             ],
+             'scales' => [
+                 'x' => [
+                     'display' => false,
+                     'max' => 260,
+                     'beginAtZero' => true,
+                 ],
+                 'y' => [
+                     'grid' => [
+                         'display' => false,
+                     ],
+                     'ticks' => [
+                         'font' => [
+                             'size' => 14,
+                             'weight' => 'bold',
+                         ],
+                         'color' => '#374151',
+                     ],
+                 ],
+             ],
+         ]);
 
         // Récupérer les évolutions du Pokémon
         $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
-        
+
         $evoliNames = [];
         if (133 === $pokemon->getPokedexId()) {
             $evoliNames = $pokevolutionRepository->findAllEvoliNames();
@@ -158,61 +188,6 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/generation/{generation}', name: 'app_pokemon_gen')]
-    public function showPokemonByGen(
-        int $generation,
-        PokemonRepository $pokemonRepository,
-        #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] ?string $query = null,
-    ): Response {
-        if (!$pokemonRepository->findOneBy(['generation' => $generation])) {
-            throw $this->createNotFoundException('Erreur');
-        }
-
-        $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
-            new QueryAdapter($pokemonRepository->getPokemonsByGenerationForSearch($generation, $query)),
-            $page,
-            42
-        );
-
-        // Calculer les pages visibles
-        $visiblePages = $this->getVisiblePages($pager);
-
-        return $this->render('pokemon/show_gen.html.twig', [
-            'pokemons' => $pager,
-            'visiblePages' => $visiblePages,
-            'generation' => $generation,
-        ]);
-    }
-
-    #[Route('/type/{type}', name: 'app_pokemon_type')]
-    public function showPokemonByType(
-        string $type,
-        PokemonRepository $pokemonRepository,
-        TypeRepository $typeRepository,
-        #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] ?string $query = null,
-    ): Response {
-        if (!$typeRepository->findOneBy(['name' => $type])) {
-            throw $this->createNotFoundException('Erreur');
-        }
-
-        $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
-            new QueryAdapter($pokemonRepository->getPokemonsByTypeForSearch($type, $query)),
-            $page,
-            42
-        );
-
-        // Calculer les pages visibles
-        $visiblePages = $this->getVisiblePages($pager);
-
-        return $this->render('pokemon/show_type.html.twig', [
-            'pokemons' => $pager,
-            'visiblePages' => $visiblePages,
-            'type' => $type,
-        ]);
-    }
-
     #[Route('/{type}/card', name: 'app_type_show_card', methods: ['GET'])]
     public function showCard(string $type): Response
     {
@@ -223,6 +198,7 @@ class PokemonController extends AbstractController
 
     /**
      * @param Pagerfanta<mixed> $pager
+     *
      * @return int[]
      */
     private function getVisiblePages(Pagerfanta $pager): array

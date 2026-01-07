@@ -22,11 +22,11 @@ class PokevolutionRepository extends ServiceEntityRepository
     public function findAllEvoliNames(): array
     {
         return $this->createQueryBuilder('e')
-            ->select('pokemon.name')
-            ->innerJoin('e.pokemon', 'pokemon')
+            ->select('p.name')
+            ->join('e.pokemon', 'p')
             ->where('e.preEvolution1 = :evoliId')
             ->setParameter('evoliId', 133)
-            ->orderBy('pokemon.name', 'ASC')
+            ->orderBy('p.name', 'ASC')
             ->getQuery()
             ->getResult();
     }

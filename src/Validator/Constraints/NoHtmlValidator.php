@@ -9,8 +9,9 @@ class NoHtmlValidator extends ConstraintValidator
 {
     public function validate(mixed $value, Constraint $constraint): void
     {
-        /** @var NoHtml $constraint */
+        /* @var NoHtml $constraint */
         if (preg_match('/<[^>]+>/', (string) $value)) {
+            /* @phpstan-ignore-next-line */
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
         }

@@ -5,14 +5,14 @@
 		</div>
 		<div class="w-3/4 ml-3 lg:ml-4 text-center">
 			<p class="font-bold text-xl italic text-gray-700">
-				{% if generation is defined %}
+				{% if generation is defined and generation is not null %}
 					La génération
 					<span class="text-red-500">{{ generation }}</span>
-					comporte
-				{% elseif type is defined %}
+					contient
+				{% elseif type is defined and type is not null %}
 					Le type
 					<span class="text-red-500">{{ type }}</span>
-					comporte
+					contient
 				{% else %}
 					Le Pokédex recense actuellement
 				{% endif %}
