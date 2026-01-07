@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\PokemonRepository;
 use App\Repository\PokevolutionRepository;
+use App\Repository\TypeRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,12 +34,12 @@ class PokemonController extends AbstractController
 
         $pokemonTypes = $pokemonRepository->findPokemonTypes();
         $generations = $pokemonRepository->findPokemonGenerations();
-
+        
         return $this->render('pokemon/show.html.twig', [
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
             'pokemonTypes' => $pokemonTypes,
-            'generations' => $generations,
+            'generations' => $generations
         ]);
     }
 
@@ -51,7 +52,11 @@ class PokemonController extends AbstractController
     ): Response {
         $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
 
-        $chart = $chartBuilder
+        if (!$pokemon) {
+            throw $this->createNotFoundException('Erreur');
+        }
+
+           $chart = $chartBuilder
             ->createChart(Chart::TYPE_BAR)
             ->setData([
                 'labels' => ['PV', 'Attaque', 'Défense', 'Atq. Spé.', 'Déf. Spé.', 'Vitesse'],
@@ -63,7 +68,7 @@ class PokemonController extends AbstractController
                             $pokemon->getDef(),
                             $pokemon->getSpeAtk(),
                             $pokemon->getSpeDef(),
-                            $pokemon->getVit(),
+                            $pokemon->getVit()
                         ],
                         'backgroundColor' => [
                             'rgba(239, 68, 68, 0.8)',  // Rouge (PV)
@@ -139,11 +144,17 @@ class PokemonController extends AbstractController
 
         // Récupérer les évolutions du Pokémon
         $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
+        
+        $evoliNames = [];
+        if (133 === $pokemon->getPokedexId()) {
+            $evoliNames = $pokevolutionRepository->findAllEvoliNames();
+        }
 
         return $this->render('pokemon/show_details.html.twig', [
             'pokemon' => $pokemon,
             'evolutions' => $evolutions,
             'chart' => $chart,
+            'evoliNames' => $evoliNames,
         ]);
     }
 
@@ -154,6 +165,10 @@ class PokemonController extends AbstractController
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] ?string $query = null,
     ): Response {
+        if (!$pokemonRepository->findOneBy(['generation' => $generation])) {
+            throw $this->createNotFoundException('Erreur');
+        }
+
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->getPokemonsByGenerationForSearch($generation, $query)),
             $page,
@@ -174,9 +189,14 @@ class PokemonController extends AbstractController
     public function showPokemonByType(
         string $type,
         PokemonRepository $pokemonRepository,
+        TypeRepository $typeRepository,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] ?string $query = null,
     ): Response {
+        if (!$typeRepository->findOneBy(['name' => $type])) {
+            throw $this->createNotFoundException('Erreur');
+        }
+
         $pager = Pagerfanta::createForCurrentPageWithMaxPerPage(
             new QueryAdapter($pokemonRepository->getPokemonsByTypeForSearch($type, $query)),
             $page,
@@ -216,7 +236,7 @@ class PokemonController extends AbstractController
         // Toujours afficher la première page
         $pages[] = 1;
 
-        // Pages autour de la page actuelle (3 avant et 3 après)
+        // Pages autour de la page actuelle (2 avant et 2 après)
         for ($i = max(2, $currentPage - 3); $i <= min($nbPages - 1, $currentPage + 3); ++$i) {
             $pages[] = $i;
         }
