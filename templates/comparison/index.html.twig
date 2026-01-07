@@ -15,7 +15,7 @@
 		{% if pokemons is empty %}
 			<div class="text-center bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
 				<p class="text-xl text-gray-600 mb-4">Votre comparateur est vide</p>
-				<a href="{{ path('app_all_pokemon') }}" class="text-large font-semibold bg-black text-amber-400 p-3 rounded-lg">
+				<a href="{{ path('app_pokemons') }}" class="text-large font-semibold bg-black text-amber-400 p-3 rounded-lg">
 					Choisir des Pokémons
 				</a>
 			</div>
@@ -28,11 +28,13 @@
 							<th class="p-4 text-left text-gray-600 w-1/5 min-w-[150px]">Comparatif</th>
 							{% for pokemon in pokemons %}
 								<th class="p-4 w-1/5 min-w-[200px] text-center relative group">
-									<a href="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-100 transition shadow hover:bg-red-600" title="Retirer">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-										</svg>
-									</a>
+									<form action="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" method="post" class="absolute top-2 right-2">
+										<button type="submit" class="bg-red-500 text-white rounded-full p-1 opacity-100 transition shadow hover:bg-red-600 cursor-pointer" title="Retirer">
+											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+											</svg>
+										</button>
+									</form>
 									<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
 										<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-24 h-24 mx-auto object-contain hover:scale-110 transition">
 										<div class="mt-2 text-lg font-bold text-gray-800">{{ pokemon.name }}</div>
@@ -202,11 +204,13 @@
 			<div class="md:hidden space-y-6">
 				{% for pokemon in pokemons %}
 					<div class="bg-white rounded-lg shadow-lg overflow-hidden relative">
-						<a href="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 shadow z-10 hover:bg-red-600 transition" title="Retirer">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-							</svg>
-						</a>
+						<form action="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" method="post" class="absolute top-2 right-2 z-10">
+							<button type="submit" class="bg-red-500 text-white rounded-full p-2 shadow hover:bg-red-600 transition flex items-center justify-center" title="Retirer">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+								</svg>
+							</button>
+						</form>
 
 						<div class="flex flex-col items-center bg-blue-50 p-4 border-b border-blue-100">
 							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" class="flex flex-col items-center">
@@ -289,7 +293,7 @@
 			</div>
 
 			<div class="mt-8 text-center">
-				<a href="{{ path('app_all_pokemon') }}" class="text-white underline">Retourner à la liste</a>
+				<a href="{{ path('app_pokemons') }}" class="text-white underline">Retourner à la liste</a>
 			</div>
 		{% endif %}
 	</div>

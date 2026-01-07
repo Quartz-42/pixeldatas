@@ -17,10 +17,32 @@ class ComparisonController extends AbstractController
         $session = $requestStack->getSession();
         $comparisonIds = $session->get('comparison', []);
 
+        // Nettoyage proactif de la session : uniques et entiers uniquement
+        $uniqueIds = array_values(array_unique(array_map('intval', $comparisonIds)));
+
+        // Si le nettoyage a modifié quelque chose, on sauvegarde
+        if ($comparisonIds !== $uniqueIds) {
+            $comparisonIds = $uniqueIds;
+            $session->set('comparison', $comparisonIds);
+        }
+
         if (empty($comparisonIds)) {
             $pokemons = [];
         } else {
-            $pokemons = $pokemonRepository->findBy(['id' => $comparisonIds]);
+            $pokemonsData = $pokemonRepository->findByIdsWithRelations($comparisonIds);
+
+            // Ordonner les résultats selon l'ordre de la session
+            $pokemonsMap = [];
+            foreach ($pokemonsData as $pokemon) {
+                $pokemonsMap[$pokemon->getId()] = $pokemon;
+            }
+
+            $pokemons = [];
+            foreach ($comparisonIds as $id) {
+                if (isset($pokemonsMap[$id])) {
+                    $pokemons[] = $pokemonsMap[$id];
+                }
+            }
         }
 
         return $this->render('comparison/index.html.twig', [
@@ -54,29 +76,25 @@ class ComparisonController extends AbstractController
             $this->addFlash('info', 'Ce Pokémon est déjà dans le comparateur');
         }
 
-        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('app_all_pokemon'));
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('app_pokemons'));
     }
 
-    #[Route('/comparison/remove/{id}', name: 'app_comparison_remove')]
+    #[Route('/comparison/remove/{id}', name: 'app_comparison_remove', methods: ['POST'])]
     public function remove(int $id, RequestStack $requestStack): Response
     {
         $session = $requestStack->getSession();
         $comparison = $session->get('comparison', []);
 
-        // Assurer que les IDs sont des entiers
-        $comparison = array_map('intval', $comparison);
+        // Filtrer pour retirer l'ID
+        $newComparison = array_filter($comparison, fn ($val) => (int) $val !== $id);
 
-        // On retire l'ID du tableau
-        if (($key = array_search($id, $comparison, true)) !== false) {
-            unset($comparison[$key]);
+        // Réindexer le tableau
+        $newComparison = array_values($newComparison);
 
-            // On réindexe le tableau pour éviter les trous
-            $newComparison = array_values($comparison);
-            $session->set('comparison', $newComparison);
-            $session->save();
+        $session->set('comparison', $newComparison);
+        $session->save();
 
-            $this->addFlash('success', 'Le Pokémon a été retiré du comparateur.');
-        }
+        $this->addFlash('success', 'Le Pokémon a été retiré du comparateur');
 
         return $this->redirectToRoute('app_comparison');
     }

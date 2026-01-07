@@ -57,7 +57,7 @@ class PokeRequest
     /**
      * Récupère les données depuis l'API.
      *
-    * @return array<int, mixed>
+     * @return array<int, mixed>
      */
     private function fetchPokemonData(): array
     {
@@ -75,8 +75,9 @@ class PokeRequest
     /**
      * Indexe le contenu de l'API par pokedex_id pour un accès rapide.
      *
-    * @param array<int, mixed> $content
-    * @return array<int, mixed>
+     * @param array<int, mixed> $content
+     *
+     * @return array<int, mixed>
      */
     private function indexContentByPokedexId(array $content): array
     {
@@ -114,7 +115,8 @@ class PokeRequest
     /**
      * Traite les données Pokémon et retourne les entités.
      *
-    * @param array<int, mixed> $content
+     * @param array<int, mixed> $content
+     *
      * @return Pokemon[]
      */
     private function processPokemonData(array $content): array
@@ -214,7 +216,7 @@ class PokeRequest
     /**
      * Attache les talents au Pokémon (crée si nécessaire).
      *
-    * @param array<int, mixed> $talentsData
+     * @param array<int, mixed> $talentsData
      */
     private function attachTalents(Pokemon $pokemon, array $talentsData): void
     {
@@ -239,7 +241,7 @@ class PokeRequest
     /**
      * Attache les types au Pokémon (crée si nécessaire).
      *
-    * @param array<int, mixed> $typesData
+     * @param array<int, mixed> $typesData
      */
     private function attachTypes(Pokemon $pokemon, array $typesData): void
     {
@@ -265,8 +267,8 @@ class PokeRequest
     /**
      * Traite les évolutions pour tous les Pokémon.
      *
-    * @param Pokemon[] $pokemonEntities
-    * @param array<int, mixed> $contentByPokedexId
+     * @param Pokemon[]         $pokemonEntities
+     * @param array<int, mixed> $contentByPokedexId
      */
     private function processEvolutions(array $pokemonEntities, array $contentByPokedexId): void
     {
@@ -304,7 +306,7 @@ class PokeRequest
     /**
      * Crée une entité Pokevolution à partir des données.
      *
-    * @param array<string, mixed> $evolutionData
+     * @param array<string, mixed> $evolutionData
      */
     private function createEvolution(Pokemon $pokemon, array $evolutionData): Pokevolution
     {
@@ -342,7 +344,7 @@ class PokeRequest
     /**
      * Configure les relations d'évolution (pré ou next).
      *
-    * @param array<int, mixed> $relations
+     * @param array<int, mixed> $relations
      */
     private function setEvolutionRelations(
         Pokevolution $evolution,

@@ -39,6 +39,28 @@ class PokemonRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param int[] $ids
+     *
+     * @return Pokemon[]
+     */
+    public function findByIdsWithRelations(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.types', 't')
+            ->addSelect('t')
+            ->leftJoin('p.pokevolutions', 'pe')
+            ->addSelect('pe')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
     private function createSearchQueryBuilder(?string $search = null, ?string $type = null, ?int $generation = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('p')
