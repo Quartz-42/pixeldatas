@@ -76,6 +76,12 @@ class Pokemon
     private Collection $types;
 
     /**
+     * @var Collection<int, PokemonResistance>
+     */
+    #[ORM\OneToMany(mappedBy: 'pokemon', targetEntity: PokemonResistance::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $resistances;
+
+    /**
      * @var Collection<int, Pokevolution>
      */
     #[ORM\OneToMany(targetEntity: Pokevolution::class, mappedBy: 'pokemon')]
@@ -109,6 +115,7 @@ class Pokemon
     {
         $this->talent = new ArrayCollection();
         $this->types = new ArrayCollection();
+        $this->resistances = new ArrayCollection();
         $this->pokevolutions = new ArrayCollection();
         $this->preEvolution1 = new ArrayCollection();
         $this->preEvolution2 = new ArrayCollection();
@@ -511,6 +518,36 @@ class Pokemon
             // set the owning side to null (unless already changed)
             if ($nextEvolution2->getNextEvolution2() === $this) {
                 $nextEvolution2->setNextEvolution2(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PokemonResistance>
+     */
+    public function getResistances(): Collection
+    {
+        return $this->resistances;
+    }
+
+    public function addResistance(PokemonResistance $resistance): static
+    {
+        if (!$this->resistances->contains($resistance)) {
+            $this->resistances->add($resistance);
+            $resistance->setPokemon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResistance(PokemonResistance $resistance): static
+    {
+        if ($this->resistances->removeElement($resistance)) {
+            // set the owning side to null (unless already changed)
+            if ($resistance->getPokemon() === $this) {
+                $resistance->setPokemon(null);
             }
         }
 
