@@ -160,6 +160,44 @@
 						{{ render_chart(chart) }}
 					</div>
 
+					{% if pokemon.resistances is defined and pokemon.resistances|length > 0 %}
+						<div class="mt-4 px-4">
+							<div class="mb-3 flex items-center gap-2">
+								<span class="font-bold text-red-600 w-24">Faiblesses</span>
+								<div class="flex flex-wrap gap-1">
+									{% for resistance in pokemon.resistances %}
+										{% if resistance.multiplier > 1 %}
+											<div class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
+												{% if resistance.type.image %}
+													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-full h-full object-contain">
+												{% else %}
+													<span class="text-xs font-bold">{{ resistance.type.name|slice(0, 1) }}</span>
+												{% endif %}
+											</div>
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+
+							<div class="flex items-center gap-2">
+								<span class="font-bold text-green-600 w-24">Résistances</span>
+								<div class="flex flex-wrap gap-1">
+									{% for resistance in pokemon.resistances %}
+										{% if resistance.multiplier < 1 %}
+											<div class="w-8 h-8 {% if resistance.multiplier == 0 %}opacity-50{% endif %}" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
+												{% if resistance.type.image %}
+													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-full h-full object-contain">
+												{% else %}
+													<span class="text-xs font-bold">{{ resistance.type.name|slice(0, 1) }}</span>
+												{% endif %}
+											</div>
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					{% endif %}
+
 				</div>
 			</div>
 

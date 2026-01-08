@@ -36,7 +36,7 @@
 										</button>
 									</form>
 									<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
-										<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-32 h-32 mx-auto object-contain hover:scale-110 transition">
+										<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-40 h-40 mx-auto object-contain hover:scale-110 transition">
 										<div class="mt-2 text-lg font-bold text-gray-800">{{ pokemon.name }}</div>
 									</a>
 								</th>
@@ -74,7 +74,55 @@
 								<td class="p-4 text-center">
 									<div class="flex justify-center gap-2">
 										{% for type in pokemon.types %}
-											<img src="{{ type.image }}" alt="{{ type.name }}" class="w-10 h-10" title="{{ type.name }}">
+											<img src="{{ type.image }}" alt="{{ type.name }}" class="w-8 h-8" title="{{ type.name }}">
+										{% endfor %}
+									</div>
+								</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+
+						<tr class="hover:bg-gray-50">
+							<td class="p-4 font-semibold text-gray-700 text-lg">Faiblesses</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4">
+									<div class="flex flex-wrap items-center justify-center gap-1">
+										{% for resistance in pokemon.resistances %}
+											{% if resistance.multiplier > 1 %}
+												{% if resistance.type.image %}
+													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
+												{% else %}
+													<span class="text-sm font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">{{ resistance.type.name|slice(0,1) }}</span>
+												{% endif %}
+											{% endif %}
+										{% endfor %}
+									</div>
+								</td>
+							{% endfor %}
+							{% if pokemons|length < 4 %}
+								{% for i in (pokemons|length + 1)..4 %}
+									<td class="bg-gray-50"></td>
+								{% endfor %}
+							{% endif %}
+						</tr>
+
+						<tr class="hover:bg-gray-50">
+							<td class="p-4 font-semibold text-gray-700 text-lg">Résistances</td>
+							{% for pokemon in pokemons %}
+								<td class="p-4">
+									<div class="flex flex-wrap items-center justify-center gap-1">
+										{% for resistance in pokemon.resistances %}
+											{% if resistance.multiplier < 1 %}
+												{% if resistance.type.image %}
+													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8 {% if resistance.multiplier == 0 %}opacity-50 grayscale{% endif %}" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
+												{% else %}
+													<span class="text-sm font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">{{ resistance.type.name|slice(0,1) }}</span>
+												{% endif %}
+											{% endif %}
 										{% endfor %}
 									</div>
 								</td>
@@ -214,15 +262,42 @@
 
 						<div class="flex flex-col items-center bg-blue-50 p-4 border-b border-blue-100">
 							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}" class="flex flex-col items-center">
-								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-32 h-32 object-contain hover:scale-110 transition">
+								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-48 h-48 object-contain hover:scale-110 transition">
 								<h2 class="text-xl font-bold text-gray-800 mt-2">{{ pokemon.name }}</h2>
 							</a>
 							<div class="text-sm text-gray-500 mt-1">Génération
 								{{ pokemon.generation }}</div>
 							<div class="flex gap-2 mt-2">
 								{% for type in pokemon.types %}
-									<img src="{{ type.image }}" alt="{{ type.name }}" class="w-6 h-6" title="{{ type.name }}">
+									<img src="{{ type.image }}" alt="{{ type.name }}" class="w-8 h-8" title="{{ type.name }}">
 								{% endfor %}
+							</div>
+
+							<div class="flex flex-col w-full mt-3 gap-2 px-2 items-center">
+								<div class="flex flex-wrap items-center justify-center gap-1">
+									<span class="text-sm font-bold text-red-600">Faiblesses :</span>
+									{% for resistance in pokemon.resistances %}
+										{% if resistance.multiplier > 1 %}
+											{% if resistance.type.image %}
+												<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">
+											{% else %}
+												<span class="text-xs font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">{{ resistance.type.name|slice(0,1) }}</span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</div>
+								<div class="flex flex-wrap items-center justify-center gap-1">
+									<span class="text-sm font-bold text-green-600">Résistances :</span>
+									{% for resistance in pokemon.resistances %}
+										{% if resistance.multiplier < 1 %}
+											{% if resistance.type.image %}
+												<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">
+											{% else %}
+												<span class="text-xs font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">{{ resistance.type.name|slice(0,1) }}</span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</div>
 							</div>
 						</div>
 

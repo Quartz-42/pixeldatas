@@ -3,6 +3,7 @@
 namespace App\API;
 
 use App\Entity\Pokemon;
+use App\Entity\PokemonResistance;
 use App\Entity\Pokevolution;
 use App\Entity\Talent;
 use App\Entity\Type;
@@ -187,6 +188,7 @@ class PokeRequest
         // Relations
         $this->attachTalents($pokemon, $data['talents'] ?? []);
         $this->attachTypes($pokemon, $data['types'] ?? []);
+        $this->attachResistances($pokemon, $data['resistances'] ?? []);
 
         return $pokemon;
     }
@@ -258,9 +260,50 @@ class PokeRequest
                 $type->setImage($typeData['image'] ?? null);
                 $this->em->persist($type);
                 $this->typeCache[$name] = $type;
+            } else {
+                // Mettre à jour l'image si elle est manquante (cas où le type a été créé via résistances)
+                $type = $this->typeCache[$name];
+                if (empty($type->getImage()) && !empty($typeData['image'])) {
+                    $type->setImage($typeData['image']);
+                }
             }
 
             $pokemon->addType($this->typeCache[$name]);
+        }
+    }
+
+    /**
+     * Attache les résistances au Pokémon.
+     *
+     * @param array<int, mixed> $resistancesData
+     */
+    private function attachResistances(Pokemon $pokemon, array $resistancesData): void
+    {
+        foreach ($resistancesData as $resData) {
+            if (!is_array($resData) || empty($resData['name'])) {
+                continue;
+            }
+
+            $typeName = $resData['name'];
+
+            // Récupérer ou créer le Type
+            if (!isset($this->typeCache[$typeName])) {
+                $type = new Type();
+                $type->setName($typeName);
+                // On ne connait pas l'image ici, elle sera mise à jour via attachTypes si on rencontre le type plus tard
+                $this->em->persist($type);
+                $this->typeCache[$typeName] = $type;
+            }
+
+            $resistance = new PokemonResistance();
+            $resistance->setPokemon($pokemon);
+            $resistance->setType($this->typeCache[$typeName]);
+            $resistance->setMultiplier((float) ($resData['multiplier'] ?? 1.0));
+            
+            $this->em->persist($resistance);
+            // Pas besoin d'ajouter à une collection inverse sur le Pokemon car on fait un persist explicite
+            // et la relation est OneToMany mappedBy
+            $pokemon->addResistance($resistance);
         }
     }
 

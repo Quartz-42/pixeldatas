@@ -46,7 +46,7 @@
 - Graphique des statistiques
 - Informations sur les évolutions
 - Sprites (normal, shiny, Gmax)
-- Types et talents
+- Types, talents, résistances et faiblesses
 
 ### Navigation par filtres
 
