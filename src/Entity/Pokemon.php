@@ -15,6 +15,7 @@ class Pokemon
     #[ORM\Column]
     /** @phpstan-ignore-next-line */
     private ?int $id = null;
+    
     #[ORM\Column]
     private ?int $pokedexId = null;
 

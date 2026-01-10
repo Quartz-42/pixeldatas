@@ -299,7 +299,7 @@ class PokeRequest
             $resistance->setPokemon($pokemon);
             $resistance->setType($this->typeCache[$typeName]);
             $resistance->setMultiplier((float) ($resData['multiplier'] ?? 1.0));
-            
+
             $this->em->persist($resistance);
             // Pas besoin d'ajouter à une collection inverse sur le Pokemon car on fait un persist explicite
             // et la relation est OneToMany mappedBy
