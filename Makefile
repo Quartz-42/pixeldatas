@@ -20,7 +20,7 @@ tailwind-build:
 
 .PHONY : import-pokemons
 import-pokemons:
-	symfony console app:import-pokemons
+	php -d memory_limit=512M bin/console app:import-pokemons
 
 .PHONY : test
 test:
