@@ -5,14 +5,13 @@ namespace App\Controller;
 use App\Repository\PokemonRepository;
 use App\Repository\PokevolutionRepository;
 use App\Repository\TypeRepository;
+use App\Service\ChartBuilder;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
 
 #[Route('/pokemons')]
 class PokemonController extends AbstractController
@@ -56,20 +55,21 @@ class PokemonController extends AbstractController
         $visiblePages = $this->getVisiblePages($pager);
 
         // Données pour l'accordéon (uniquement sur la page principale)
-        $pokemonTypes = null;
-        $generations = null;
-        if (!$type && !$generation) {
-            $pokemonTypes = $pokemonRepository->findPokemonTypes();
-            $generations = $pokemonRepository->findPokemonGenerations();
-        }
+        $filters = [
+            'active' => [
+                'type' => $type,
+                'generation' => $generation,
+            ],
+            'available' => [
+                'types' => (!$type && !$generation) ? $pokemonRepository->findPokemonTypes() : null,
+                'generations' => (!$type && !$generation) ? $pokemonRepository->findPokemonGenerations() : null,
+            ],
+        ];
 
         return $this->render('pokemon/list.html.twig', [
             'pokemons' => $pager,
             'visiblePages' => $visiblePages,
-            'pokemonTypes' => $pokemonTypes,
-            'generations' => $generations,
-            'type' => $type,
-            'generation' => $generation,
+            'filters' => $filters,
         ]);
     }
 
@@ -77,8 +77,8 @@ class PokemonController extends AbstractController
     public function showPokemonDetails(
         PokemonRepository $pokemonRepository,
         PokevolutionRepository $pokevolutionRepository,
+        ChartBuilder $chartBuilder,
         string $name,
-        ChartBuilderInterface $chartBuilder,
     ): Response {
         $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
 
@@ -86,91 +86,8 @@ class PokemonController extends AbstractController
             throw $this->createNotFoundException('Erreur');
         }
 
-        $chart = $chartBuilder
-         ->createChart(Chart::TYPE_BAR)
-         ->setData([
-             'labels' => ['PV', 'Attaque', 'Défense', 'Atq. Spé.', 'Déf. Spé.', 'Vitesse'],
-             'datasets' => [
-                 [
-                     'data' => [
-                         $pokemon->getHp(),
-                         $pokemon->getAtk(),
-                         $pokemon->getDef(),
-                         $pokemon->getSpeAtk(),
-                         $pokemon->getSpeDef(),
-                         $pokemon->getVit(),
-                     ],
-                     'backgroundColor' => [
-                         'rgba(239, 68, 68, 0.8)',  // Rouge (PV)
-                         'rgba(249, 115, 22, 0.8)', // Orange (ATK)
-                         'rgba(234, 179, 8, 0.8)',  // Jaune (DEF)
-                         'rgba(59, 130, 246, 0.8)', // Bleu (SPE ATK)
-                         'rgba(34, 197, 94, 0.8)',  // Vert (SPE DEF)
-                         'rgba(168, 85, 247, 0.8)', // Mauve (VIT)
-                     ],
-                     'borderColor' => [
-                         'rgba(220, 38, 38, 1)',
-                         'rgba(234, 88, 12, 1)',
-                         'rgba(202, 138, 4, 1)',
-                         'rgba(37, 99, 235, 1)',
-                         'rgba(22, 163, 74, 1)',
-                         'rgba(147, 51, 234, 1)',
-                     ],
-                     'borderWidth' => 2,
-                     'borderRadius' => 6,
-                     'barPercentage' => 0.5,
-                 ],
-             ],
-         ])
-         ->setOptions([
-             'indexAxis' => 'y',
-             'responsive' => true,
-             'maintainAspectRatio' => false,
-             'animation' => false,
-             'plugins' => [
-                 'legend' => [
-                     'display' => false,
-                 ],
-                 'datalabels' => [
-                     'display' => true,
-                     'color' => 'black',
-                     'anchor' => 'end',
-                     'align' => 'end',
-                     'font' => [
-                         'size' => 14,
-                         'weight' => 'bold',
-                     ],
-                     'formatter' => function ($value) {
-                         return $value;
-                     },
-                 ],
-                 'tooltip' => [
-                     'enabled' => true,
-                     'callbacks' => [
-                         'title' => function () { return ''; },
-                     ],
-                 ],
-             ],
-             'scales' => [
-                 'x' => [
-                     'display' => false,
-                     'max' => 260,
-                     'beginAtZero' => true,
-                 ],
-                 'y' => [
-                     'grid' => [
-                         'display' => false,
-                     ],
-                     'ticks' => [
-                         'font' => [
-                             'size' => 14,
-                             'weight' => 'bold',
-                         ],
-                         'color' => '#374151',
-                     ],
-                 ],
-             ],
-         ]);
+        //recuperation du datas chart
+        $chart = $chartBuilder->createChart($pokemon);
 
         // Récupérer les évolutions du Pokémon
         $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
@@ -188,10 +105,11 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    #[Route('/{type}/card', name: 'app_type_show_card', methods: ['GET'])]
+    //retourne le template de la card type pour le popover
+    #[Route('/{type}/popover', name: 'app_type_show_card', methods: ['GET'])]
     public function showCard(string $type): Response
     {
-        return $this->render('pokemon/_card.html.twig', [
+        return $this->render('pokemon/_popover.html.twig', [
             'type' => $type,
         ]);
     }

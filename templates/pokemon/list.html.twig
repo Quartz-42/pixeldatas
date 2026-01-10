@@ -5,15 +5,15 @@
 
 		{% include 'shared/_poke_number_html.twig' with { 
 			'numberOfPokemons': pokemons.nbResults,
-			'type': type,
-			'generation': generation
+			'type': filters.active.type,
+			'generation': filters.active.generation
 		} %}
 
 		{# RECHERCHE PAR NOM #}
-		{% if type %}
-			{% set formAction = path('app_pokemon_type', {'type': type}) %}
-		{% elseif generation %}
-			{% set formAction = path('app_pokemon_gen', {'generation': generation}) %}
+		{% if filters.active.type %}
+			{% set formAction = path('app_pokemon_type', {'type': filters.active.type}) %}
+		{% elseif filters.active.generation %}
+			{% set formAction = path('app_pokemon_gen', {'generation': filters.active.generation}) %}
 		{% else %}
 			{% set formAction = path('app_pokemons') %}
 		{% endif %}
@@ -23,7 +23,7 @@
 		</form>
 
 		{# RECHERCHE AVANCEE - uniquement sur la page principale #}
-		{% if not type and not generation %}
+		{% if not filters.active.type and not filters.active.generation %}
 			{% include ('shared/_accordion.html.twig') %}
 		{% endif %}
 
