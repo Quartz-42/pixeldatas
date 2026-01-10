@@ -41,7 +41,7 @@ class SitemapController extends AbstractController
         foreach ($types as $typeData) {
             if ($typeData['name']) {
                 $urls[] = [
-                    'loc' => $hostname.$this->urlGenerator->generate('app_pokemons_by_type', ['type' => $typeData['name']]),
+                    'loc' => $hostname.$this->urlGenerator->generate('app_pokemon_type', ['type' => $typeData['name']]),
                     'changefreq' => 'weekly',
                     'priority' => '0.8',
                 ];
@@ -53,7 +53,7 @@ class SitemapController extends AbstractController
         foreach ($generations as $generation) {
             if ($generation) {
                 $urls[] = [
-                    'loc' => $hostname.$this->urlGenerator->generate('app_pokemons_by_generation', ['generation' => $generation]),
+                    'loc' => $hostname.$this->urlGenerator->generate('app_pokemon_gen', ['gen' => $generation]),
                     'changefreq' => 'weekly',
                     'priority' => '0.8',
                 ];
