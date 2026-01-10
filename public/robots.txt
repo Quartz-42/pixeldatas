@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://XXXXXXXXXXXXX/sitemap.xml
+
+Disallow: /bundles/
+Disallow: /_profiler/
+Disallow: /_wdt/
+
+Crawl-delay: 1
