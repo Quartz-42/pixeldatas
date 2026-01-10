@@ -1,5 +1,12 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}PixelDatas - Pokédex complet avec statistiques et évolutions
+{% endblock %}
+{% block meta_description %}Explorez le Pokédex complet sur PixelDatas : statistiques détaillées, évolutions, types, talents et résistances de tous les Pokémons.
+{% endblock %}
+{% block meta_keywords %}Pokémon, Pokédex, statistiques Pokémon, évolutions Pokémon, types Pokémon, Nintendo, Game Freak
+{% endblock %}
+
 {% block content %}
 	<div class="p-4">
 		<div class="container mx-auto">
@@ -61,4 +68,25 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="application/ld+json">
+		{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "PixelDatas",
+				"description": "Pokédex complet avec statistiques et évolutions de tous les Pokémons",
+				"url": "{{ absolute_url(path('app_home')) }}",
+				"potentialAction": {
+					"@type": "SearchAction",
+					"target": {
+						"@type": "EntryPoint",
+						"urlTemplate": "{{ absolute_url(path('app_pokemons')) }}?search={search_term_string}"
+					},
+					"query-input": "required name=search_term_string"
+				}
+			}
+	</script>
 {% endblock %}

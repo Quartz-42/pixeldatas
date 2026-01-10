@@ -1,5 +1,29 @@
 {% extends 'base.html.twig' %}
 
+{% if filters.active.type %}
+	{% set page_title = 'Pokémons de type ' ~ filters.active.type ~ ' | PixelDatas' %}
+	{% set page_description = 'Découvrez tous les Pokémons de type ' ~ filters.active.type ~ ' avec leurs statistiques, évolutions et capacités.' %}
+	{% set page_keywords = 'Pokémon, ' ~ filters.active.type ~ ', type ' ~ filters.active.type ~ ', statistiques, évolutions' %}
+{% elseif filters.active.generation %}
+	{% set page_title = 'Pokémons de génération ' ~ filters.active.generation ~ ' | PixelDatas' %}
+	{% set page_description = 'Retrouvez tous les Pokémons de la génération ' ~ filters.active.generation ~ ' avec leurs détails complets.' %}
+	{% set page_keywords = 'Pokémon, génération ' ~ filters.active.generation ~ ', gen ' ~ filters.active.generation %}
+{% else %}
+	{% set page_title = 'Tous les Pokémons | PixelDatas' %}
+	{% set page_description = 'Explorez la liste complète de tous les Pokémons avec leurs types, statistiques et évolutions.' %}
+	{% set page_keywords = 'Pokémon, liste Pokémon, tous les Pokémons, Pokédex' %}
+{% endif %}
+
+{% block title %}
+	{{ page_title }}
+{% endblock %}
+{% block meta_description %}
+	{{ page_description }}
+{% endblock %}
+{% block meta_keywords %}
+	{{ page_keywords }}
+{% endblock %}
+
 {% block content %}
 	<div class="bg-red-600 p-6 min-h-screen mx-auto">
 

@@ -10,8 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PokemonRepositoryTest extends KernelTestCase
 {
-    private ?EntityManagerInterface $entityManager;
-    private ?PokemonRepository $pokemonRepository;
+    private EntityManagerInterface $entityManager;
+    private PokemonRepository $pokemonRepository;
 
     protected function setUp(): void
     {
@@ -21,7 +21,9 @@ class PokemonRepositoryTest extends KernelTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->pokemonRepository = $this->entityManager->getRepository(Pokemon::class);
+        /** @var PokemonRepository $repository */
+        $repository = $this->entityManager->getRepository(Pokemon::class);
+        $this->pokemonRepository = $repository;
     }
 
     protected function tearDown(): void
@@ -29,7 +31,6 @@ class PokemonRepositoryTest extends KernelTestCase
         parent::tearDown();
 
         $this->entityManager->close();
-        $this->entityManager = null;
     }
 
     public function testFindBySearchQueryBuilderWithQuery(): void
@@ -130,7 +131,6 @@ class PokemonRepositoryTest extends KernelTestCase
         $count = 5;
         $pokemons = $this->pokemonRepository->getRandomPokemons($count);
 
-        $this->assertIsArray($pokemons);
         $this->assertLessThanOrEqual($count, count($pokemons));
         
         foreach ($pokemons as $pokemon) {
@@ -149,7 +149,6 @@ class PokemonRepositoryTest extends KernelTestCase
 
     public function testRepositoryExists(): void
     {
-        $this->assertNotNull($this->pokemonRepository);
         $this->assertInstanceOf(PokemonRepository::class, $this->pokemonRepository);
     }
 }

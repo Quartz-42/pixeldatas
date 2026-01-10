@@ -9,8 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class TypeRepositoryTest extends KernelTestCase
 {
-    private ?EntityManagerInterface $entityManager;
-    private ?TypeRepository $typeRepository;
+    private EntityManagerInterface $entityManager;
+    private TypeRepository $typeRepository;
 
     protected function setUp(): void
     {
@@ -20,7 +20,9 @@ class TypeRepositoryTest extends KernelTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->typeRepository = $this->entityManager->getRepository(Type::class);
+        /** @var TypeRepository $repository */
+        $repository = $this->entityManager->getRepository(Type::class);
+        $this->typeRepository = $repository;
     }
 
     protected function tearDown(): void
@@ -28,14 +30,11 @@ class TypeRepositoryTest extends KernelTestCase
         parent::tearDown();
 
         $this->entityManager->close();
-        $this->entityManager = null;
     }
 
     public function testCanFindAllTypes(): void
     {
         $types = $this->typeRepository->findAll();
-
-        $this->assertIsArray($types);
         
         foreach ($types as $type) {
             $this->assertInstanceOf(Type::class, $type);
@@ -61,7 +60,6 @@ class TypeRepositoryTest extends KernelTestCase
 
     public function testRepositoryExists(): void
     {
-        $this->assertNotNull($this->typeRepository);
         $this->assertInstanceOf(TypeRepository::class, $this->typeRepository);
     }
 }
