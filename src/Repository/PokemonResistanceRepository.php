@@ -8,7 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<PokemonResistance>
- *
  */
 class PokemonResistanceRepository extends ServiceEntityRepository
 {

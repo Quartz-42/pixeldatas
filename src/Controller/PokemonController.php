@@ -86,7 +86,7 @@ class PokemonController extends AbstractController
             throw $this->createNotFoundException('Erreur');
         }
 
-        //recuperation du datas chart
+        // recuperation du datas chart
         $chart = $chartBuilder->createChart($pokemon);
 
         // Récupérer les évolutions du Pokémon
@@ -105,7 +105,7 @@ class PokemonController extends AbstractController
         ]);
     }
 
-    //retourne le template de la card type pour le popover
+    // retourne le template de la card type pour le popover
     #[Route('/{type}/popover', name: 'app_type_show_card', methods: ['GET'])]
     public function showCard(string $type): Response
     {
