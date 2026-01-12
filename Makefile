@@ -14,14 +14,18 @@ php-stan:
 php-cs:
 	 set "PHP_CS_FIXER_IGNORE_ENV=1" && .\vendor\bin\php-cs-fixer fix src
  
-.PHONY : tailwind-build
+.PHONY: tailwind-build
 tailwind-build:
 	symfony console tailwind:build --watch
 
-.PHONY : import-pokemons
+.PHONY: import-pokemons
 import-pokemons:
 	php -d memory_limit=512M bin/console app:import-pokemons
 
-.PHONY : test
+.PHONY: test
 test:
 	php bin/phpunit
+
+.PHONY: cc
+cc:
+	php bin/console cache:clear
