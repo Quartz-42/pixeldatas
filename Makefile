@@ -30,13 +30,10 @@ test:
 cc:
 	php bin/console cache:clear
 
-server := $(SSH_USER)@$(SSH_HOST)
-domain := $(SSH_PATH)
-
 .PHONY: install deploy
 
 deploy:
-	ssh -A $(server) 'cd $(domain) && git pull origin master && make install'
+	ssh -A kina8534@trefle.o2switch.net "cd /home/kina8534/pixeldatas && git pull origin master && make install"
 
 install: vendor/autoload.php
 	php bin/console doctrine:migrations:migrate -n
@@ -47,5 +44,5 @@ install: vendor/autoload.php
 	php bin/console cache:clear
 
 vendor/autoload.php: composer.lock composer.json
-    composer install --no-dev --optimize-autoloader
-    touch vendor/autoload.php
+	composer install --no-dev --optimize-autoloader
+	touch vendor/autoload.php
