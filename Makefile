@@ -33,6 +33,7 @@ cc:
 .PHONY: install
 install: vendor/autoload.php
 	php bin/console doctrine:migrations:migrate -n
+	make import-pokemons
 	php bin/console importmap:install
 	php bin/console asset-map:compile
 	php bin/console tailwind:build --minify
