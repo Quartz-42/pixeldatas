@@ -33,9 +33,7 @@
 			<div class="bg-white p-4 mt-4 mb-8 rounded-md relative">
 				<h1 class="uppercase font-bold text-4xl mt-8">{{ pokemon.name }}</h1>
 				<a href="{{ path('app_comparison_add', {'id': pokemon.id}) }}" class="absolute top-4 right-4 inline-flex items-center gap-1.5 md:gap-2 font-bold bg-black border border-black rounded text-amber-400 hover:text-amber-200 transition shadow text-xs px-3 py-1.5 md:text-sm md:px-5 md:py-2.5">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-					</svg>
+					<twig:ux:icon name="icon-park-outline:ranking" class="size-[1.25rem]"/>
 					Comparer
 				</a>
 				{#CV POKEMON #}
@@ -250,28 +248,28 @@
 	{{ parent() }}
 	<script type="application/ld+json">
 		{
-				"@context": "https://schema.org",
-				"@type": "VideoGameCharacter",
-				"name": "{{ pokemon.name }}",
-				"identifier": "#{{ pokemon.pokedexId }}",
-				"image": "{{ absolute_url(pokemon.spriteRegular) }}",
-				"description": "{{ page_description }}",
-				"inVideoGame": {
-					"@type": "VideoGameSeries",
-					"name": "Pokémon",
-					"publisher": {
-						"@type": "Organization",
-						"name": "Nintendo"
-					}
-				}
+														"@context": "https://schema.org",
+														"@type": "VideoGameCharacter",
+														"name": "{{ pokemon.name }}",
+														"identifier": "#{{ pokemon.pokedexId }}",
+														"image": "{{ absolute_url(pokemon.spriteRegular) }}",
+														"description": "{{ page_description }}",
+														"inVideoGame": {
+															"@type": "VideoGameSeries",
+															"name": "Pokémon",
+															"publisher": {
+																"@type": "Organization",
+																"name": "Nintendo"
+															}
+														}
 		{% if pokemon.types|length > 0 %},
-					"additionalProperty": [
+																				"additionalProperty": [
 			{% for type in pokemon.types %}
 				{
-										"@type": "PropertyValue",
-										"name": "Type",
-										"value": "{{ type.name }}"
-								}
+																														"@type": "PropertyValue",
+																														"name": "Type",
+																														"value": "{{ type.name }}"
+																												}
 				{% if not loop.last %},
 				{% endif %}
 			{% endfor %}

@@ -17,7 +17,7 @@
 		<meta property="og:title" content="{% block og_title %}{% block title %}PixelDatas{% endblock %}{% endblock %}">
 		<meta property="og:description" content="{% block og_description %}{{ block('meta_description') }}{% endblock %}">
 		<meta
-		property="og:image" content="{% block og_image %}{{ absolute_url(asset('img/favicon.png')) }}{% endblock %}">
+		property="og:image" content="{% block og_image %}{{ absolute_url(asset('icons/emojione-v1/lightning-mood.svg')) }}{% endblock %}">
 
 		{# Twitter #}
 		<meta property="twitter:card" content="summary_large_image">
@@ -31,7 +31,7 @@
 		<link rel="canonical" href="{% block canonical_url %}{{ app.request.uri }}{% endblock %}">
 
 		<title>{{ block('title') }}</title>
-		<link rel="icon" href="{{ asset('img/favicon.png') }}">
+		<link rel="icon" href="{{ asset('icons/emojione-v1/lightning-mood.svg') }}" type="image/svg+xml">
 		{% block stylesheets %}
 			<link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 		{% endblock %}
