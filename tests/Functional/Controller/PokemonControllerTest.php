@@ -114,11 +114,9 @@ class PokemonControllerTest extends WebTestCase
     {
         $client = static::createClient();
         
-        // Test page 1
         $client->request('GET', '/pokemons?page=1');
         $this->assertResponseIsSuccessful();
         
-        // Test page 2
         $client->request('GET', '/pokemons?page=2');
         $this->assertResponseIsSuccessful();
     }
@@ -128,8 +126,6 @@ class PokemonControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/pokemons/generation/999');
 
-        // Devrait retourner une page vide ou une erreur
-        // Selon l'implémentation actuelle
         $this->assertTrue(
             $client->getResponse()->isSuccessful() || 
             $client->getResponse()->isClientError()

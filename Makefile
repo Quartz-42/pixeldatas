@@ -8,7 +8,7 @@ stop:
 
 .PHONY: php-stan
 php-stan: 
-	vendor\bin\phpstan analyse src templates --memory-limit=512M
+	php -d memory_limit=512M vendor\bin\phpstan analyse src templates
 
 .PHONY: php-cs
 php-cs:

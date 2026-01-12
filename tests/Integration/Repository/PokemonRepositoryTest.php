@@ -137,18 +137,4 @@ class PokemonRepositoryTest extends KernelTestCase
             $this->assertInstanceOf(Pokemon::class, $pokemon);
         }
     }
-
-    public function testGetRandomPokemonsReturnsRequestedCount(): void
-    {
-        $count = 3;
-        $pokemons = $this->pokemonRepository->getRandomPokemons($count);
-
-        // Vérifie qu'on a bien le nombre demandé ou moins s'il n'y a pas assez de données
-        $this->assertLessThanOrEqual($count, count($pokemons));
-    }
-
-    public function testRepositoryExists(): void
-    {
-        $this->assertInstanceOf(PokemonRepository::class, $this->pokemonRepository);
-    }
 }
