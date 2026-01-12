@@ -57,3 +57,13 @@ document.addEventListener("turbo:before-frame-render", (event) => {
     });
   }
 });
+
+// TOGGLE MENU MOBILE
+document.addEventListener("click", function (event) {
+  if (event.target.closest("#menu-toggle")) {
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (mobileMenu) {
+      mobileMenu.classList.toggle("hidden");
+    }
+  }
+});
