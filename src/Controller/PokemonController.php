@@ -80,7 +80,7 @@ class PokemonController extends AbstractController
         ChartBuilder $chartBuilder,
         string $name,
     ): Response {
-        $pokemon = $pokemonRepository->findOneBy(['name' => $name]);
+        $pokemon = $pokemonRepository->findOneByNameWithRelations($name);
 
         if (!$pokemon) {
             throw $this->createNotFoundException('Erreur');
@@ -89,8 +89,8 @@ class PokemonController extends AbstractController
         // recuperation du datas chart
         $chart = $chartBuilder->createChart($pokemon);
 
-        // Récupérer les évolutions du Pokémon
-        $evolutions = $pokevolutionRepository->findOneBy(['pokemon' => $pokemon->getId()]);
+        // Récupérer les évolutions
+        $evolutions = $pokemon->getPokevolutions()->first() ?: null;
 
         $evoliNames = [];
         if (133 === $pokemon->getPokedexId()) {

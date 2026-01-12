@@ -206,7 +206,7 @@
 								<div class="flex flex-wrap gap-1">
 									{% for resistance in pokemon.resistances %}
 										{% if resistance.multiplier < 1 %}
-											<div class="w-8 h-8 {% if resistance.multiplier == 0 %}opacity-50{% endif %}" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
+											<div class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
 												{% if resistance.type.image %}
 													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-full h-full object-contain">
 												{% else %}
@@ -268,10 +268,10 @@
 					"additionalProperty": [
 			{% for type in pokemon.types %}
 				{
-								"@type": "PropertyValue",
-								"name": "Type",
-								"value": "{{ type.name }}"
-							}
+										"@type": "PropertyValue",
+										"name": "Type",
+										"value": "{{ type.name }}"
+								}
 				{% if not loop.last %},
 				{% endif %}
 			{% endfor %}
