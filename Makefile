@@ -30,11 +30,7 @@ test:
 cc:
 	php bin/console cache:clear
 
-.PHONY: install deploy
-
-deploy:
-	ssh -A kina8534@trefle.o2switch.net "cd /home/kina8534/pixeldatas && git pull origin master && make install"
-
+.PHONY: install
 install: vendor/autoload.php
 	php bin/console doctrine:migrations:migrate -n
 	php bin/console importmap:install
