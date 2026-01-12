@@ -22,17 +22,17 @@ class PokemonRepository extends ServiceEntityRepository
      */
     public function getRandomPokemons(int $count): array
     {
-        // 1. Récupérer tous les IDs
         $ids = $this->createQueryBuilder('p')
             ->select('p.id')
             ->getQuery()
             ->getSingleColumnResult();
 
-        // 2. Mélanger et prendre X IDs au hasard
         shuffle($ids);
         $randomIds = array_slice($ids, 0, $count);
 
         return $this->createQueryBuilder('p')
+            ->leftJoin('p.types', 't')
+            ->addSelect('t')
             ->where('p.id IN (:ids)')
             ->setParameter('ids', $randomIds)
             ->getQuery()
@@ -131,5 +131,35 @@ class PokemonRepository extends ServiceEntityRepository
             ->getResult();
 
         return array_column($results, 'generation');
+    }
+
+    /**
+     * Trouve un Pokémon par son nom avec toutes ses relations chargées.
+     */
+    public function findOneByNameWithRelations(string $name): ?Pokemon
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.types', 't')
+            ->addSelect('t')
+            ->leftJoin('p.talent', 'talent')
+            ->addSelect('talent')
+            ->leftJoin('p.resistances', 'r')
+            ->addSelect('r')
+            ->leftJoin('r.type', 'rt')
+            ->addSelect('rt')
+            ->leftJoin('p.pokevolutions', 'evo')
+            ->addSelect('evo')
+            ->leftJoin('evo.preEvolution1', 'pre1')
+            ->addSelect('pre1')
+            ->leftJoin('evo.preEvolution2', 'pre2')
+            ->addSelect('pre2')
+            ->leftJoin('evo.nextEvolution1', 'next1')
+            ->addSelect('next1')
+            ->leftJoin('evo.nextEvolution2', 'next2')
+            ->addSelect('next2')
+            ->where('p.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
