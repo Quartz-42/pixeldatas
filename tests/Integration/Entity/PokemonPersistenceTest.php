@@ -59,7 +59,7 @@ class PokemonPersistenceTest extends KernelTestCase
         $this->assertNotNull($foundPokemon);
         $this->assertEquals('TestPokemon' . substr($pokemon->getName(), -13), $foundPokemon->getName());
         
-        // Nettoyer
+        // Suppression du pokemon en base
         $this->entityManager->remove($foundPokemon);
         $this->entityManager->flush();
     }
@@ -94,7 +94,7 @@ class PokemonPersistenceTest extends KernelTestCase
         $this->assertCount(1, $pokemon->getTypes());
         $this->assertTrue($pokemon->getTypes()->contains($type));
 
-        // Nettoyer
+        // Suppression du pokemon en base
         $this->entityManager->remove($pokemon);
         $this->entityManager->remove($type);
         $this->entityManager->flush();
@@ -129,7 +129,7 @@ class PokemonPersistenceTest extends KernelTestCase
         $this->assertCount(1, $pokemon->getTalent());
         $this->assertTrue($pokemon->getTalent()->contains($talent));
 
-        // Nettoyer
+        // Suppression du pokemon en base
         $this->entityManager->remove($pokemon);
         $this->entityManager->remove($talent);
         $this->entityManager->flush();

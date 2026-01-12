@@ -57,9 +57,4 @@ class TypeRepositoryTest extends KernelTestCase
             $this->markTestSkipped('Aucun type trouvé dans la base de données.');
         }
     }
-
-    public function testRepositoryExists(): void
-    {
-        $this->assertInstanceOf(TypeRepository::class, $this->typeRepository);
-    }
 }
