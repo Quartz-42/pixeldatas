@@ -45,7 +45,7 @@ class ComparisonController extends AbstractController
             }
         }
 
-        return $this->render('comparison/index.html.twig', [
+        return $this->render('pokemon/comparison.html.twig', [
             'pokemons' => $pokemons,
         ]);
     }

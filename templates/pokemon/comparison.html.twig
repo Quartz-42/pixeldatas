@@ -30,9 +30,7 @@
 								<th class="p-4 w-1/5 min-w-[200px] text-center relative group">
 									<form action="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" method="post" class="absolute top-2 right-2">
 										<button type="submit" class="bg-red-500 text-white rounded-full p-1 opacity-100 transition shadow hover:bg-red-600 cursor-pointer" title="Retirer">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-											</svg>
+											<twig:ux:icon name="bitcoin-icons:cross-filled"/>
 										</button>
 									</form>
 									<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
@@ -118,7 +116,7 @@
 										{% for resistance in pokemon.resistances %}
 											{% if resistance.multiplier < 1 %}
 												{% if resistance.type.image %}
-													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8 {% if resistance.multiplier == 0 %}opacity-50 grayscale{% endif %}" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
+													<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
 												{% else %}
 													<span class="text-sm font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">{{ resistance.type.name|slice(0,1) }}</span>
 												{% endif %}
@@ -254,9 +252,7 @@
 					<div class="bg-white rounded-lg shadow-lg overflow-hidden relative">
 						<form action="{{ path('app_comparison_remove', {'id': pokemon.id}) }}" method="post" class="absolute top-2 right-2 z-10">
 							<button type="submit" class="bg-red-500 text-white rounded-full p-2 shadow hover:bg-red-600 transition flex items-center justify-center" title="Retirer">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-								</svg>
+								<twig:ux:icon name="bitcoin-icons:cross-filled"/>
 							</button>
 						</form>
 
