@@ -53,7 +53,7 @@
 
 		<turbo-frame id="pokemon-list" target="_top" data-turbo-action="advance" class="aria-busy:opacity-50 aria-busy:blur-sm transition-all">
 
-			<div id="pokemon-list" class="grid gap-3 lg:gap-4 mt-5 grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 min-[2400px]:grid-cols-8">
+			<div id="pokemon-list" class="grid gap-3 lg:gap-4 mt-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 min-[2400px]:grid-cols-8">
 				{% for pokemon in pokemons %}
 					{% include 'shared/_card.html.twig' %}
 				{% endfor %}

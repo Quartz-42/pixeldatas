@@ -1,14 +1,18 @@
 <div class="bg-white shadow-lg my-4 rounded-lg mx-auto flex items-center justify-center p-4 lg:p-6 w-full gap-8">
 	<img class="hidden lg:block w-16 object-contain" src="{{ asset('/img/pokeFact.png') }}" fetchpriority="high" alt="Icône PokéFact">
-	<p class="poke-text font-bold italic text-gray-700 text-center">
+	<p class="text-base md:text-lg lg:text-xl font-bold italic text-gray-700 text-center">
 		{% if generation is defined and generation is not null %}
-			La génération 
-			<span class="text-red-500">{{ generation }}</span> contient
+			La génération
+			<span class="text-red-500">{{ generation }}</span>
+			contient
 		{% elseif type is defined and type is not null %}
-			Le type <span class="text-red-500">{{ type }}</span> contient
+			Le type
+			<span class="text-red-500">{{ type }}</span>
+			contient
 		{% else %}
 			Le Pokédex comporte
 		{% endif %}
-		<span class="text-red-500">{{ numberOfPokemons }}</span> Pokémons !
+		<span class="text-red-500">{{ numberOfPokemons }}</span>
+		Pokémons
 	</p>
 </div>

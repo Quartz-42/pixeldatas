@@ -1,11 +1,11 @@
 <div class="pokemon-card bg-white shadow-md p-2 lg:p-3 rounded-lg hover:shadow-lg transition transform hover:scale-105">
 
 	<div>
-		<h2 class="text-sm lg:text-base xl:text-lg font-bold text-gray-800 mb-1 flex flex-wrap items-baseline justify-center gap-1 lg:gap-2">
+		<h2 class="text-sm md:text-xl lg:text-xl xl:text-lg font-bold text-gray-800 mb-1 flex flex-wrap items-baseline justify-center gap-1 lg:gap-2">
 			<span class="text-center">{{ pokemon.name }}</span>
-			<span class="text-xs lg:text-sm font-semibold bg-black text-amber-400 py-0.5 px-1 lg:py-1 lg:px-2 rounded-lg">N°{{ pokemon.pokedexId }}</span>
+			<span class="text-xs md:text-base lg:text-sm font-semibold bg-black text-amber-400 py-0.5 px-1 lg:py-1 lg:px-2 rounded-lg">N°{{ pokemon.pokedexId }}</span>
 			{% if pokemon.spriteGmax %}
-				<span class="text-xs lg:text-sm font-semibold bg-black text-amber-400 py-0.5 px-1 lg:py-1 lg:px-2 rounded-lg">GMAX</span>
+				<span class="text-xs md:text-base lg:text-sm font-semibold bg-black text-amber-400 py-0.5 px-1 lg:py-1 lg:px-2 rounded-lg">GMAX</span>
 			{% endif %}
 		</h2>
 	</div>
@@ -15,7 +15,7 @@
 			{% for type in pokemon.types %}
 				<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
 					<a href="{{ path('app_pokemon_type', {'type': type.name}) }}" data-turbo-frame="_top">
-						<img class="w-5 h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}" fetchpriority="high">
+						<img class="w-6 h-6 md:w-7 md:h-7 lg:w-6 lg:h-6 xl:w-7 xl:h-7 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}" fetchpriority="high">
 						<template data-popover-target="content">
 							<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-8">
 								<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
@@ -32,7 +32,7 @@
 				</div>
 			{% endfor %}
 		</div>
-		<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" class="text-sm lg:text-base 2xl:text-lg font-semibold text-red-500 underline" data-turbo-frame="_top">
+		<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}" class="text-base md:text-xl lg:text-base 2xl:text-lg font-semibold text-red-500 underline" data-turbo-frame="_top">
 			Gen.
 			{{ pokemon.generation }}
 		</a>

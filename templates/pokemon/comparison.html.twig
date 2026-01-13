@@ -54,9 +54,9 @@
 					<tbody class="divide-y divide-gray-200">
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700">Génération</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Génération</td>
 							{% for pokemon in pokemons %}
-								<td class="p-4 text-center font-bold">Génération
+								<td class="p-4 text-center font-bold text-base md:text-lg">Génération
 									{{ pokemon.generation }}</td>
 							{% endfor %}
 							{% if pokemons|length < 4 %}
@@ -67,7 +67,7 @@
 						</tr>
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700">Types</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Types</td>
 							{% for pokemon in pokemons %}
 								<td class="p-4 text-center">
 									<div class="flex justify-center gap-2">
@@ -85,7 +85,7 @@
 						</tr>
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700 text-lg">Faiblesses</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Faiblesses</td>
 							{% for pokemon in pokemons %}
 								<td class="p-4">
 									<div class="flex flex-wrap items-center justify-center gap-1">
@@ -109,7 +109,7 @@
 						</tr>
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700 text-lg">Résistances</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Résistances</td>
 							{% for pokemon in pokemons %}
 								<td class="p-4">
 									<div class="flex flex-wrap items-center justify-center gap-1">
@@ -133,9 +133,9 @@
 						</tr>
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700">Caractéristiques</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Caractéristiques</td>
 							{% for pokemon in pokemons %}
-								<td class="p-4 text-center font-bold">
+								<td class="p-4 text-center font-bold text-base md:text-lg">
 									{{ pokemon.weight }}
 									-
 									{{ pokemon.height}}
@@ -159,12 +159,12 @@
 
 						{% for label, field in stats %}
 							<tr class="hover:bg-gray-50">
-								<td class="p-4 font-semibold text-gray-700">{{ label }}</td>
+								<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">{{ label }}</td>
 								{% for pokemon in pokemons %}
 									{% set value = attribute(pokemon, field) %}
 									<td class="p-4 text-center">
 										<div class="flex items-center justify-center gap-2">
-											<span class="font-bold">{{ value }}</span>
+											<span class="font-bold text-base md:text-lg">{{ value }}</span>
 											<div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
 												<div class="h-full bg-blue-500" style="width: {{ min(value / 255 * 100, 100) }}%"></div>
 											</div>
@@ -180,9 +180,9 @@
 						{% endfor %}
 
 						<tr class="bg-blue-50 font-bold border-t-2 border-blue-100">
-							<td class="p-4 text-blue-900">Total Stats</td>
+							<td class="p-4 text-blue-900 text-base md:text-lg">Total Stats</td>
 							{% for pokemon in pokemons %}
-								<td class="p-4 text-center text-blue-900">
+								<td class="p-4 text-center text-blue-900 text-base md:text-lg">
 									{{ pokemon.hp + pokemon.atk + pokemon.def + pokemon.speAtk + pokemon.speDef + pokemon.vit }}
 								</td>
 							{% endfor %}
@@ -194,7 +194,7 @@
 						</tr>
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700">Évolutif ?</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Évolutif ?</td>
 							{% for pokemon in pokemons %}
 								<td class="p-4 text-center">
 									{% set hasEvolution = false %}
@@ -209,7 +209,7 @@
 											Oui
 										</span>
 									{% else %}
-										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs md:text-sm font-medium bg-gray-100 text-gray-800">
 											Non
 										</span>
 									{% endif %}
@@ -223,11 +223,11 @@
 						</tr>
 
 						<tr class="hover:bg-gray-50">
-							<td class="p-4 font-semibold text-gray-700">Forme GMAX ?</td>
+							<td class="p-4 font-semibold text-gray-700 text-base md:text-lg">Forme GMAX ?</td>
 							{% for pokemon in pokemons %}
 								<td class="p-4 text-center">
 									{% if pokemon.spriteGmax %}
-										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs md:text-sm font-medium bg-purple-100 text-purple-800">
 											Oui
 										</span>
 									{% else %}
@@ -275,7 +275,7 @@
 									{% for resistance in pokemon.resistances %}
 										{% if resistance.multiplier > 1 %}
 											{% if resistance.type.image %}
-												<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">
+												<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
 											{% else %}
 												<span class="text-xs font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">{{ resistance.type.name|slice(0,1) }}</span>
 											{% endif %}
@@ -287,7 +287,7 @@
 									{% for resistance in pokemon.resistances %}
 										{% if resistance.multiplier < 1 %}
 											{% if resistance.type.image %}
-												<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">
+												<img src="{{ resistance.type.image }}" alt="{{ resistance.type.name }}" class="w-8 h-8" title="{{ resistance.type.name }} (x{{ resistance.multiplier + 0 }})">
 											{% else %}
 												<span class="text-xs font-bold" title="{{ resistance.type.name }} (x{{ resistance.multiplier }})">{{ resistance.type.name|slice(0,1) }}</span>
 											{% endif %}
