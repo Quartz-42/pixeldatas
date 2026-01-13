@@ -32,7 +32,7 @@
 		<div class="container mx-auto text-center flex-grow">
 			<div class="bg-white p-4 mt-4 mb-8 rounded-md relative">
 				<h1 class="uppercase font-bold text-4xl mt-8">{{ pokemon.name }}</h1>
-				<a href="{{ path('app_comparison_add', {'id': pokemon.id}) }}" class="absolute top-4 right-4 inline-flex items-center gap-1.5 md:gap-2 font-bold bg-black border border-black rounded text-amber-400 hover:text-amber-200 transition shadow text-xs px-3 py-1.5 md:text-sm md:px-5 md:py-2.5">
+				<a href="{{ path('app_comparison_add', {'id': pokemon.id}) }}" data-turbo="false" class="absolute top-4 right-4 inline-flex items-center gap-1.5 md:gap-2 font-bold bg-black border border-black rounded text-amber-400 hover:text-amber-200 transition shadow text-xs px-3 py-1.5 md:text-sm md:px-5 md:py-2.5 z-10 touch-manipulation">
 					<twig:ux:icon name="icon-park-outline:ranking" class="size-[1.25rem]"/>
 					Comparer
 				</a>
@@ -251,28 +251,28 @@
 	{{ parent() }}
 	<script type="application/ld+json">
 		{
-																						"@context": "https://schema.org",
-																						"@type": "VideoGameCharacter",
-																						"name": "{{ pokemon.name }}",
-																						"identifier": "#{{ pokemon.pokedexId }}",
-																						"image": "{{ absolute_url(pokemon.spriteRegular) }}",
-																						"description": "{{ page_description }}",
-																						"inVideoGame": {
-																							"@type": "VideoGameSeries",
-																							"name": "Pokémon",
-																							"publisher": {
-																								"@type": "Organization",
-																								"name": "Nintendo"
-																							}
-																						}
+																										"@context": "https://schema.org",
+																										"@type": "VideoGameCharacter",
+																										"name": "{{ pokemon.name }}",
+																										"identifier": "#{{ pokemon.pokedexId }}",
+																										"image": "{{ absolute_url(pokemon.spriteRegular) }}",
+																										"description": "{{ page_description }}",
+																										"inVideoGame": {
+																											"@type": "VideoGameSeries",
+																											"name": "Pokémon",
+																											"publisher": {
+																												"@type": "Organization",
+																												"name": "Nintendo"
+																											}
+																										}
 		{% if pokemon.types|length > 0 %},
-																																	"additionalProperty": [
+																																							"additionalProperty": [
 			{% for type in pokemon.types %}
 				{
-																																												"@type": "PropertyValue",
-																																												"name": "Type",
-																																												"value": "{{ type.name }}"
-																																										}
+																																																				"@type": "PropertyValue",
+																																																				"name": "Type",
+																																																				"value": "{{ type.name }}"
+																																																		}
 				{% if not loop.last %},
 				{% endif %}
 			{% endfor %}
