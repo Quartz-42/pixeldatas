@@ -10,18 +10,18 @@
 {% block content %}
 	<div class="p-4">
 		<div class="container mx-auto">
-			<h1 class="font-bold text-xl uppercase text-center mt-8">3 Pokémons aléatoires apparaissent !</h1>
+			<h1 class="font-bold text-xl md:text-2xl lg:text-3xl xl:text-2xl 2xl:text-xl  uppercase text-center mt-8">3 Pokémons aléatoires apparaissent !</h1>
 			<div class="flex flex-wrap mx-2 justify-between">
 				{% for pokemon in randomPokemons %}
-					<div class="w-full lg:w-1/4 px-2 mt-8 text-center justify-center">
+					<div class="w-full xl:w-1/4 px-2 mt-8 text-center justify-center">
 						<div class="p-2 border-dashed border-2 border-red-500 rounded">
-							<h2 class="text-xl font-bold mt-2">{{ pokemon.name }}</h2>
+							<h2 class="text-xl md:text-2xl lg:text-3xl xl:text-2xl 2xl:text-xl font-bold mt-2">{{ pokemon.name }}</h2>
 							<div class="my-2 flex justify-center items-center">
 								<div class="flex">
 									{% for type in pokemon.types %}
 										<div data-controller="popover" class="relative" data-action="mouseenter->popover#show mouseleave->popover#hide">
 											<a href="{{path('app_pokemon_type', {'type' : type.name })}}">
-												<img class="w-8 h-auto inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}" fetchpriority="high">
+												<img class="w-10 lg:w-8 h-auto inline-block mr-3 rounded-lg" src="{{ type.image }}" alt="{{ type.name }}" fetchpriority="high">
 												<template data-popover-target="content">
 													<div data-popover-target="card" class="max-w-sm rounded-lg shadow-lg bg-white absolute left-0 bottom-10">
 														<turbo-frame loading="lazy" id="type--{{ type.name }}" target="_top" src="{{ path('app_type_show_card', { 'type': type.name }) }}" data-skip-transition>
@@ -42,7 +42,7 @@
 							<a href="{{ path('app_pokemon_details', {'name': pokemon.name}) }}">
 								<img src="{{ pokemon.spriteRegular }}" alt="{{ pokemon.name }}" class="w-1/2 h-auto mx-auto" fetchpriority="high">
 							</a>
-							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
+							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center text-xl lg:text-base">
 								N°{{ pokemon.pokedexId }}
 								<a href="{{ path('app_pokemon_gen', {'generation': pokemon.generation}) }}">
 									-
@@ -52,7 +52,7 @@
 									</span>
 								</a>
 							</p>
-							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center">
+							<p class="bg-gray-700 text-amber-400 rounded py-2 px-4 my-6 uppercase lg:w-1/2 mx-auto text-center text-xl lg:text-base">
 								{{ pokemon.weight|upper }}
 								-
 								{{ pokemon.height|upper }}
@@ -74,19 +74,19 @@
 	{{ parent() }}
 	<script type="application/ld+json">
 		{
-						"@context": "https://schema.org",
-						"@type": "WebSite",
-						"name": "PixelDatas",
-						"description": "Pokédex complet avec statistiques et évolutions de tous les Pokémons",
-						"url": "{{ absolute_url(path('app_home')) }}",
-						"potentialAction": {
-							"@type": "SearchAction",
-							"target": {
-								"@type": "EntryPoint",
-								"urlTemplate": "{{ absolute_url(path('app_pokemons')) }}?search={search_term_string}"
-							},
-							"query-input": "required name=search_term_string"
-						}
-					}
+																																																												"@context": "https://schema.org",
+																																																												"@type": "WebSite",
+																																																												"name": "PixelDatas",
+																																																												"description": "Pokédex complet avec statistiques et évolutions de tous les Pokémons",
+																																																												"url": "{{ absolute_url(path('app_home')) }}",
+																																																												"potentialAction": {
+																																																													"@type": "SearchAction",
+																																																													"target": {
+																																																														"@type": "EntryPoint",
+																																																														"urlTemplate": "{{ absolute_url(path('app_pokemons')) }}?search={search_term_string}"
+																																																													},
+																																																													"query-input": "required name=search_term_string"
+																																																												}
+																																																											}
 	</script>
 {% endblock %}

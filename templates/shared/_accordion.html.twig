@@ -1,7 +1,7 @@
 <div id="accordion" data-controller="accordion" class="overflow-hidden">
 	<h2 id="accordion-1">
 		<button type="button" class="text-white flex items-center justify-between w-50 px-3 mb-2 mt-[-5px] font-medium bg-transparent focus:outline-none hover:bg-transparent focus:ring-0 active:bg-transparent" aria-expanded="true" aria-controls="accordion-body-1">
-			<span class="font-bold text-white text-base lg:text-lg">Recherche avancée</span>
+			<span class="font-bold text-white text-base md:text-lg lg:text-lg">Recherche avancée</span>
 			<svg class="ml-1 mt-1 w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" aria-hidden="true">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
 			</svg>
@@ -14,17 +14,17 @@
 			{% for type in filters.available.types %}
 				<a href="{{ path('app_pokemon_type', { 'type': type.name }) }}" class="flex flex-col items-center space-y-2 p-2 rounded-lg">
 					<img src="{{ type.image }}" alt="{{ type.name }}" class="w-12 h-12 md:w-10 md:h-10 sm:w-8 sm:h-8 rounded-lg" fetchpriority="high">
-					<span class="text-gray-800  text-sm md:text-base lg:text-lg font-medium text-center">{{ type.name }}</span>
+					<span class="text-gray-800 text-sm md:text-lg lg:text-lg font-medium text-center">{{ type.name }}</span>
 				</a>
 			{% endfor %}
 		</div>
 
 		<h3 class="font-bold text-grey-500 my-4 ml-3 text-xl">Génération :</h3>
-		<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 place-items-center">
+		<div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-9 gap-2 place-items-center">
 			{% for generation in filters.available.generations %}
 				<a href="{{ path('app_pokemon_gen', { 'generation': generation }) }}" class="flex flex-col items-center space-y-2 p-2">
-					<span class="text-center text-sm md:text-base lg:text-lg font-medium bg-black text-amber-400 py-1 md:py-2 px-4 md:px-5 rounded-lg">
-						Génération
+					<span class="text-center text-sm md:text-lg lg:text-lg font-medium bg-black text-amber-400 py-1 md:py-2 px-4 md:px-6 rounded-lg">
+						Gén.
 						{{ generation }}
 					</span>
 				</a>
