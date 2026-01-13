@@ -2,6 +2,11 @@
 
 **PixelDatas** est un site web dédié aux Pokémons qui permet de retrouver toutes les informations sur les Pokémons de toutes les générations
 
+## 🌐 Mise en ligne
+
+Le site est désormais disponible à l'adresse https://pixeldatas.fr/
+N'hésitez pas à me partager vos avis via la page Contact !
+
 ## 🎯 Fonctionnalités
 
 - **Catalogue complet** : Parcourez tous les Pokémons avec leurs informations détaillées
