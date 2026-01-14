@@ -185,7 +185,7 @@
 					{% if pokemon.resistances is defined and pokemon.resistances|length > 0 %}
 						<div class="mt-4 px-4">
 							<div class="mb-3 flex items-center gap-2">
-								<span class="font-bold text-red-600 w-24 text-sm md:text-lg xl:text-lg">Faiblesses</span>
+								<span class="font-bold text-red-600 w-24 text-sm md:text-lg xl:text-base">Faiblesses</span>
 								<div class="flex flex-wrap gap-1">
 									{% for resistance in pokemon.resistances %}
 										{% if resistance.multiplier > 1 %}
@@ -202,7 +202,7 @@
 							</div>
 
 							<div class="flex items-center gap-2">
-								<span class="font-bold text-green-600 w-24 text-sm md:text-lg xl:text-lg">Résistances</span>
+								<span class="font-bold text-green-600 w-24 text-sm md:text-lg xl:text-base">Résistances</span>
 								<div class="flex flex-wrap gap-1">
 									{% for resistance in pokemon.resistances %}
 										{% if resistance.multiplier < 1 %}
@@ -253,28 +253,28 @@
 	{{ parent() }}
 	<script type="application/ld+json">
 		{
-																																						"@context": "https://schema.org",
-																																						"@type": "VideoGameCharacter",
-																																						"name": "{{ pokemon.name }}",
-																																						"identifier": "#{{ pokemon.pokedexId }}",
-																																						"image": "{{ absolute_url(pokemon.spriteRegular) }}",
-																																						"description": "{{ page_description }}",
-																																						"inVideoGame": {
-																																							"@type": "VideoGameSeries",
-																																							"name": "Pokémon",
-																																							"publisher": {
-																																								"@type": "Organization",
-																																								"name": "Nintendo"
-																																							}
-																																						}
+									"@context": "https://schema.org",
+									"@type": "VideoGameCharacter",
+									"name": "{{ pokemon.name }}",
+									"identifier": "#{{ pokemon.pokedexId }}",
+									"image": "{{ absolute_url(pokemon.spriteRegular) }}",
+									"description": "{{ page_description }}",
+									"inVideoGame": {
+										"@type": "VideoGameSeries",
+										"name": "Pokémon",
+										"publisher": {
+											"@type": "Organization",
+											"name": "Nintendo"
+										}
+									}
 		{% if pokemon.types|length > 0 %},
-																																																									"additionalProperty": [
+												"additionalProperty": [
 			{% for type in pokemon.types %}
 				{
-																																																																												"@type": "PropertyValue",
-																																																																												"name": "Type",
-																																																																												"value": "{{ type.name }}"
-																																																																										}
+															"@type": "PropertyValue",
+															"name": "Type",
+															"value": "{{ type.name }}"
+													}
 				{% if not loop.last %},
 				{% endif %}
 			{% endfor %}
