@@ -1,0 +1,5 @@
+# Modèle de configuration de déploiement
+# Copiez ce fichier en 'deploy.config.ps1' et remplissez les valeurs
+$SSH_USER = "votre_utilisateur"
+$SSH_HOST = "votre_hote"
+$SSH_PATH = "/chemin/vers/votre/projet"
