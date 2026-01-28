@@ -11,7 +11,8 @@ if (Test-Path $ConfigFile) {
 
 Write-Host "Deploying to $SSH_USER@$SSH_HOST..." -ForegroundColor Cyan
 
-ssh -A "$SSH_USER@$SSH_HOST" "cd $SSH_PATH && git pull origin master && make install"
+# Commande de déploiement
+ssh -A "$SSH_USER@$SSH_HOST" "cd $SSH_PATH && git fetch origin && git reset --hard origin/master && make install"
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Deployment successful!" -ForegroundColor Green
