@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PokeRequest
 {
-    private const API_URL = 'https://tyradex.vercel.app/api/v1/pokemon';
+    private const API_URL = 'https://tyradex.app/api/v1/pokemon';
     private const BATCH_SIZE = 50;
 
     /** @var array<string, Talent> */
